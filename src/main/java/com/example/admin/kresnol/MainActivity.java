@@ -28,17 +28,18 @@ public class MainActivity extends AppCompatActivity {
     String typeOfPlayerLeft = "livePlayer";
     String typeOfPlayerRight = "livePlayer";
 
+    // TODO: 11.04.18 сделать выбор уровня в интерфейсе
     String level = "easy";
 
-    // TODO: 04.04.18 заменить массив результата на массив кнопок
-    String playField[] = new String[9];
+    // заменен массив результата на массив кнопок
+    //String playField[] = new String[9];
 
     int totalWinLeft = 0;
     int totalWinRight = 0;
 
     int numOfRestart = 0;
 
-    Button btn0;
+/*    Button btn0;
     Button btn1;
     Button btn2;
     Button btn3;
@@ -46,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
     Button btn5;
     Button btn6;
     Button btn7;
-    Button btn8;
+    Button btn8;*/
+
+    Button arrayOfButtons[] = new Button[9];
 
     Button symbolOfBtnLeft;
     Button symbolOfBtnRight;
@@ -58,20 +61,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(LOG_TAG, "statusGame-ready");
+        Log.d(LOG_TAG, "64 statusGame-ready");
 
         //определение кнопки игрового поля
-        btn0 = (Button) findViewById(R.id.button0);
-        btn1 = (Button) findViewById(R.id.button1);
-        btn2 = (Button) findViewById(R.id.button2);
-        btn3 = (Button) findViewById(R.id.button3);
-        btn4 = (Button) findViewById(R.id.button4);
-        btn5 = (Button) findViewById(R.id.button5);
-        btn6 = (Button) findViewById(R.id.button6);
-        btn7 = (Button) findViewById(R.id.button7);
-        btn8 = (Button) findViewById(R.id.button8);
-
-        Log.d(LOG_TAG, "btn0.getText()= " + btn0.getText());
+        arrayOfButtons[0] = (Button) findViewById(R.id.button0);
+        arrayOfButtons[1] = (Button) findViewById(R.id.button1);
+        arrayOfButtons[2] = (Button) findViewById(R.id.button2);
+        arrayOfButtons[3] = (Button) findViewById(R.id.button3);
+        arrayOfButtons[4] = (Button) findViewById(R.id.button4);
+        arrayOfButtons[5] = (Button) findViewById(R.id.button5);
+        arrayOfButtons[6] = (Button) findViewById(R.id.button6);
+        arrayOfButtons[7] = (Button) findViewById(R.id.button7);
+        arrayOfButtons[8] = (Button) findViewById(R.id.button8);
 
 
         nameOfPlayerLeft = (TextView) findViewById(R.id.textViewLeftPlayer);
@@ -79,9 +80,6 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 01.04.18 реализовать выбор андроида-игрока
         nameOfPlayerRight.setText("Android");
 
-        // TODO: 04.04.18 использовать массив
-        // занести кнопки в массив
-        Button arrayOfButton[] = {btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8};
 
         //определение кнопки выбора символов
         symbolOfBtnLeft = (Button) findViewById(R.id.buttonSymbol);
@@ -108,7 +106,13 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: 24.02.18 связать имя игрока с авой и наоборот
 
+        // TODO: 20.04.18 сделать кнопки абсолютно квадратными
+
+        // TODO: 20.04.18 сделать анимацию зачеркивания выигрышных кнопок
+
         // TODO: 12.03.18 заменить подсветку ходящего на анимацию
+
+        // TODO: 15.04.18 расставить паузы
 
 
         //изменение символов для игроков
@@ -123,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                     symbolOfBtnRight.setText(rightPlayer.getSymbol());
 
                     if ((clickedButtonsTotal == 0) & (numOfRestart == 0)) {
-                        Log.d(LOG_TAG, "clickedButtonsTotal=" + clickedButtonsTotal);
+                        Log.d(LOG_TAG, "128 clickedButtonsTotal=" + clickedButtonsTotal);
 
                         if (leftPlayer.getSymbol().equals("x")) {
                             leftPlayer.setActiv(true);
@@ -168,42 +172,43 @@ public class MainActivity extends AppCompatActivity {
 
             //нажатие кнопки игроком в игровом поле
             case R.id.button0:
-                clickPlayFieldBtn(0, btn0);
+                clickPlayFieldBtn(arrayOfButtons[0]);
                 break;
             case R.id.button1:
-                clickPlayFieldBtn(1, btn1);
+                //clickPlayFieldBtn(1, btn1);
+                clickPlayFieldBtn(arrayOfButtons[1]);
+
                 break;
             case R.id.button2:
-                clickPlayFieldBtn(2, btn2);
+                clickPlayFieldBtn(arrayOfButtons[2]);
                 break;
             case R.id.button3:
-                clickPlayFieldBtn(3, btn3);
+                clickPlayFieldBtn(arrayOfButtons[3]);
                 break;
             case R.id.button4:
-                clickPlayFieldBtn(4, btn4);
+                clickPlayFieldBtn(arrayOfButtons[4]);
                 break;
             case R.id.button5:
-                clickPlayFieldBtn(5, btn5);
+                clickPlayFieldBtn(arrayOfButtons[5]);
                 break;
             case R.id.button6:
-                clickPlayFieldBtn(6, btn6);
+                clickPlayFieldBtn(arrayOfButtons[6]);
                 break;
             case R.id.button7:
-                clickPlayFieldBtn(7, btn7);
+                clickPlayFieldBtn(arrayOfButtons[7]);
                 break;
             case R.id.button8:
-                clickPlayFieldBtn(8, btn8);
+                clickPlayFieldBtn(arrayOfButtons[8]);
                 break;
         }
     }
 
-    public void clickPlayFieldBtn(int btnNumber, Button btn) {
-
+    public void clickPlayFieldBtn(Button btn) {
 
         // проверка нажатости кнопки и закончившесяй игры
-        if ((statusGames != "finish") & (playField[btnNumber] == null)) {
+        if ((statusGames != "finish") & (btn.getText().equals(""))) {
             statusGames = "inplay";
-            Log.d(LOG_TAG, "statusGames-inplay");
+            Log.d(LOG_TAG, "205 statusGames-inplay");
             disableChangeSymbol();
 
 
@@ -213,14 +218,15 @@ public class MainActivity extends AppCompatActivity {
                 symbolActiv = rightPlayer.getSymbol();
             }
             btn.setText(symbolActiv);
+            Log.d(LOG_TAG, "217 btn.setText(symbolActiv)" + symbolActiv);
 
             //счетчик нажатых кнопок
             clickedButtonsTotal++;
-            Log.d(LOG_TAG, "clickedButtonsTotal " + clickedButtonsTotal);
+            Log.d(LOG_TAG, "223 clickedButtonsTotal " + clickedButtonsTotal);
 
             // занести в массив номер кнопки
-            playField[btnNumber] = symbolActiv;
-            Log.d(LOG_TAG, "playField[" + btnNumber + "] " + playField[btnNumber]);
+            //playField[btnNumber] = symbolActiv;
+            //Log.d(LOG_TAG, "playField[" + btnNumber + "] " + playField[btnNumber]);
 
             // проверка на выигрыш
             checkWin();
@@ -228,21 +234,22 @@ public class MainActivity extends AppCompatActivity {
             //проверка числа нажатых кнопок
             if (clickedButtonsTotal == 9) {
                 statusGames = "finish";
-                Log.d(LOG_TAG, "statusGames-finish");
+                Log.d(LOG_TAG, "235 clickedButtonsTotal == 9, statusGames-finish");
             }
 
             // TODO: 24.02.18 передать ход 2му игроку если андроид, то ход по алгоритму, иначе обрабатывать нажатие
-            //инверсия активности игроков для следующего хода
 
-            if (nameOfPlayerRight.getText().equals("Android")) {
+            // TODO: 13.04.18 заменить на имя из класса игрока
+            if ((nameOfPlayerRight.getText().equals("Android"))&(leftPlayer.isActiv())
+                    &(statusGames.equals("inplay"))) {
                 //todo сделать алгоритм хода андроида
-                Log.d(LOG_TAG, "ход андроида");
+                Log.d(LOG_TAG, "244 ход андроида");
+                droidsStep();
             } else if (statusGames == "inplay") {
                 //invertVariables();
                 invertPlayersActivity();
             }
 
-            // TODO: 01.04.18 проверить необходимость этого рестарта
         } else if (statusGames == "finish") {
             restartGame();
         }
@@ -250,35 +257,37 @@ public class MainActivity extends AppCompatActivity {
 
     private void restartGame() {
 
-        Log.d(LOG_TAG, "restart");
+        Log.d(LOG_TAG, "258 restart");
         numOfRestart++;
 
         clickedButtonsTotal = 0;
 
-        btn0.setTextColor(Color.BLACK);
-        btn0.setText("");
-        btn1.setTextColor(Color.BLACK);
-        btn1.setText("");
-        btn2.setTextColor(Color.BLACK);
-        btn2.setText("");
-        btn3.setTextColor(Color.BLACK);
-        btn3.setText("");
-        btn4.setTextColor(Color.BLACK);
-        btn4.setText("");
-        btn5.setTextColor(Color.BLACK);
-        btn5.setText("");
-        btn6.setTextColor(Color.BLACK);
-        btn6.setText("");
-        btn7.setTextColor(Color.BLACK);
-        btn7.setText("");
-        btn8.setTextColor(Color.BLACK);
-        btn8.setText("");
+        arrayOfButtons[0].setTextColor(Color.BLACK);
+        arrayOfButtons[0].setText("");
+        arrayOfButtons[1].setTextColor(Color.BLACK);
+        arrayOfButtons[1].setText("");
+        arrayOfButtons[2].setTextColor(Color.BLACK);
+        arrayOfButtons[2].setText("");
+        arrayOfButtons[3].setTextColor(Color.BLACK);
+        arrayOfButtons[3].setText("");
+        arrayOfButtons[4].setTextColor(Color.BLACK);
+        arrayOfButtons[4].setText("");
+        arrayOfButtons[5].setTextColor(Color.BLACK);
+        arrayOfButtons[5].setText("");
+        arrayOfButtons[6].setTextColor(Color.BLACK);
+        arrayOfButtons[6].setText("");
+        arrayOfButtons[7].setTextColor(Color.BLACK);
+        arrayOfButtons[7].setText("");
+        arrayOfButtons[8].setTextColor(Color.BLACK);
+        arrayOfButtons[8].setText("");
 
         statusGames = "ready";
-        Log.d(LOG_TAG, "statusGames-ready");
+        Log.d(LOG_TAG, "283 statusGames-ready");
+
 
         for (int i = 0; i < 9; i++) {
-            playField[i] = null;
+            arrayOfButtons[i].setText("");
+            //playField[i] = null;
         }
 
         enableChangeSymbol();
@@ -286,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
 
         if ((nameOfPlayerRight.getText().equals("Android")) & rightPlayer.isActiv()) {
             //todo сделать алгоритм хода андроида
+            invertPlayersActivity();
             droidsStep();
         }
 
@@ -305,129 +315,138 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkWin() {
 
-        // TODO: 10.03.18 заменить финиш на вин
-        if ((playField[0] == symbolActiv) & (playField[1] == symbolActiv)
-                & (playField[2] == symbolActiv)) {
+        // TODO: 10.03.18 заменить финиш на вин?
+        if ((arrayOfButtons[0].getText().equals(symbolActiv))
+                & (arrayOfButtons[1].getText().equals(symbolActiv))
+                & (arrayOfButtons[2].getText().equals(symbolActiv))) {
             statusGames = "finish";
-            Log.d(LOG_TAG, "statusGames-finish");
-            btn0.setTextColor(Color.RED);
-            btn1.setTextColor(Color.RED);
-            btn2.setTextColor(Color.RED);
+            Log.d(LOG_TAG, "320 statusGames-finish");
+            arrayOfButtons[0].setTextColor(Color.RED);
+            arrayOfButtons[1].setTextColor(Color.RED);
+            arrayOfButtons[2].setTextColor(Color.RED);
 
-            saveResult(playField[0]);
+            // TODO: 04.04.18 передавать не текст кнопки, а aктивный символ, проверить
+            saveResult(arrayOfButtons[0].getText());
         }
 
-        if ((playField[3] == symbolActiv) & (playField[4] == symbolActiv)
-                & (playField[5] == symbolActiv)) {
+        if ((arrayOfButtons[3].getText().equals(symbolActiv))
+                & (arrayOfButtons[4].getText().equals(symbolActiv))
+                & (arrayOfButtons[5].getText().equals(symbolActiv))) {
+
             statusGames = "finish";
-            Log.d(LOG_TAG, "statusGames-finish");
+            Log.d(LOG_TAG, "334 statusGames-finish");
 
-            btn3.setTextColor(Color.RED);
-            btn4.setTextColor(Color.RED);
-            btn5.setTextColor(Color.RED);
+            arrayOfButtons[3].setTextColor(Color.RED);
+            arrayOfButtons[4].setTextColor(Color.RED);
+            arrayOfButtons[5].setTextColor(Color.RED);
 
-            saveResult(playField[3]);
+            saveResult(arrayOfButtons[3].getText());
         }
 
-        if ((playField[6] == symbolActiv) & (playField[7] == symbolActiv)
-                & (playField[8] == symbolActiv)) {
+        if ((arrayOfButtons[6].getText().equals(symbolActiv))
+                & (arrayOfButtons[7].getText().equals(symbolActiv))
+                & (arrayOfButtons[8].getText().equals(symbolActiv))) {
+
             statusGames = "finish";
-            Log.d(LOG_TAG, "statusGames-finish");
+            Log.d(LOG_TAG, "348 statusGames-finish");
 
-            btn6.setTextColor(Color.RED);
-            btn7.setTextColor(Color.RED);
-            btn8.setTextColor(Color.RED);
+            arrayOfButtons[6].setTextColor(Color.RED);
+            arrayOfButtons[7].setTextColor(Color.RED);
+            arrayOfButtons[8].setTextColor(Color.RED);
 
-            saveResult(playField[6]);
+            saveResult(arrayOfButtons[6].getText());
 
         }
-
-        if ((playField[0] == symbolActiv) & (playField[3] == symbolActiv)
-                & (playField[6] == symbolActiv)) {
+        if ((arrayOfButtons[0].getText().equals(symbolActiv))
+                & (arrayOfButtons[3].getText().equals(symbolActiv))
+                & (arrayOfButtons[6].getText().equals(symbolActiv))) {
             statusGames = "finish";
-            Log.d(LOG_TAG, "statusGames-finish");
+            Log.d(LOG_TAG, "361 statusGames-finish");
 
-            btn0.setTextColor(Color.RED);
-            btn3.setTextColor(Color.RED);
-            btn6.setTextColor(Color.RED);
+            arrayOfButtons[0].setTextColor(Color.RED);
+            arrayOfButtons[3].setTextColor(Color.RED);
+            arrayOfButtons[6].setTextColor(Color.RED);
 
-            saveResult(playField[0]);
+            saveResult(arrayOfButtons[0].getText());
         }
 
-        if ((playField[1] == symbolActiv) & (playField[4] == symbolActiv)
-                & (playField[7] == symbolActiv)) {
+        if ((arrayOfButtons[1].getText().equals(symbolActiv))
+                & (arrayOfButtons[4].getText().equals(symbolActiv))
+                & (arrayOfButtons[7].getText().equals(symbolActiv))) {
             statusGames = "finish";
-            Log.d(LOG_TAG, "statusGames-finish");
+            Log.d(LOG_TAG, "374 statusGames-finish");
 
-            btn1.setTextColor(Color.RED);
-            btn4.setTextColor(Color.RED);
-            btn7.setTextColor(Color.RED);
+            arrayOfButtons[1].setTextColor(Color.RED);
+            arrayOfButtons[4].setTextColor(Color.RED);
+            arrayOfButtons[7].setTextColor(Color.RED);
 
-            saveResult(playField[1]);
+            saveResult(arrayOfButtons[1].getText());
         }
-
-        if ((playField[2] == symbolActiv) & (playField[5] == symbolActiv)
-                & (playField[8] == symbolActiv)) {
+        if ((arrayOfButtons[2].getText().equals(symbolActiv))
+                & (arrayOfButtons[5].getText().equals(symbolActiv))
+                & (arrayOfButtons[8].getText().equals(symbolActiv))) {
             statusGames = "finish";
-            Log.d(LOG_TAG, "statusGames-finish");
+            Log.d(LOG_TAG, "386 statusGames-finish");
 
-            btn2.setTextColor(Color.RED);
-            btn5.setTextColor(Color.RED);
-            btn8.setTextColor(Color.RED);
+            arrayOfButtons[2].setTextColor(Color.RED);
+            arrayOfButtons[5].setTextColor(Color.RED);
+            arrayOfButtons[8].setTextColor(Color.RED);
 
-            saveResult(playField[2]);
+            saveResult(arrayOfButtons[2].getText());
         }
-
-        if ((playField[0] == symbolActiv) & (playField[4] == symbolActiv)
-                & (playField[8] == symbolActiv)) {
+        if ((arrayOfButtons[0].getText().equals(symbolActiv))
+                & (arrayOfButtons[4].getText().equals(symbolActiv))
+                & (arrayOfButtons[8].getText().equals(symbolActiv))) {
             statusGames = "finish";
-            Log.d(LOG_TAG, "statusGames-finish");
+            Log.d(LOG_TAG, "398 statusGames-finish");
 
-            btn0.setTextColor(Color.RED);
-            btn4.setTextColor(Color.RED);
-            btn8.setTextColor(Color.RED);
+            arrayOfButtons[0].setTextColor(Color.RED);
+            arrayOfButtons[4].setTextColor(Color.RED);
+            arrayOfButtons[8].setTextColor(Color.RED);
 
-            saveResult(playField[0]);
+            saveResult(arrayOfButtons[0].getText());
         }
-
-        if ((playField[2] == symbolActiv) & (playField[4] == symbolActiv)
-                & (playField[6] == symbolActiv)) {
+        if ((arrayOfButtons[2].getText().equals(symbolActiv))
+                & (arrayOfButtons[4].getText().equals(symbolActiv))
+                & (arrayOfButtons[6].getText().equals(symbolActiv))) {
+    /*    if ((playField[2] == symbolActiv) & (playField[4] == symbolActiv)
+                & (playField[6] == symbolActiv)) {*/
             statusGames = "finish";
-            Log.d(LOG_TAG, "statusGames-finish");
+            Log.d(LOG_TAG, "412 statusGames-finish");
 
-            btn2.setTextColor(Color.RED);
-            btn4.setTextColor(Color.RED);
-            btn6.setTextColor(Color.RED);
+            arrayOfButtons[2].setTextColor(Color.RED);
+            arrayOfButtons[4].setTextColor(Color.RED);
+            arrayOfButtons[6].setTextColor(Color.RED);
 
-            saveResult(playField[2]);
+            saveResult(arrayOfButtons[2].getText());
         }
 
 
     }
 
-    public void saveResult(String winSimbol) {
+    public void saveResult(CharSequence winSimbol) {
 
-        Log.d(LOG_TAG, "winSimbol=" + winSimbol);
+        Log.d(LOG_TAG, "426 winSimbol=" + winSimbol);
 
-        Log.d(LOG_TAG, "symbolOfBtnLeft=" + symbolOfBtnLeft.getText());
-        Log.d(LOG_TAG, "symbolOfBtnRight=" + symbolOfBtnRight.getText());
+        Log.d(LOG_TAG, "428 symbolOfBtnLeft=" + symbolOfBtnLeft.getText());
+        Log.d(LOG_TAG, "429 symbolOfBtnRight=" + symbolOfBtnRight.getText());
 
         TextView winLeft = (TextView) findViewById(R.id.totalWinLeftPlayer);
         TextView winRight = (TextView) findViewById(R.id.totalWinRightPlayer);
 
         if (symbolOfBtnLeft.getText().equals(winSimbol)) {
-            Log.d(LOG_TAG, "left win=");
+            Log.d(LOG_TAG, "435 left win=");
 
             totalWinLeft++;
-            Log.d(LOG_TAG, "totalWinLeft=" + totalWinLeft);
+            Log.d(LOG_TAG, "438 totalWinLeft=" + totalWinLeft);
 
             winLeft.setText(Integer.toString(totalWinLeft));
         } else if (symbolOfBtnRight.getText().equals(winSimbol)) {
-            Log.d(LOG_TAG, "right win=");
+            Log.d(LOG_TAG, "442 right win=");
 
             totalWinRight++;
             winRight.setText(Integer.toString(totalWinRight));
-            Log.d(LOG_TAG, "totalWinRight=" + totalWinRight);
+            Log.d(LOG_TAG, "446 totalWinRight=" + totalWinRight);
 
         }
     }
@@ -468,28 +487,34 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (leftPlayer.isActiv()) {
-            Log.d(LOG_TAG, "leftPlayer.isActiv()=true");
-            Log.d(LOG_TAG, "leftPlayer.getSymbol()=" + leftPlayer.getSymbol());
+            Log.d(LOG_TAG, "487 leftPlayer.isActiv()=true");
+            Log.d(LOG_TAG, "488 leftPlayer.getSymbol()=" + leftPlayer.getSymbol());
             makeNameActive("leftButton");
         } else if (rightPlayer.isActiv()) {
-            Log.d(LOG_TAG, "rightPlayer.isActiv()=true");
-            Log.d(LOG_TAG, "rightPlayer.getSymbol()=" + rightPlayer.getSymbol());
+            Log.d(LOG_TAG, "491 rightPlayer.isActiv()=true");
+            Log.d(LOG_TAG, "492 rightPlayer.getSymbol()=" + rightPlayer.getSymbol());
             makeNameActive("rightButton");
         }
 
     }
 
     public void droidsStep() {
-        Log.d(LOG_TAG, "ход андроида droidsStep");
-
+        invertPlayersActivity();
+        Log.d(LOG_TAG, "500 droidsStep");
+        int x;
+        int xx;
+        //TimeUnit.SECONDS.sleep(1);
         switch (level) {
             case "easy":
 
-                // TODO: 03.04.18 сделать рэндом нажатие кнопки
-                //x=Math.random()*8;
+                // рэндом нажатие кнопки андроидом
+                x=(int)(Math.random()*8);
 
+                Log.d(LOG_TAG, "510 x=(int)(Math.random()*8) = " + x);
 
-
+                xx=checkEmptyButton(x);
+               clickPlayFieldBtn(arrayOfButtons[xx]);
+                //clickPlayFieldBtn(arrayOfButtons[checkEmptyButton(x)]);
 
                 break;
             case "normal":
@@ -503,6 +528,29 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-
     }
+
+
+    public int checkEmptyButton(int numberOfButton){
+        Log.d(LOG_TAG, "526 test checkEmptyButton ");
+        Log.d(LOG_TAG, "527 numberOfButton= "+ numberOfButton);
+
+        Log.d(LOG_TAG, "535 arrayOfButtons[numberOfButton].getText()= "+ arrayOfButtons[numberOfButton].getText());
+
+        while ((arrayOfButtons[numberOfButton].getText().equals("x"))
+                |(arrayOfButtons[numberOfButton].getText().equals("o"))) {
+            numberOfButton = numberOfButton + 1;
+            Log.d(LOG_TAG, "532 numberOfButton+1 = "+ numberOfButton);
+
+            if (numberOfButton == 9) {
+                numberOfButton = 0;
+            }
+            //checkEmptyButton(numberOfButton);
+            Log.d(LOG_TAG, "538 test checkEmptyButton ");
+            Log.d(LOG_TAG, "539 numberOfButton= "+ numberOfButton);
+
+        }
+        return(numberOfButton);
+    }
+
 }
