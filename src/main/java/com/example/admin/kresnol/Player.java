@@ -6,7 +6,7 @@ public class Player {
 
     public CharSequence name;
     public String symbol;
-    private boolean activ;
+    private boolean active;
 
     final String LOG_TAG = "myLogs";
 
@@ -30,18 +30,18 @@ public class Player {
         return symbol;
     }
 
-    public boolean isActiv(){
-            return activ;
+    public boolean isActive(){
+            return active;
 
     }
 
-    public void setActiv(final boolean activ){
-        this.activ = activ;
+    public void setActive(final boolean active){
+        this.active = active;
 
     }
 
-    public void setPassiv(){
-        activ = false;
+    public void setPassive(){
+        active = false;
     }
 
     /*public void droidsStep(){
