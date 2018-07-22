@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
     final String LOG_TAG = "myLogs";
 
     int button;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     Spinner spinnerLeft;
     Spinner spinnerRight;
-    Spinner spinnerLevel;
+    static Spinner spinnerLevel;
 
     String[] arrayOfPlayers = {"Player 1", "Player 2", "Android"};
     String[] arrayOfLevel = {"Easy", "Normal", "Hard"};
@@ -612,10 +613,29 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case "Hard":
-                // TODO: 03.04.18 сделать логику для 3 уровня
-                // TODO: 09.07.18 делать угловой хода на 2-м шаге, доработать и на 5-м правильно составить треугольник
+                // логика для 3 уровня
 
                 Log.d(LOG_TAG, "сделать логику для 3 уровня ");
+
+                makeStep = false;
+
+                //проверка возможности выигрыша
+                checkWinStep();
+
+                //проверка возможности проигрыша
+                checkLooseStep();
+
+                //проверка возможности поставить в центр
+                makeCenterStep();
+
+                //ставить в угол
+                makeCornerStep();
+
+                //если раньше не было ходов то сделать случайный ход
+                if (makeStep == false){
+                    // рэндом нажатие кнопки андроидом
+                    makeRandomStep();
+                }
                 break;
         }
     }
@@ -650,6 +670,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void makeCornerStep(){
+        if ((makeStep == false)&(arrayOfButtons[0].getText().equals(""))) {
+            makeStep = true;
+            clickPlayFieldBtn(arrayOfButtons[0]);
+        }
+        if ((makeStep == false)&(arrayOfButtons[2].getText().equals(""))) {
+            makeStep = true;
+            clickPlayFieldBtn(arrayOfButtons[2]);
+        }
+        if ((makeStep == false)&(arrayOfButtons[5].getText().equals(""))) {
+            makeStep = true;
+            clickPlayFieldBtn(arrayOfButtons[5]);
+        }
+        if ((makeStep == false)&(arrayOfButtons[8].getText().equals(""))) {
+            makeStep = true;
+            clickPlayFieldBtn(arrayOfButtons[8]);
+        }
+
+
+    }
 
     // рэндом нажатие кнопки андроидом
     public void makeRandomStep(){
@@ -1041,6 +1081,10 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(LOG_TAG, "1042 makeStep =" + makeStep);
 
+    }
+
+    public static String getSpinnerLevel(){
+        return spinnerLevel.getSelectedItem().toString();
     }
 
 }
