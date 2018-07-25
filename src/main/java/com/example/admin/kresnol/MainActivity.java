@@ -13,33 +13,30 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//это вью паттерна мвп
 public class MainActivity extends AppCompatActivity {
 
     final String LOG_TAG = "myLogs";
 
-    int button;
     int clickedButtonsTotal = 0;
-    //int btnNumber;
 
     String symbolActiv = "x";
-    String symbolNext = "o";
     String statusGames = "ready";
 
-    String typeOfPlayerLeft = "livePlayer";
-    String typeOfPlayerRight = "livePlayer";
-
+    // TODO: 25.07.18 после реализации бд вместо 0 брать значения из бд
     int totalWinLeft = 0;
     int totalWinRight = 0;
 
+    //число рестартов
     int numOfRestart = 0;
 
     Button arrayOfButtons[] = new Button[9];
 
-    Button symbolOfBtnLeft;
-    Button symbolOfBtnRight;
-
     Player leftPlayer;
     Player rightPlayer;
+
+    Button symbolOfBtnLeftPlayer;
+    Button symbolOfBtnRightPlayer;
 
     Spinner spinnerLeft;
     Spinner spinnerRight;
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(LOG_TAG, "64 statusGame-ready");
+        //Log.d(LOG_TAG, "64 statusGame-ready");
 
         //определение кнопки игрового поля
         arrayOfButtons[0] = (Button) findViewById(R.id.button0);
@@ -67,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
         arrayOfButtons[7] = (Button) findViewById(R.id.button7);
         arrayOfButtons[8] = (Button) findViewById(R.id.button8);
 
-        //nameOfPlayerLeft = (TextView) findViewById(R.id.textViewLeftPlayer);
-        //nameOfPlayerRight = (TextView) findViewById(R.id.textViewRightPlayer);
 
         // адаптер
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfPlayers);
@@ -80,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
         spinnerRight = (Spinner) findViewById(R.id.spinnerRight);
         spinnerRight.setAdapter(adapter);
 
-        // заголовок
-        //spinnerRight.setPrompt("Title");
         // выделяем элемент
         spinnerLeft.setSelection(0);
         spinnerRight.setSelection(1);
@@ -92,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
                 // показываем позиция нажатого элемента
-                Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -104,10 +97,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                // показываем позиция нажатого элемента
-                Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
-
-                //((TextView) spinnerRight.getSelectedView()).setGravity(Gravity.RIGHT);
+                // показываем позиция нажатого элемента, убрать?
+                //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
 
                 //видимость спинера уровня для игрока Андроид
                 if (spinnerRight.getSelectedItem().toString().equals("Android")) {
@@ -141,10 +132,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //определение кнопки выбора символов
-        symbolOfBtnLeft = (Button) findViewById(R.id.buttonSymbol);
-        symbolOfBtnRight = (Button) findViewById(R.id.buttonSymbol2);
+        symbolOfBtnLeftPlayer = (Button) findViewById(R.id.buttonSymbolLeftPlayer);
+        symbolOfBtnRightPlayer = (Button) findViewById(R.id.buttonSymbolRightPlayer);
 
-        //leftPlayer = new Player(nameOfPlayerLeft.getText());
+        //создание левого и правого игрока
         leftPlayer = new Player(spinnerLeft.getSelectedItem().toString());
         rightPlayer = new Player(spinnerRight.getSelectedItem().toString());
 
@@ -182,16 +173,21 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 09.07.18 при смене игроков менять счет
 
 
+        // TODO: 25.07.18 перенести обработку нажатий в класс-презентер, и здесь вызывать его метод нажатия
+        /*public void onGetButtonClick() {
+
+        }*/
+
         //изменение символов для игроков
         switch (v.getId()) {
-            case R.id.buttonSymbol:
+            case R.id.buttonSymbolLeftPlayer:
 
                 if (statusGames == "ready") {
                     // меняет символ
                     invertVariables();
 
-                    symbolOfBtnLeft.setText(leftPlayer.getSymbol());
-                    symbolOfBtnRight.setText(rightPlayer.getSymbol());
+                    symbolOfBtnLeftPlayer.setText(leftPlayer.getSymbol());
+                    symbolOfBtnRightPlayer.setText(rightPlayer.getSymbol());
 
                     if ((clickedButtonsTotal == 0) & (numOfRestart == 0)) {
                         Log.d(LOG_TAG, "128 clickedButtonsTotal=" + clickedButtonsTotal);
@@ -209,12 +205,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
 
-            case R.id.buttonSymbol2:
+            case R.id.buttonSymbolRightPlayer:
                 if (statusGames == "ready") {
                     invertVariables();
 
-                    symbolOfBtnRight.setText(rightPlayer.getSymbol());
-                    symbolOfBtnLeft.setText(leftPlayer.getSymbol());
+                    symbolOfBtnRightPlayer.setText(rightPlayer.getSymbol());
+                    symbolOfBtnLeftPlayer.setText(leftPlayer.getSymbol());
 
                     if ((clickedButtonsTotal == 0) & (numOfRestart == 0)) {
                         if (rightPlayer.getSymbol().equals("x")) {
@@ -364,8 +360,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void disableChangeSymbol() {
 
-        symbolOfBtnLeft.setEnabled(false);
-        symbolOfBtnRight.setEnabled(false);
+        symbolOfBtnLeftPlayer.setEnabled(false);
+        symbolOfBtnRightPlayer.setEnabled(false);
         spinnerLeft.setEnabled(false);
         spinnerRight.setEnabled(false);
         spinnerLevel.setEnabled(false);
@@ -373,8 +369,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void enableChangeSymbol() {
 
-        symbolOfBtnLeft.setEnabled(true);
-        symbolOfBtnRight.setEnabled(true);
+        symbolOfBtnLeftPlayer.setEnabled(true);
+        symbolOfBtnRightPlayer.setEnabled(true);
         spinnerLeft.setEnabled(true);
         spinnerRight.setEnabled(true);
         spinnerLevel.setEnabled(true);
@@ -492,20 +488,20 @@ public class MainActivity extends AppCompatActivity {
     public void saveResult(CharSequence winSimbol) {
 
         Log.d(LOG_TAG, "426 winSimbol=" + winSimbol);
-        Log.d(LOG_TAG, "428 symbolOfBtnLeft=" + symbolOfBtnLeft.getText());
-        Log.d(LOG_TAG, "429 symbolOfBtnRight=" + symbolOfBtnRight.getText());
+        Log.d(LOG_TAG, "428 symbolOfBtnLeftPlayer=" + symbolOfBtnLeftPlayer.getText());
+        Log.d(LOG_TAG, "429 symbolOfBtnRightPlayer=" + symbolOfBtnRightPlayer.getText());
 
         TextView winLeft = (TextView) findViewById(R.id.totalWinLeftPlayer);
         TextView winRight = (TextView) findViewById(R.id.totalWinRightPlayer);
 
-        if (symbolOfBtnLeft.getText().equals(winSimbol)) {
+        if (symbolOfBtnLeftPlayer.getText().equals(winSimbol)) {
             Log.d(LOG_TAG, "435 left win=");
 
             totalWinLeft++;
             Log.d(LOG_TAG, "438 totalWinLeft=" + totalWinLeft);
 
             winLeft.setText(Integer.toString(totalWinLeft));
-        } else if (symbolOfBtnRight.getText().equals(winSimbol)) {
+        } else if (symbolOfBtnRightPlayer.getText().equals(winSimbol)) {
             Log.d(LOG_TAG, "442 right win=");
 
             totalWinRight++;
