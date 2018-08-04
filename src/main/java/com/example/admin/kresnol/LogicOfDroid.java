@@ -1,6 +1,8 @@
 package com.example.admin.kresnol;
 
 import android.util.Log;
+import android.widget.Button;
+
 
 /**
  * Created by admin on 20.07.18.
@@ -9,22 +11,38 @@ import android.util.Log;
 public class LogicOfDroid {
 
     boolean makeStep;
+    int btnToDroidStep;
+    int btnToStep;
+    Button[] arrayOfBtn;
+    Player leftPlr;
+    Player rightPlr;
+    MainModel model;
 
-    public void droidsStep() {
-        invertPlayersActivity();
+    /*// TODO: 03.08.18 проверить работоспособность, или же передовать экземпляр из презентера
+    Player leftPlayer;
+    Player rightPlayer;*/
+
+
+
+    // TODO: 02.08.18 сделать функции, возвращать в презентер номер кнопки для хода
+    public int droidsStep(Button[] arrayOfBtn, Player leftPlr, Player rightPlr, MainModel mainModel) {
+        //убрал инвертирование из метода, вынес перед вызовом метода
+        //invertPlayersActivity();
+
         //Log.d(LOG_TAG, "500 droidsStep");
         //int x;
         //int xx;
         //boolean makeStep = false;
         //TimeUnit.SECONDS.sleep(1);
         //switch (spinnerLevel.getSelectedItem().toString()) {
-        switch (MainActivity.getSpinnerLevel()) {
+        // TODO: 03.08.18 подумать над созданием разных массивов с перезаписью их при вызове метода
+
+        switch (mainModel.getSpinnerLeftValue()) {
             case "Easy":
 
                 //// TODO: 06.07.18 вынести в класс логики
-
                 // рэндом нажатие кнопки андроидом
-                makeRandomStep();
+                btnToDroidStep = makeRandomStep();
                /* x = (int) (Math.random() * 8);
                 Log.d(LOG_TAG, "510 x=(int)(Math.random()*8) = " + x);
 
@@ -38,492 +56,495 @@ public class LogicOfDroid {
                 makeStep = false;
 
                 //проверка возможности выигрыша
-                checkWinStep();
+                btnToDroidStep = checkWinStep();
 
                 //проверка возможности проигрыша
-                checkLooseStep();
+                btnToDroidStep = checkLooseStep();
 
                 //проверка возможности поставить в центр
-                makeCenterStep();
+                btnToDroidStep = makeCenterStep();
 
                 //если раньше не было ходов то сделать случайный ход
 
                 if (makeStep == false) {
                     // рэндом нажатие кнопки андроидом
-                    makeRandomStep();
+                    btnToDroidStep = makeRandomStep();
                 }
 
                 break;
 
             case "Hard":
-                // TODO: 03.04.18 сделать логику для 3 уровня
+                // логику для 3 уровня
                 // TODO: 09.07.18 делать угловой хода на 2-м шаге, доработать и на 5-м правильно составить треугольник
-
-                Log.d(LOG_TAG, "сделать логику для 3 уровня ");
 
                 makeStep = false;
 
                 //проверка возможности выигрыша
-                checkWinStep();
+                btnToDroidStep = checkWinStep();
 
                 //проверка возможности проигрыша
-                checkLooseStep();
+                btnToDroidStep = checkLooseStep();
 
                 //проверка возможности поставить в центр
-                makeCenterStep();
+                btnToDroidStep = makeCenterStep();
 
                 //ставить в угол
-                makeCornerStep();
+                btnToDroidStep = makeCornerStep();
 
                 //если раньше не было ходов то сделать случайный ход
                 if (makeStep == false) {
                     // рэндом нажатие кнопки андроидом
-                    makeRandomStep();
+                    btnToDroidStep = makeRandomStep();
                 }
                 break;
         }
+        return btnToDroidStep;
     }
 
     //проверка ячейки на незанятость, иначе брать следующую
     public int checkEmptyButton(int numberOfButton) {
-        Log.d(LOG_TAG, "526 test checkEmptyButton ");
+        /*Log.d(LOG_TAG, "526 test checkEmptyButton ");
         Log.d(LOG_TAG, "527 numberOfButton= " + numberOfButton);
-
         Log.d(LOG_TAG, "535 arrayOfButtons[numberOfButton].getText()= " + arrayOfButtons[numberOfButton].getText());
-
-        while ((arrayOfButtons[numberOfButton].getText().equals("x"))
-                | (arrayOfButtons[numberOfButton].getText().equals("o"))) {
+*/
+        while ((arrayOfBtn[numberOfButton].getText().equals("x"))
+                | (arrayOfBtn[numberOfButton].getText().equals("o"))) {
             numberOfButton = numberOfButton + 1;
-            Log.d(LOG_TAG, "532 numberOfButton+1 = " + numberOfButton);
+            //Log.d(LOG_TAG, "532 numberOfButton+1 = " + numberOfButton);
 
             if (numberOfButton == 9) {
                 numberOfButton = 0;
             }
             //checkEmptyButton(numberOfButton);
-            Log.d(LOG_TAG, "538 test checkEmptyButton ");
+           /* Log.d(LOG_TAG, "538 test checkEmptyButton ");
             Log.d(LOG_TAG, "539 numberOfButton= " + numberOfButton);
-
+*/
         }
         return (numberOfButton);
     }
 
-    public void makeCenterStep(){
-        if ((makeStep == false) & (arrayOfButtons[4].getText().equals(""))) {
+    public int makeCenterStep(){
+        if ((makeStep == false) & (arrayOfBtn[4].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[4]);
+            btnToStep=4;
         }
+        return btnToStep;
     }
 
-    public void makeCornerStep(){
-        if ((makeStep == false)&(arrayOfButtons[0].getText().equals(""))) {
+    public int makeCornerStep(){
+        if ((makeStep == false)&(arrayOfBtn[0].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[0]);
+            btnToStep = 0;
         }
-        if ((makeStep == false)&(arrayOfButtons[2].getText().equals(""))) {
+        if ((makeStep == false)&(arrayOfBtn[2].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[2]);
+            btnToStep = 2;
         }
-        if ((makeStep == false)&(arrayOfButtons[5].getText().equals(""))) {
+        if ((makeStep == false)&(arrayOfBtn[5].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[5]);
+            btnToStep = 5;
         }
-        if ((makeStep == false)&(arrayOfButtons[8].getText().equals(""))) {
+        if ((makeStep == false)&(arrayOfBtn[8].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[8]);
+            btnToStep = 8;
         }
 
-
+        return btnToStep;
     }
 
     // рэндом нажатие кнопки андроидом
-    public void makeRandomStep(){
+    public int makeRandomStep(){
 
         int varRandom ;
 
         varRandom = (int) (Math.random() * 8);
-        Log.d(LOG_TAG, "510 x=(int)(Math.random()*8) = " + varRandom);
+        //Log.d(LOG_TAG, "510 x=(int)(Math.random()*8) = " + varRandom);
 
-        //xx = checkEmptyButton(x);
+        return  checkEmptyButton(varRandom);
         //clickPlayFieldBtn(arrayOfButtons[xx]);
-        clickPlayFieldBtn(arrayOfButtons[checkEmptyButton(varRandom)]);
+
+        //clickPlayFieldBtn(arrayOfButtons[checkEmptyButton(varRandom)]);
     }
 
-    public void checkWinStep() {
+    public int checkWinStep() {
 
         if ((makeStep == false)
-                & (arrayOfButtons[0].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[1].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[2].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[1].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[2].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[2]);
+            btnToStep = 2;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[0].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[2].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[1].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[2].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[1].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[1]);
+            btnToStep = 1;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[1].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[2].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[0].getText().equals(""))) {
+                & (arrayOfBtn[1].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[2].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[0].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[0]);
-        }
-
-        if ((makeStep == false)
-                & (arrayOfButtons[3].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[5].getText().equals(""))) {
-            makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[5]);
-        }
-        if ((makeStep == false)
-                & (arrayOfButtons[3].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[5].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(""))) {
-            makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[4]);
-        }
-        if ((makeStep == false)
-                & (arrayOfButtons[4].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[5].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[3].getText().equals(""))) {
-            makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[3]);
+            btnToStep = 0;
         }
 
-
         if ((makeStep == false)
-                & (arrayOfButtons[6].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[7].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(""))) {
+                & (arrayOfBtn[3].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[5].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[8]);
+            btnToStep = 5;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[6].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[7].getText().equals(""))) {
+                & (arrayOfBtn[3].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[5].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[7]);
+            btnToStep = 4;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[7].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[5].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[3].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[6]);
+            btnToStep = 3;
         }
 
 
         if ((makeStep == false)
-                & (arrayOfButtons[0].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[3].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(""))) {
+                & (arrayOfBtn[6].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[7].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[6]);
+            btnToStep = 8;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[0].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[3].getText().equals(""))) {
+                & (arrayOfBtn[6].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[7].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[3]);
+            btnToStep = 7;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[3].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[0].getText().equals(""))) {
+                & (arrayOfBtn[7].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[0]);
+            btnToStep = 6;
         }
 
 
         if ((makeStep == false)
-                & (arrayOfButtons[1].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[7].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[3].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[7]);
+            btnToStep = 6;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[1].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[7].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[3].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[4]);
+            btnToStep = 3;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[4].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[7].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[1].getText().equals(""))) {
+                & (arrayOfBtn[3].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[0].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[1]);
+            btnToStep = 0;
         }
 
 
         if ((makeStep == false)
-                & (arrayOfButtons[2].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[5].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(""))) {
+                & (arrayOfBtn[1].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[7].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[8]);
+            btnToStep = 7;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[2].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[5].getText().equals(""))) {
+                & (arrayOfBtn[1].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[7].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[5]);
+            btnToStep = 4;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[5].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[2].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[7].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[1].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[2]);
+            btnToStep = 1;
         }
 
 
         if ((makeStep == false)
-                & (arrayOfButtons[0].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(""))) {
+                & (arrayOfBtn[2].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[5].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[8]);
+            btnToStep = 8;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[0].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(""))) {
+                & (arrayOfBtn[2].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[5].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[4]);
+            btnToStep = 5;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[4].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[0].getText().equals(""))) {
+                & (arrayOfBtn[5].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[2].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[0]);
+            btnToStep = 2;
         }
 
 
         if ((makeStep == false)
-                & (arrayOfButtons[2].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[6]);
+            btnToStep = 8;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[2].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[4]);
+            btnToStep = 4;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[4].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(rightPlayer.getSymbol()))
-                & (arrayOfButtons[2].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[0].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[2]);
+            btnToStep = 0;
         }
-        Log.d(LOG_TAG, "850 makeStep =" + makeStep);
+
+
+        if ((makeStep == false)
+                & (arrayOfBtn[2].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(""))) {
+            makeStep = true;
+            btnToStep = 6;
+        }
+        if ((makeStep == false)
+                & (arrayOfBtn[2].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(""))) {
+            makeStep = true;
+            btnToStep = 4;
+        }
+        if ((makeStep == false)
+                & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(rightPlr.getSymbol()))
+                & (arrayOfBtn[2].getText().equals(""))) {
+            makeStep = true;
+            btnToStep = 2;
+        }
+        //Log.d(LOG_TAG, "850 makeStep =" + makeStep);
+        return btnToStep;
     }
 
-    public void checkLooseStep (){
+    public int checkLooseStep (){
 
-        Log.d(LOG_TAG, "855 checkLooseStep ");
+       /* Log.d(LOG_TAG, "855 checkLooseStep ");
         Log.d(LOG_TAG, "850 makeStep =" + makeStep);
-
+*/
         if ((makeStep == false)
-                & (arrayOfButtons[0].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[1].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[2].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[1].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[2].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[2]);
+            btnToStep = 2;
         }
 
         if ((makeStep == false)
-                & (arrayOfButtons[0].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[2].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[1].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[2].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[1].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[1]);
+            btnToStep = 1;
 
         }
         if ((makeStep == false)
-                & (arrayOfButtons[1].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[2].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[0].getText().equals(""))) {
+                & (arrayOfBtn[1].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[2].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[0].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[0]);
+            btnToStep = 0;
         }
 
         if ((makeStep == false)
-                & (arrayOfButtons[3].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[5].getText().equals(""))) {
+                & (arrayOfBtn[3].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[5].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[5]);
+            btnToStep = 5;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[3].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[5].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(""))) {
+                & (arrayOfBtn[3].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[5].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[4]);
+            btnToStep = 4;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[4].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[5].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[3].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[5].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[3].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[3]);
-        }
-
-
-        if ((makeStep == false)
-                & (arrayOfButtons[6].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[7].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(""))) {
-            makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[8]);
-        }
-        if ((makeStep == false)
-                & (arrayOfButtons[6].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[7].getText().equals(""))) {
-            makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[7]);
-        }
-        if ((makeStep == false)
-                & (arrayOfButtons[7].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(""))) {
-            makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[6]);
+            btnToStep = 3;
         }
 
 
         if ((makeStep == false)
-                & (arrayOfButtons[0].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[3].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(""))) {
+                & (arrayOfBtn[6].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[7].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[6]);
+            btnToStep = 8;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[0].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[3].getText().equals(""))) {
+                & (arrayOfBtn[6].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[7].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[3]);
+            btnToStep = 7;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[3].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[0].getText().equals(""))) {
+                & (arrayOfBtn[7].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[0]);
+            btnToStep = 6;
         }
 
 
         if ((makeStep == false)
-                & (arrayOfButtons[1].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[7].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[3].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[7]);
+            btnToStep = 6;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[1].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[7].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[3].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[4]);
+            btnToStep = 3;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[4].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[7].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[1].getText().equals(""))) {
+                & (arrayOfBtn[3].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[0].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[1]);
+            btnToStep = 0;
         }
 
 
         if ((makeStep == false)
-                & (arrayOfButtons[2].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[5].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(""))) {
+                & (arrayOfBtn[1].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[7].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[8]);
+            btnToStep = 7;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[2].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[5].getText().equals(""))) {
+                & (arrayOfBtn[1].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[7].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[5]);
+            btnToStep = 4;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[5].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[2].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[7].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[1].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[2]);
+            btnToStep = 1;
         }
 
 
         if ((makeStep == false)
-                & (arrayOfButtons[0].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(""))) {
+                & (arrayOfBtn[2].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[5].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[8]);
+            btnToStep = 8;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[0].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(""))) {
+                & (arrayOfBtn[2].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[5].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[4]);
+            btnToStep = 5;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[4].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[8].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[0].getText().equals(""))) {
+                & (arrayOfBtn[5].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[2].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[0]);
+            btnToStep = 2;
         }
 
 
         if ((makeStep == false)
-                & (arrayOfButtons[2].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[6]);
+            btnToStep = 8;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[2].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[4].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[4]);
+            btnToStep = 4;
         }
         if ((makeStep == false)
-                & (arrayOfButtons[4].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[6].getText().equals(leftPlayer.getSymbol()))
-                & (arrayOfButtons[2].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[8].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[0].getText().equals(""))) {
             makeStep = true;
-            clickPlayFieldBtn(arrayOfButtons[2]);
+            btnToStep = 0;
         }
 
-        Log.d(LOG_TAG, "1042 makeStep =" + makeStep);
+
+        if ((makeStep == false)
+                & (arrayOfBtn[2].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(""))) {
+            makeStep = true;
+            btnToStep = 6;
+        }
+        if ((makeStep == false)
+                & (arrayOfBtn[2].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[4].getText().equals(""))) {
+            makeStep = true;
+            btnToStep = 4;
+        }
+        if ((makeStep == false)
+                & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[6].getText().equals(leftPlr.getSymbol()))
+                & (arrayOfBtn[2].getText().equals(""))) {
+            makeStep = true;
+            btnToStep = 2;
+        }
+
+        //Log.d(LOG_TAG, "1042 makeStep =" + makeStep);
+
+        return btnToStep;
 
     }
 

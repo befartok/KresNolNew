@@ -18,22 +18,26 @@ public class MainActivity extends AppCompatActivity {
 
     final String LOG_TAG = "myLogs";
 
-    int clickedButtonsTotal = 0;
+    // TODO: 26.07.18 перенести в модель ok
+    //int clickedButtonsTotal = 0;
 
-    String symbolActiv = "x";
-    String statusGames = "ready";
+    // TODO: 26.07.18 перенести в модель ok
+    //String symbolActiv = "x";
+    //String statusGames = "ready";
 
-    // TODO: 25.07.18 после реализации бд вместо 0 брать значения из бд
-    int totalWinLeft = 0;
-    int totalWinRight = 0;
+    // TODO: 26.07.18 перенести в модель ok
+    //int totalWinLeft = 0;
+    //int totalWinRight = 0;
 
     //число рестартов
-    int numOfRestart = 0;
+    // TODO: 26.07.18 перенести в модель ok
+    //int numOfRestart = 0;
 
+    // TODO: 26.07.18 перенести в модель? no
     Button arrayOfButtons[] = new Button[9];
 
-    Player leftPlayer;
-    Player rightPlayer;
+    /*Player leftPlayer;
+    Player rightPlayer;*/
 
     Button symbolOfBtnLeftPlayer;
     Button symbolOfBtnRightPlayer;
@@ -42,17 +46,29 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinnerRight;
     static Spinner spinnerLevel;
 
-    String[] arrayOfPlayers = {"Player 1", "Player 2", "Android"};
-    String[] arrayOfLevel = {"Easy", "Normal", "Hard"};
+    MainPresenter presenter;
 
-    boolean makeStep;
+    // TODO: 26.07.18 перенести в модель ok
+    //String[] arrayOfPlayers = {"Player 1", "Player 2", "Android"};
+    //String[] arrayOfLevel = {"Easy", "Normal", "Hard"};
+
+    // TODO: 26.07.18 перенести в модель ok
+    // boolean makeStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Log.d(LOG_TAG, "64 statusGame-ready");
+        init();
+    }
 
+
+    private void init() {
+
+        presenter = new MainPresenter();
+
+        // TODO: 26.07.18 перенести в модель? нет!
         //определение кнопки игрового поля
         arrayOfButtons[0] = (Button) findViewById(R.id.button0);
         arrayOfButtons[1] = (Button) findViewById(R.id.button1);
@@ -66,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         // адаптер
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfPlayers);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfPlayers);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfPlayer());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinnerLeft = (Spinner) findViewById(R.id.spinnerLeft);
@@ -86,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
                                        int position, long id) {
                 // показываем позиция нажатого элемента
                 //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
+                presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
+
             }
 
             @Override
@@ -100,10 +119,15 @@ public class MainActivity extends AppCompatActivity {
                 // показываем позиция нажатого элемента, убрать?
                 //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
 
+                //установить сеттер для модели транзитом через презентер
+                presenter.setSpinnerRight(spinnerRight.getSelectedItem().toString());
                 //видимость спинера уровня для игрока Андроид
-                if (spinnerRight.getSelectedItem().toString().equals("Android")) {
+                presenter.checkVisibilitySpinnerLevel();
+                // TODO: 26.07.18 перенести в модель ok
+/*                if (spinnerRight.getSelectedItem().toString().equals("Android")) {
+
                     spinnerLevel.setVisibility(View.VISIBLE);
-                } else spinnerLevel.setVisibility(View.INVISIBLE);
+                } else spinnerLevel.setVisibility(View.INVISIBLE);*/
             }
 
             @Override
@@ -111,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ArrayAdapter<String> adapterLevel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfLevel);
+        //ArrayAdapter<String> adapterLevel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfLevel);
+        ArrayAdapter<String> adapterLevel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfLevel());
         adapterLevel.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinnerLevel = (Spinner) findViewById(R.id.spinnerLevel);
@@ -122,7 +147,8 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
                 // показываем позиция нажатого элемента
-                Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
+                presenter.setSpinnerLevel(spinnerLevel.getSelectedItem().toString());
 
             }
 
@@ -136,14 +162,16 @@ public class MainActivity extends AppCompatActivity {
         symbolOfBtnRightPlayer = (Button) findViewById(R.id.buttonSymbolRightPlayer);
 
         //создание левого и правого игрока
-        leftPlayer = new Player(spinnerLeft.getSelectedItem().toString());
-        rightPlayer = new Player(spinnerRight.getSelectedItem().toString());
+        // TODO: 26.07.18 перенести в презентер? ок
+        //leftPlayer = new Player(spinnerLeft.getSelectedItem().toString());
+        //rightPlayer = new Player(spinnerRight.getSelectedItem().toString());
 
         // присвоить символы и другие значения по умолчанию
-        leftPlayer.setSymbol("x");
+        // TODO: 26.07.18 перенести в модель ok
+        /*leftPlayer.setSymbol("x");
         leftPlayer.setActive(true);
         rightPlayer.setSymbol("o");
-        rightPlayer.setActive(false);
+        rightPlayer.setActive(false);*/
     }
 
     public void onclick(View v) {
@@ -178,8 +206,9 @@ public class MainActivity extends AppCompatActivity {
 
         }*/
 
+        presenter.click(v.getId());
         //изменение символов для игроков
-        switch (v.getId()) {
+       /* switch (v.getId()) {
             case R.id.buttonSymbolLeftPlayer:
 
                 if (statusGames == "ready") {
@@ -263,15 +292,15 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button8:
                 clickPlayFieldBtn(arrayOfButtons[8]);
                 break;
-        }
+        }*/
     }
 
-    public void clickPlayFieldBtn(Button btn) {
+    /*public void clickPlayFieldBtn(Button btn) {
 
         // проверка нажатости кнопки и закончившесяй игры
         if ((statusGames != "finish") & (btn.getText().equals(""))) {
             statusGames = "inplay";
-            Log.d(LOG_TAG, "277 clickPlayFieldBtn["+ btn + "]");
+            Log.d(LOG_TAG, "277 clickPlayFieldBtn[" + btn + "]");
             disableChangeSymbol();
 
             if (leftPlayer.isActive()) {
@@ -307,16 +336,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(LOG_TAG, "244 ход андроида");
                 droidsStep();
             } else if (statusGames == "inplay") {
-                //invertVariables();
                 invertPlayersActivity();
             }
 
         } else if (statusGames == "finish") {
             restartGame();
         }
-    }
+    }*/
 
-    private void restartGame() {
+    //// TODO: 31.07.18 перенести в презентер ok
+    /*private void restartGame() {
 
         Log.d(LOG_TAG, "258 restart");
         numOfRestart++;
@@ -356,9 +385,9 @@ public class MainActivity extends AppCompatActivity {
             invertPlayersActivity();
             droidsStep();
         }
-    }
+    }*/
 
-    public void disableChangeSymbol() {
+    /*public void disableChangeSymbol() {
 
         symbolOfBtnLeftPlayer.setEnabled(false);
         symbolOfBtnRightPlayer.setEnabled(false);
@@ -366,19 +395,21 @@ public class MainActivity extends AppCompatActivity {
         spinnerRight.setEnabled(false);
         spinnerLevel.setEnabled(false);
     }
-
-    public void enableChangeSymbol() {
+*/
+/*    public void enableChangeSymbol() {
 
         symbolOfBtnLeftPlayer.setEnabled(true);
         symbolOfBtnRightPlayer.setEnabled(true);
         spinnerLeft.setEnabled(true);
         spinnerRight.setEnabled(true);
         spinnerLevel.setEnabled(true);
-    }
+    }*/
 
-    public void checkWin() {
+    /*public void checkWin() {
 
         // TODO: 10.03.18 заменить финиш на вин?
+        // TODO: 10.03.18 присваивать символ актив перед иф
+
         if ((arrayOfButtons[0].getText().equals(symbolActiv))
                 & (arrayOfButtons[1].getText().equals(symbolActiv))
                 & (arrayOfButtons[2].getText().equals(symbolActiv))) {
@@ -388,7 +419,6 @@ public class MainActivity extends AppCompatActivity {
             arrayOfButtons[1].setTextColor(Color.RED);
             arrayOfButtons[2].setTextColor(Color.RED);
 
-            // TODO: 04.04.18 передавать не текст кнопки, а aктивный символ, проверить
             saveResult(arrayOfButtons[0].getText());
         }
 
@@ -472,8 +502,8 @@ public class MainActivity extends AppCompatActivity {
         if ((arrayOfButtons[2].getText().equals(symbolActiv))
                 & (arrayOfButtons[4].getText().equals(symbolActiv))
                 & (arrayOfButtons[6].getText().equals(symbolActiv))) {
-    /*    if ((playField[2] == symbolActiv) & (playField[4] == symbolActiv)
-                & (playField[6] == symbolActiv)) {*/
+    *//*    if ((playField[2] == symbolActiv) & (playField[4] == symbolActiv)
+                & (playField[6] == symbolActiv)) {*//*
             statusGames = "finish";
             Log.d(LOG_TAG, "412 statusGames-finish");
 
@@ -483,9 +513,9 @@ public class MainActivity extends AppCompatActivity {
 
             saveResult(arrayOfButtons[2].getText());
         }
-    }
+    }*/
 
-    public void saveResult(CharSequence winSimbol) {
+    /*public void saveResult(CharSequence winSimbol) {
 
         Log.d(LOG_TAG, "426 winSimbol=" + winSimbol);
         Log.d(LOG_TAG, "428 symbolOfBtnLeftPlayer=" + symbolOfBtnLeftPlayer.getText());
@@ -508,14 +538,15 @@ public class MainActivity extends AppCompatActivity {
             winRight.setText(Integer.toString(totalWinRight));
             Log.d(LOG_TAG, "446 totalWinRight=" + totalWinRight);
         }
-    }
+    }*/
 
+/*    // TODO: 28.07.18 перенести в модель ok
     public void makeNameActive(String selectedSymbolsButton) {
 
         switch (selectedSymbolsButton) {
             case "leftButton":
-/*                nameOfPlayerLeft.setTextColor(getResources().getColor(R.color.buttonsTextActive));
-                nameOfPlayerLeft.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);*/
+*//*                nameOfPlayerLeft.setTextColor(getResources().getColor(R.color.buttonsTextActive));
+                nameOfPlayerLeft.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);*//*
 
                 ((TextView) spinnerLeft.getSelectedView()).setTextColor(getResources().getColor(R.color.buttonsTextActive));
                 ((TextView) spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
@@ -524,8 +555,8 @@ public class MainActivity extends AppCompatActivity {
                 ((TextView) spinnerRight.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
                 break;
             case "rightButton":
-/*                nameOfPlayerLeft.setTextColor(getResources().getColor(R.color.buttonsText));
-                nameOfPlayerLeft.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);*/
+*//*                nameOfPlayerLeft.setTextColor(getResources().getColor(R.color.buttonsText));
+                nameOfPlayerLeft.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);*//*
 
                 ((TextView) spinnerLeft.getSelectedView()).setTextColor(getResources().getColor(R.color.buttonsText));
                 ((TextView) spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
@@ -535,18 +566,19 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
         }
-    }
+    }*/
 
     // меняет символ
-    public void invertVariables() {
+    // TODO: 31.07.18 перенесено в презентер ок
+/*    public void invertVariables() {
         String buferVariable;
 
         buferVariable = leftPlayer.getSymbol();
         leftPlayer.setSymbol(rightPlayer.getSymbol());
         rightPlayer.setSymbol(buferVariable);
-    }
+    }*/
 
-    public void invertPlayersActivity() {
+/*    public void invertPlayersActivity() {
         Boolean buferActivity;
 
         buferActivity = leftPlayer.isActive();
@@ -562,9 +594,9 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "492 rightPlayer.getSymbol()=" + rightPlayer.getSymbol());
             makeNameActive("rightButton");
         }
-    }
+    }*/
 
-    public void droidsStep() {
+    /*public void droidsStep() {
         invertPlayersActivity();
         Log.d(LOG_TAG, "500 droidsStep");
         //int x;
@@ -578,11 +610,11 @@ public class MainActivity extends AppCompatActivity {
 
                 // рэндом нажатие кнопки андроидом
                 makeRandomStep();
-               /* x = (int) (Math.random() * 8);
+               *//* x = (int) (Math.random() * 8);
                 Log.d(LOG_TAG, "510 x=(int)(Math.random()*8) = " + x);
 
                 xx = checkEmptyButton(x);
-                clickPlayFieldBtn(arrayOfButtons[xx]);*/
+                clickPlayFieldBtn(arrayOfButtons[xx]);*//*
                 //clickPlayFieldBtn(arrayOfButtons[checkEmptyButton(x)]);
 
                 break;
@@ -601,9 +633,9 @@ public class MainActivity extends AppCompatActivity {
 
                 //если раньше не было ходов то сделать случайный ход
 
-                if (makeStep == false){
+                if (makeStep == false) {
                     // рэндом нажатие кнопки андроидом
-                   makeRandomStep();
+                    makeRandomStep();
                 }
 
                 break;
@@ -628,15 +660,15 @@ public class MainActivity extends AppCompatActivity {
                 makeCornerStep();
 
                 //если раньше не было ходов то сделать случайный ход
-                if (makeStep == false){
+                if (makeStep == false) {
                     // рэндом нажатие кнопки андроидом
                     makeRandomStep();
                 }
                 break;
         }
     }
-
-    //проверка ячейки на незанятость, иначе брать следующую
+*/
+/*    //проверка ячейки на незанятость, иначе брать следующую
     public int checkEmptyButton(int numberOfButton) {
         Log.d(LOG_TAG, "526 test checkEmptyButton ");
         Log.d(LOG_TAG, "527 numberOfButton= " + numberOfButton);
@@ -659,27 +691,27 @@ public class MainActivity extends AppCompatActivity {
         return (numberOfButton);
     }
 
-    public void makeCenterStep(){
+    public void makeCenterStep() {
         if ((makeStep == false) & (arrayOfButtons[4].getText().equals(""))) {
             makeStep = true;
             clickPlayFieldBtn(arrayOfButtons[4]);
         }
     }
 
-    public void makeCornerStep(){
-        if ((makeStep == false)&(arrayOfButtons[0].getText().equals(""))) {
+    public void makeCornerStep() {
+        if ((makeStep == false) & (arrayOfButtons[0].getText().equals(""))) {
             makeStep = true;
             clickPlayFieldBtn(arrayOfButtons[0]);
         }
-        if ((makeStep == false)&(arrayOfButtons[2].getText().equals(""))) {
+        if ((makeStep == false) & (arrayOfButtons[2].getText().equals(""))) {
             makeStep = true;
             clickPlayFieldBtn(arrayOfButtons[2]);
         }
-        if ((makeStep == false)&(arrayOfButtons[5].getText().equals(""))) {
+        if ((makeStep == false) & (arrayOfButtons[5].getText().equals(""))) {
             makeStep = true;
             clickPlayFieldBtn(arrayOfButtons[5]);
         }
-        if ((makeStep == false)&(arrayOfButtons[8].getText().equals(""))) {
+        if ((makeStep == false) & (arrayOfButtons[8].getText().equals(""))) {
             makeStep = true;
             clickPlayFieldBtn(arrayOfButtons[8]);
         }
@@ -688,9 +720,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // рэндом нажатие кнопки андроидом
-    public void makeRandomStep(){
+    public void makeRandomStep() {
 
-        int varRandom ;
+        int varRandom;
 
         varRandom = (int) (Math.random() * 8);
         Log.d(LOG_TAG, "510 x=(int)(Math.random()*8) = " + varRandom);
@@ -886,7 +918,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "850 makeStep =" + makeStep);
     }
 
-    public void checkLooseStep (){
+    public void checkLooseStep() {
 
         Log.d(LOG_TAG, "855 checkLooseStep ");
         Log.d(LOG_TAG, "850 makeStep =" + makeStep);
@@ -1077,10 +1109,11 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(LOG_TAG, "1042 makeStep =" + makeStep);
 
-    }
+    }*/
 
-    public static String getSpinnerLevel(){
+    /*// TODO: 04.08.18 зачем этод метод? убрать?
+    public static String getSpinnerLevel() {
         return spinnerLevel.getSelectedItem().toString();
-    }
+    }*/
 
 }
