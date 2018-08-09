@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     MainPresenter presenter;
 
+
     // TODO: 26.07.18 перенести в модель ok
     //String[] arrayOfPlayers = {"Player 1", "Player 2", "Android"};
     //String[] arrayOfLevel = {"Easy", "Normal", "Hard"};
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
 
-        presenter = new MainPresenter();
+        presenter = new MainPresenter(this);
 
         // TODO: 26.07.18 перенести в модель? нет!
         //определение кнопки игрового поля
@@ -199,6 +200,8 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 15.04.18 расставить паузы
 
         // TODO: 09.07.18 при смене игроков менять счет
+
+        // TODO: 08.08.18 запретить выбирать в спинере выбранного с другой стороны игрока
 
 
         // TODO: 25.07.18 перенести обработку нажатий в класс-презентер, и здесь вызывать его метод нажатия

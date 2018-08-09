@@ -22,10 +22,12 @@ public class LogicOfDroid {
     Player leftPlayer;
     Player rightPlayer;*/
 
+    final String LOG_TAG = "myLogs";
+
 
 
     // TODO: 02.08.18 сделать функции, возвращать в презентер номер кнопки для хода
-    public int droidsStep(Button[] arrayOfBtn, Player leftPlr, Player rightPlr, MainModel mainModel) {
+    public int droidsStep(Button[] arr, Player lPlr, Player rPlr, MainModel mainModel) {
         //убрал инвертирование из метода, вынес перед вызовом метода
         //invertPlayersActivity();
 
@@ -36,13 +38,18 @@ public class LogicOfDroid {
         //TimeUnit.SECONDS.sleep(1);
         //switch (spinnerLevel.getSelectedItem().toString()) {
         // TODO: 03.08.18 подумать над созданием разных массивов с перезаписью их при вызове метода
+        arrayOfBtn=arr;
+        leftPlr = lPlr;
+        rightPlr = rPlr;
+        Log.d(LOG_TAG, "42 mainModel.getSpinnerLevelValue()" + mainModel.getSpinnerLevelValue());
 
-        switch (mainModel.getSpinnerLeftValue()) {
+        switch (mainModel.getSpinnerLevelValue()) {
             case "Easy":
 
                 //// TODO: 06.07.18 вынести в класс логики
                 // рэндом нажатие кнопки андроидом
                 btnToDroidStep = makeRandomStep();
+                //Log.d(LOG_TAG, "48  btnToDroidStep" + btnToDroidStep);
                /* x = (int) (Math.random() * 8);
                 Log.d(LOG_TAG, "510 x=(int)(Math.random()*8) = " + x);
 
@@ -52,17 +59,21 @@ public class LogicOfDroid {
 
                 break;
             case "Normal":
-                //Log.d(LOG_TAG, "сделать логику для 2 уровня ");
+                //логика для 2 уровня;
                 makeStep = false;
+                Log.d(LOG_TAG, "62 test" );
 
                 //проверка возможности выигрыша
                 btnToDroidStep = checkWinStep();
+                Log.d(LOG_TAG, "66 test" );
 
                 //проверка возможности проигрыша
                 btnToDroidStep = checkLooseStep();
+                Log.d(LOG_TAG, "70 test" );
 
                 //проверка возможности поставить в центр
                 btnToDroidStep = makeCenterStep();
+                Log.d(LOG_TAG, "74 test" );
 
                 //если раньше не было ходов то сделать случайный ход
 
@@ -70,6 +81,7 @@ public class LogicOfDroid {
                     // рэндом нажатие кнопки андроидом
                     btnToDroidStep = makeRandomStep();
                 }
+                Log.d(LOG_TAG, "82 test" );
 
                 break;
 
@@ -107,10 +119,12 @@ public class LogicOfDroid {
         Log.d(LOG_TAG, "527 numberOfButton= " + numberOfButton);
         Log.d(LOG_TAG, "535 arrayOfButtons[numberOfButton].getText()= " + arrayOfButtons[numberOfButton].getText());
 */
+        Log.d(LOG_TAG, " 115 test  checkEmptyButton");
+
         while ((arrayOfBtn[numberOfButton].getText().equals("x"))
                 | (arrayOfBtn[numberOfButton].getText().equals("o"))) {
             numberOfButton = numberOfButton + 1;
-            //Log.d(LOG_TAG, "532 numberOfButton+1 = " + numberOfButton);
+            Log.d(LOG_TAG, "120 numberOfButton+1 = " + numberOfButton);
 
             if (numberOfButton == 9) {
                 numberOfButton = 0;
@@ -156,9 +170,8 @@ public class LogicOfDroid {
     public int makeRandomStep(){
 
         int varRandom ;
-
         varRandom = (int) (Math.random() * 8);
-        //Log.d(LOG_TAG, "510 x=(int)(Math.random()*8) = " + varRandom);
+        //Log.d(LOG_TAG, "164 varRandom = " + varRandom);
 
         return  checkEmptyButton(varRandom);
         //clickPlayFieldBtn(arrayOfButtons[xx]);
@@ -167,6 +180,9 @@ public class LogicOfDroid {
     }
 
     public int checkWinStep() {
+        Log.d(LOG_TAG, "181 test" );
+        Log.d(LOG_TAG, "182 arrayOfBtn[4].getText()=" + arrayOfBtn[4].getText() );
+        Log.d(LOG_TAG, "184 rightPlr.getSymbol=" + rightPlr.getSymbol() );
 
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
@@ -349,7 +365,7 @@ public class LogicOfDroid {
             makeStep = true;
             btnToStep = 2;
         }
-        //Log.d(LOG_TAG, "850 makeStep =" + makeStep);
+        Log.d(LOG_TAG, "364 test" );
         return btnToStep;
     }
 

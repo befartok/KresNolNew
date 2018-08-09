@@ -7,9 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-/*import static com.example.admin.kresnol.MainActivity.spinnerLevel;
-import static com.example.admin.kresnol.R.id.spinnerLeft;
-import static com.example.admin.kresnol.R.id.spinnerRight;*/
 
 /**
  * Created by admin on 26.07.18.
@@ -23,19 +20,24 @@ public class MainPresenter {
     Player leftPlayer;
     Player rightPlayer;
 
+    //final String LOG_TAG = "myLogs";
 
-    public MainPresenter() {
+
+    public MainPresenter(MainActivity mainActivity) {
+        view = mainActivity;
         model = new MainModel();
         logic = new LogicOfDroid();
+
+
+        //создание левого и правого игрока
+        leftPlayer = new Player(model.getSpinnerLeftValue());
+        rightPlayer = new Player(model.getSpinnerRightValue());
 
         leftPlayer.setSymbol("x");
         leftPlayer.setActive(true);
         rightPlayer.setSymbol("o");
         rightPlayer.setActive(false);
 
-        //создание левого и правого игрока
-        leftPlayer = new Player(model.getSpinnerLeftValue());
-        rightPlayer = new Player(model.getSpinnerRightValue());
     }
 
     public String[] getArrayOfPlayer() {
@@ -70,6 +72,8 @@ public class MainPresenter {
 
     public void checkVisibilitySpinnerLevel() {
         if (model.getSpinnerRightValue().equals("Android")) {
+
+
             view.spinnerLevel.setVisibility(View.VISIBLE);
         } else view.spinnerLevel.setVisibility(View.INVISIBLE);
     }
@@ -139,6 +143,8 @@ public class MainPresenter {
 
             //нажатие кнопки игроком в игровом поле
             case R.id.button0:
+
+
                 clickPlayFieldBtn(view.arrayOfButtons[0]);
                 break;
             case R.id.button1:
@@ -266,12 +272,12 @@ public class MainPresenter {
         rightPlayer.setActive(buferActivity);
 
         if (leftPlayer.isActive()) {
-            Log.d(view.LOG_TAG, "487 leftPlayer.isActive()=true");
-            Log.d(view.LOG_TAG, "488 leftPlayer.getSymbol()=" + leftPlayer.getSymbol());
+            //Log.d(view.LOG_TAG, "487 leftPlayer.isActive()=true");
+            //Log.d(view.LOG_TAG, "488 leftPlayer.getSymbol()=" + leftPlayer.getSymbol());
             makeNameActive("leftButton");
         } else if (rightPlayer.isActive()) {
-            Log.d(view.LOG_TAG, "491 rightPlayer.isActive()=true");
-            Log.d(view.LOG_TAG, "492 rightPlayer.getSymbol()=" + rightPlayer.getSymbol());
+            //Log.d(view.LOG_TAG, "491 rightPlayer.isActive()=true");
+            //Log.d(view.LOG_TAG, "492 rightPlayer.getSymbol()=" + rightPlayer.getSymbol());
             makeNameActive("rightButton");
         }
     }

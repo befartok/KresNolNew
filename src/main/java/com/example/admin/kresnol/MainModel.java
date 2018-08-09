@@ -26,8 +26,7 @@ public class MainModel {
     String spinnerRightValue;
     String spinnerLevelValue;
 
-
-    // TODO: 27.07.18 проверить гетеры и сеттеры насчет параметров и переменных
+// TODO: 27.07.18 проверить гетеры и сеттеры насчет параметров и переменных
 
     public String getSpinnerLeftValue() {
         return spinnerLeftValue;
@@ -46,5 +45,9 @@ public class MainModel {
     }
     public void setSpinnerLevelValue(String spinnerLevelValue) {
         this.spinnerLevelValue = spinnerLevelValue;
+    }
+
+    public String getSpinnerLevelValue() {
+        return spinnerLevelValue;
     }
 }
