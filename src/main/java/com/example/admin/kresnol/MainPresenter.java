@@ -20,7 +20,7 @@ public class MainPresenter {
     Player leftPlayer;
     Player rightPlayer;
 
-    //final String LOG_TAG = "myLogs";
+    final String LOG_TAG = "myLogs";
 
 
     public MainPresenter(MainActivity mainActivity) {
@@ -57,12 +57,19 @@ public class MainPresenter {
         model.setSpinnerLeftValue(spinLeft);
     }
 
-    public void getSpinnerRight() {
+    /*public void getSpinnerRight() {
         model.getSpinnerRightValue();
-    }
+    }*/
 
     public void setSpinnerRight(String spinRight) {
         model.setSpinnerRightValue(spinRight);
+        setImageRight();
+    }
+
+    public void setImageRight(){
+        if (model.getSpinnerRightValue().equals("Android")){
+            view.imageOfRightPlayer.setImageResource(R.drawable.ic_android_black_24dp);
+        }else view.imageOfRightPlayer.setImageResource(R.drawable.ic_accessibility_black_24dp);
     }
 
     public void setSpinnerLevel(String spinLevel) {
@@ -82,19 +89,14 @@ public class MainPresenter {
         switch (id) {
             case R.id.buttonSymbolRightPlayer:
             case R.id.buttonSymbolLeftPlayer:
+                Log.d(LOG_TAG, "92 click test");
 
-                // TODO: 28.07.18 объединить со следующим кейзом
+
                 // TODO: 28.07.18 вынести в модель?
-
                 if (model.statusGames == "ready") {
 
                     // меняет символ
                     invertVariables();
-
-                    /*
-                    view.symbolOfBtnLeftPlayer.setText(leftPlayer.getSymbol());
-                    view.symbolOfBtnRightPlayer.setText(rightPlayer.getSymbol()); */
-
 
                     //первый выбор символа, установка активности
                     // TODO: 28.07.18 вынести в модель?
@@ -112,27 +114,6 @@ public class MainPresenter {
                     }
                 }
                 break;
-/* объединил с предыдущим кейзом
-            case R.id.buttonSymbolRightPlayer:
-                if (statusGames == "ready") {
-                    invertVariables();
-
-                    symbolOfBtnRightPlayer.setText(rightPlayer.getSymbol());
-                    symbolOfBtnLeftPlayer.setText(leftPlayer.getSymbol());
-
-                    if ((clickedButtonsTotal == 0) & (numOfRestart == 0)) {
-                        if (rightPlayer.getSymbol().equals("x")) {
-                            rightPlayer.setActive(true);
-                            makeNameActive("rightButton");
-                            leftPlayer.setActive(false);
-                        } else if (rightPlayer.getSymbol().equals("o")) {
-                            rightPlayer.setActive(false);
-                            makeNameActive("leftButton");
-                            leftPlayer.setActive(true);
-                        }
-                    }
-                }
-                break;*/
 
             //перезапуск
             case R.id.layout0:
@@ -143,14 +124,10 @@ public class MainPresenter {
 
             //нажатие кнопки игроком в игровом поле
             case R.id.button0:
-
-
                 clickPlayFieldBtn(view.arrayOfButtons[0]);
                 break;
             case R.id.button1:
-                //clickPlayFieldBtn(1, btn1);
                 clickPlayFieldBtn(view.arrayOfButtons[1]);
-
                 break;
             case R.id.button2:
                 clickPlayFieldBtn(view.arrayOfButtons[2]);
@@ -176,6 +153,7 @@ public class MainPresenter {
         }
     }
 
+    //меняем символ у игроков
     public void invertVariables() {
         String buferVariable;
 
@@ -193,8 +171,6 @@ public class MainPresenter {
 
         switch (selectedSymbolsButton) {
             case "leftButton":
-/*                nameOfPlayerLeft.setTextColor(getResources().getColor(R.color.buttonsTextActive));
-                nameOfPlayerLeft.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);*/
 
                 ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
                 ((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
@@ -203,9 +179,6 @@ public class MainPresenter {
                 ((TextView) view.spinnerRight.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
                 break;
             case "rightButton":
-/*                nameOfPlayerLeft.setTextColor(getResources().getColor(R.color.buttonsText));
-                nameOfPlayerLeft.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);*/
-
                 ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
                 ((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
 
@@ -223,30 +196,6 @@ public class MainPresenter {
 
         model.clickedButtonsTotal = 0;
 
-        //убран дублироованный код
-/*
-        view.arrayOfButtons[0].setTextColor(Color.BLACK);
-        view.arrayOfButtons[0].setText("");
-        view.arrayOfButtons[1].setTextColor(Color.BLACK);
-        view.arrayOfButtons[1].setText("");
-        view.arrayOfButtons[2].setTextColor(Color.BLACK);
-        view.arrayOfButtons[2].setText("");
-        view.arrayOfButtons[3].setTextColor(Color.BLACK);
-        view.arrayOfButtons[3].setText("");
-        view.arrayOfButtons[4].setTextColor(Color.BLACK);
-        view.arrayOfButtons[4].setText("");
-        view.arrayOfButtons[5].setTextColor(Color.BLACK);
-        view.arrayOfButtons[5].setText("");
-        view.arrayOfButtons[6].setTextColor(Color.BLACK);
-        view.arrayOfButtons[6].setText("");
-        view.arrayOfButtons[7].setTextColor(Color.BLACK);
-        view.arrayOfButtons[7].setText("");
-        view.arrayOfButtons[8].setTextColor(Color.BLACK);
-        view.arrayOfButtons[8].setText("");
-*/
-
-        //Log.d(view.LOG_TAG, "283 statusGames-ready");
-
         for (int i = 0; i < 9; i++) {
             view.arrayOfButtons[i].setTextColor(Color.BLACK);
             view.arrayOfButtons[i].setText("");
@@ -258,36 +207,32 @@ public class MainPresenter {
         invertPlayersActivity();
 
         if ((view.spinnerRight.getSelectedItem().toString().equals("Android")) & rightPlayer.isActive()) {
-            //убрал инвертирование, т.к. убрал и из метода второй инверт
-            //invertPlayersActivity();
+
             clickPlayFieldBtn(view.arrayOfButtons[logic.droidsStep(view.arrayOfButtons, leftPlayer, rightPlayer, model)]);
         }
     }
 
+    //меняем активность игроков
     public void invertPlayersActivity() {
-        Boolean buferActivity;
+        Boolean tempActive;
 
-        buferActivity = leftPlayer.isActive();
+        tempActive = leftPlayer.isActive();
         leftPlayer.setActive(rightPlayer.isActive());
-        rightPlayer.setActive(buferActivity);
+        rightPlayer.setActive(tempActive);
 
         if (leftPlayer.isActive()) {
-            //Log.d(view.LOG_TAG, "487 leftPlayer.isActive()=true");
-            //Log.d(view.LOG_TAG, "488 leftPlayer.getSymbol()=" + leftPlayer.getSymbol());
             makeNameActive("leftButton");
         } else if (rightPlayer.isActive()) {
-            //Log.d(view.LOG_TAG, "491 rightPlayer.isActive()=true");
-            //Log.d(view.LOG_TAG, "492 rightPlayer.getSymbol()=" + rightPlayer.getSymbol());
             makeNameActive("rightButton");
         }
     }
 
-    public void clickPlayFieldBtn(Button btn) {
+    public void clickPlayFieldBtn(SquareButton btn) {
+   // public void clickPlayFieldBtn(Button btn) {
 
         // проверка нажатости кнопки и закончившесяй игры
         if ((model.statusGames != "finish") & (btn.getText().equals(""))) {
             model.statusGames = "inplay";
-            //Log.d(LOG_TAG, "277 clickPlayFieldBtn[" + btn + "]");
             //отключение изменяемости кнопок выбора символа и игроков
             disableChangeSymbol();
 
@@ -296,11 +241,8 @@ public class MainPresenter {
             } else if (rightPlayer.isActive()) {
                 btn.setText(rightPlayer.getSymbol());
             }
-            // рисование на кнопке активного символа
-            //btn.setText(symbolActiv);
-            //Log.d(LOG_TAG, "217 btn.setText(symbolActiv)" + symbolActiv);
 
-            //счетчик нажатых кнопок
+            //увеличить счетчик нажатых кнопок
             model.clickedButtonsTotal++;
             //Log.d(LOG_TAG, "223 clickedButtonsTotal " + clickedButtonsTotal);
 
@@ -310,15 +252,12 @@ public class MainPresenter {
             //проверка числа нажатых кнопок
             if (model.clickedButtonsTotal == 9) {
                 model.statusGames = "finish";
-                //Log.d(LOG_TAG, "235 clickedButtonsTotal == 9, statusGames-finish");
             }
 
             //передача ход 2му игроку если андроид, то ход по алгоритму, иначе обрабатывать нажатие
-            // TODO: 13.04.18 заменить на имя из класса игрока
+            // TODO: 13.04.18 заменить на имя из ресурсов
             if ((model.getSpinnerRightValue().equals("Android")) & (leftPlayer.isActive())
                     & (model.statusGames.equals("inplay"))) {
-                //Log.d(LOG_TAG, "244 ход андроида");
-                //добавил инвертирование, т. к. убрал из метода
                 invertPlayersActivity();
 
                 clickPlayFieldBtn(view.arrayOfButtons[logic.droidsStep(view.arrayOfButtons, leftPlayer, rightPlayer, model)]);
@@ -341,7 +280,6 @@ public class MainPresenter {
     }
 
     //включение возможности менять игровые символы
-
     public void enableChangeSymbol() {
         view.symbolOfBtnLeftPlayer.setEnabled(true);
         view.symbolOfBtnRightPlayer.setEnabled(true);
@@ -362,13 +300,12 @@ public class MainPresenter {
         if ((view.arrayOfButtons[0].getText().equals(symbolActive))
                 & (view.arrayOfButtons[1].getText().equals(symbolActive))
                 & (view.arrayOfButtons[2].getText().equals(symbolActive))) {
+
             model.statusGames = "finish";
-            //Log.d(LOG_TAG, "320 statusGames-finish");
             view.arrayOfButtons[0].setTextColor(Color.RED);
             view.arrayOfButtons[1].setTextColor(Color.RED);
             view.arrayOfButtons[2].setTextColor(Color.RED);
 
-            // TODO: 04.04.18 передавать не текст кнопки, а aктивный символ, проверить
             saveResult(view.arrayOfButtons[0].getText());
         }
 
@@ -377,7 +314,6 @@ public class MainPresenter {
                 & (view.arrayOfButtons[5].getText().equals(symbolActive))) {
 
             model.statusGames = "finish";
-            //Log.d(LOG_TAG, "334 model.statusGames-finish");
 
             view.arrayOfButtons[3].setTextColor(Color.RED);
             view.arrayOfButtons[4].setTextColor(Color.RED);
@@ -391,7 +327,6 @@ public class MainPresenter {
                 & (view.arrayOfButtons[8].getText().equals(symbolActive))) {
 
             model.statusGames = "finish";
-            //Log.d(LOG_TAG, "348 model.statusGames-finish");
 
             view.arrayOfButtons[6].setTextColor(Color.RED);
             view.arrayOfButtons[7].setTextColor(Color.RED);
@@ -404,7 +339,6 @@ public class MainPresenter {
                 & (view.arrayOfButtons[3].getText().equals(symbolActive))
                 & (view.arrayOfButtons[6].getText().equals(symbolActive))) {
             model.statusGames = "finish";
-            //Log.d(LOG_TAG, "361 model.statusGames-finish");
 
             view.arrayOfButtons[0].setTextColor(Color.RED);
             view.arrayOfButtons[3].setTextColor(Color.RED);
@@ -417,7 +351,6 @@ public class MainPresenter {
                 & (view.arrayOfButtons[4].getText().equals(symbolActive))
                 & (view.arrayOfButtons[7].getText().equals(symbolActive))) {
             model.statusGames = "finish";
-            //Log.d(LOG_TAG, "374 model.statusGames-finish");
 
             view.arrayOfButtons[1].setTextColor(Color.RED);
             view.arrayOfButtons[4].setTextColor(Color.RED);
@@ -429,7 +362,6 @@ public class MainPresenter {
                 & (view.arrayOfButtons[5].getText().equals(symbolActive))
                 & (view.arrayOfButtons[8].getText().equals(symbolActive))) {
             model.statusGames = "finish";
-            //Log.d(LOG_TAG, "386 model.statusGames-finish");
 
             view.arrayOfButtons[2].setTextColor(Color.RED);
             view.arrayOfButtons[5].setTextColor(Color.RED);
@@ -441,7 +373,6 @@ public class MainPresenter {
                 & (view.arrayOfButtons[4].getText().equals(symbolActive))
                 & (view.arrayOfButtons[8].getText().equals(symbolActive))) {
             model.statusGames = "finish";
-            //Log.d(LOG_TAG, "398 model.statusGames-finish");
 
             view.arrayOfButtons[0].setTextColor(Color.RED);
             view.arrayOfButtons[4].setTextColor(Color.RED);
@@ -452,11 +383,8 @@ public class MainPresenter {
         if ((view.arrayOfButtons[2].getText().equals(symbolActive))
                 & (view.arrayOfButtons[4].getText().equals(symbolActive))
                 & (view.arrayOfButtons[6].getText().equals(symbolActive))) {
-    /*    if ((playField[2] == symbolActive) & (playField[4] == symbolActive)
-                & (playField[6] == symbolActive)) {*/
-            model.statusGames = "finish";
-            //Log.d(LOG_TAG, "412 model.statusGames-finish");
 
+            model.statusGames = "finish";
             view.arrayOfButtons[2].setTextColor(Color.RED);
             view.arrayOfButtons[4].setTextColor(Color.RED);
             view.arrayOfButtons[6].setTextColor(Color.RED);
@@ -467,28 +395,18 @@ public class MainPresenter {
 
     public void saveResult(CharSequence winSimbol) {
 
-        //Log.d(LOG_TAG, "426 winSimbol=" + winSimbol);
-        //Log.d(LOG_TAG, "428 symbolOfBtnLeftPlayer=" + symbolOfBtnLeftPlayer.getText());
-        //Log.d(LOG_TAG, "429 symbolOfBtnRightPlayer=" + symbolOfBtnRightPlayer.getText());
-
         TextView winLeft = (TextView) view.findViewById(R.id.totalWinLeftPlayer);
         TextView winRight = (TextView) view.findViewById(R.id.totalWinRightPlayer);
 
         // TODO: 01.08.18 вынести винсимвол в модель?
-
         if (view.symbolOfBtnLeftPlayer.getText().equals(winSimbol)) {
-            //Log.d(LOG_TAG, "435 left win=");
 
             model.totalWinLeft++;
-            //Log.d(LOG_TAG, "438 totalWinLeft=" + totalWinLeft);
-
             winLeft.setText(Integer.toString(model.totalWinLeft));
         } else if (view.symbolOfBtnRightPlayer.getText().equals(winSimbol)) {
-            //Log.d(LOG_TAG, "442 right win=");
 
             model.totalWinRight++;
             winRight.setText(Integer.toString(model.totalWinRight));
-            //Log.d(LOG_TAG, "446 totalWinRight=" + totalWinRight);
         }
     }
 }

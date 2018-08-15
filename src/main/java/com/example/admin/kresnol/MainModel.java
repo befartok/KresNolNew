@@ -8,7 +8,6 @@ public class MainModel {
 
     int clickedButtonsTotal = 0;
 
-    String symbolActiv = "x";
     String statusGames = "ready";
 
     // TODO: 25.07.18 после реализации бд вместо 0 брать значения из бд
@@ -16,6 +15,8 @@ public class MainModel {
     int totalWinRight = 0;
 
     int numOfRestart = 0;
+
+    // TODO: 09.08.18 массивы игроков брать из разных списков без пересекающихся значений
 
     String[] arrayOfPlayers = {"Player 1", "Player 2", "Android"};
     String[] arrayOfLevel = {"Easy", "Normal", "Hard"};
@@ -50,4 +51,6 @@ public class MainModel {
     public String getSpinnerLevelValue() {
         return spinnerLevelValue;
     }
+
+
 }

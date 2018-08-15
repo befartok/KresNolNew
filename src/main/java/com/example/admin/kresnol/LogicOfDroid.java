@@ -16,27 +16,12 @@ public class LogicOfDroid {
     Button[] arrayOfBtn;
     Player leftPlr;
     Player rightPlr;
-    MainModel model;
-
-    /*// TODO: 03.08.18 проверить работоспособность, или же передовать экземпляр из презентера
-    Player leftPlayer;
-    Player rightPlayer;*/
+    //MainModel model;
 
     final String LOG_TAG = "myLogs";
 
-
-
-    // TODO: 02.08.18 сделать функции, возвращать в презентер номер кнопки для хода
     public int droidsStep(Button[] arr, Player lPlr, Player rPlr, MainModel mainModel) {
-        //убрал инвертирование из метода, вынес перед вызовом метода
-        //invertPlayersActivity();
 
-        //Log.d(LOG_TAG, "500 droidsStep");
-        //int x;
-        //int xx;
-        //boolean makeStep = false;
-        //TimeUnit.SECONDS.sleep(1);
-        //switch (spinnerLevel.getSelectedItem().toString()) {
         // TODO: 03.08.18 подумать над созданием разных массивов с перезаписью их при вызове метода
         arrayOfBtn=arr;
         leftPlr = lPlr;
@@ -46,16 +31,8 @@ public class LogicOfDroid {
         switch (mainModel.getSpinnerLevelValue()) {
             case "Easy":
 
-                //// TODO: 06.07.18 вынести в класс логики
                 // рэндом нажатие кнопки андроидом
                 btnToDroidStep = makeRandomStep();
-                //Log.d(LOG_TAG, "48  btnToDroidStep" + btnToDroidStep);
-               /* x = (int) (Math.random() * 8);
-                Log.d(LOG_TAG, "510 x=(int)(Math.random()*8) = " + x);
-
-                xx = checkEmptyButton(x);
-                clickPlayFieldBtn(arrayOfButtons[xx]);*/
-                //clickPlayFieldBtn(arrayOfButtons[checkEmptyButton(x)]);
 
                 break;
             case "Normal":
@@ -76,7 +53,6 @@ public class LogicOfDroid {
                 Log.d(LOG_TAG, "74 test" );
 
                 //если раньше не было ходов то сделать случайный ход
-
                 if (makeStep == false) {
                     // рэндом нажатие кнопки андроидом
                     btnToDroidStep = makeRandomStep();
@@ -87,7 +63,6 @@ public class LogicOfDroid {
 
             case "Hard":
                 // логику для 3 уровня
-                // TODO: 09.07.18 делать угловой хода на 2-м шаге, доработать и на 5-м правильно составить треугольник
 
                 makeStep = false;
 
@@ -115,10 +90,7 @@ public class LogicOfDroid {
 
     //проверка ячейки на незанятость, иначе брать следующую
     public int checkEmptyButton(int numberOfButton) {
-        /*Log.d(LOG_TAG, "526 test checkEmptyButton ");
-        Log.d(LOG_TAG, "527 numberOfButton= " + numberOfButton);
-        Log.d(LOG_TAG, "535 arrayOfButtons[numberOfButton].getText()= " + arrayOfButtons[numberOfButton].getText());
-*/
+
         Log.d(LOG_TAG, " 115 test  checkEmptyButton");
 
         while ((arrayOfBtn[numberOfButton].getText().equals("x"))
@@ -129,10 +101,7 @@ public class LogicOfDroid {
             if (numberOfButton == 9) {
                 numberOfButton = 0;
             }
-            //checkEmptyButton(numberOfButton);
-           /* Log.d(LOG_TAG, "538 test checkEmptyButton ");
-            Log.d(LOG_TAG, "539 numberOfButton= " + numberOfButton);
-*/
+
         }
         return (numberOfButton);
     }
@@ -174,10 +143,7 @@ public class LogicOfDroid {
         //Log.d(LOG_TAG, "164 varRandom = " + varRandom);
 
         return  checkEmptyButton(varRandom);
-        //clickPlayFieldBtn(arrayOfButtons[xx]);
-
-        //clickPlayFieldBtn(arrayOfButtons[checkEmptyButton(varRandom)]);
-    }
+            }
 
     public int checkWinStep() {
         Log.d(LOG_TAG, "181 test" );
@@ -365,15 +331,12 @@ public class LogicOfDroid {
             makeStep = true;
             btnToStep = 2;
         }
-        Log.d(LOG_TAG, "364 test" );
+        Log.d(LOG_TAG, " test" );
         return btnToStep;
     }
 
     public int checkLooseStep (){
 
-       /* Log.d(LOG_TAG, "855 checkLooseStep ");
-        Log.d(LOG_TAG, "850 makeStep =" + makeStep);
-*/
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[1].getText().equals(leftPlr.getSymbol()))
@@ -557,11 +520,8 @@ public class LogicOfDroid {
             makeStep = true;
             btnToStep = 2;
         }
-
-        //Log.d(LOG_TAG, "1042 makeStep =" + makeStep);
 
         return btnToStep;
-
     }
 
 }
