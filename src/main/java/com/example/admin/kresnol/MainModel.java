@@ -8,6 +8,7 @@ public class MainModel {
 
     int clickedButtonsTotal = 0;
 
+    // TODO: 30.08.18 проверить необходимость переменной и ее инициализации
     String statusGames = "ready";
 
     // TODO: 25.07.18 после реализации бд вместо 0 брать значения из бд

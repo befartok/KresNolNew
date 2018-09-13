@@ -1,11 +1,15 @@
 package com.example.admin.kresnol;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+
+//import static com.example.admin.kresnol.R.id.group1;
 
 
 /**
@@ -20,14 +24,21 @@ public class MainPresenter {
     Player leftPlayer;
     Player rightPlayer;
 
+    boolean settingsGroupVisible = false;
+
+
     final String LOG_TAG = "myLogs";
 
 
     public MainPresenter(MainActivity mainActivity) {
         view = mainActivity;
         model = new MainModel();
+// TODO: 30.08.18 вынести в модель
+//        setMenuEnabled();
+
         logic = new LogicOfDroid();
 
+        //view.menu.setGroupVisible(group1, false);
 
         //создание левого и правого игрока
         leftPlayer = new Player(model.getSpinnerLeftValue());
@@ -66,10 +77,10 @@ public class MainPresenter {
         setImageRight();
     }
 
-    public void setImageRight(){
-        if (model.getSpinnerRightValue().equals("Android")){
+    public void setImageRight() {
+        if (model.getSpinnerRightValue().equals("Android")) {
             view.imageOfRightPlayer.setImageResource(R.drawable.ic_android_black_24dp);
-        }else view.imageOfRightPlayer.setImageResource(R.drawable.ic_accessibility_black_24dp);
+        } else view.imageOfRightPlayer.setImageResource(R.drawable.ic_accessibility_black_24dp);
     }
 
     public void setSpinnerLevel(String spinLevel) {
@@ -153,6 +164,120 @@ public class MainPresenter {
         }
     }
 
+    public boolean clickMenu(Integer idMenu) {
+
+        Log.d(LOG_TAG, "clickMenu test ");
+
+        switch (idMenu) {
+            /*case R.id.menu_setting_player:
+                //Log.d(LOG_TAG, "menu_setting test ");
+
+                menuSettingPlayer();
+                return true;
+*/
+            case R.id.menu_settings:
+                view.setPrefs();
+
+                return true;
+
+            case R.id.menu_records:
+                view.menuRecords();
+                return true;
+            case R.id.menu_about:
+                view.menuAbout();
+                return true;
+          /*  case R.id.menu_create_player:
+                menuCreatePlayer(myMenu);
+                return true;
+            case R.id.menu_edit_player:
+                menuEditPlayer(myMenu);
+                return true;
+            case R.id.menu_delete_player:
+                menuDeletePlayer(myMenu);
+                return true;
+            case R.id.menu_level:
+                menuLevel(myMenu);
+                return true;
+            case R.id.menu_records:
+                menuRecords(myMenu);
+                return true;
+            case R.id.menu_about:
+                menuAbout(myMenu);
+                return true;*/
+           /* case R.id.create_player:
+
+
+                showHelp();
+                return true;*/
+            default:
+                return false;
+        }
+
+    }
+
+
+
+
+    public void menuSettingPlayer() {
+
+        Log.d(LOG_TAG, "menuSetting ");
+        Log.d(LOG_TAG, "settingsGroupVisible = " + settingsGroupVisible);
+
+
+        /*if (settingsGroupVisible == false) {
+            Log.d(LOG_TAG, "settingsGroupVisible1 = " + settingsGroupVisible);
+            view.myMenu.setGroupVisible(group1, true);
+            settingsGroupVisible = true;
+
+            //view.myMenu.onMenuPressed();
+            //invalidateOptionsMenu();
+
+            //view.onPrepareOptionsMenu(view.myMenu);
+
+            view.myMenu.close();
+            view.openOptionsMenu();
+
+            Log.d(LOG_TAG, "settingsGroupVisible2 = " + settingsGroupVisible);
+        } else if (settingsGroupVisible = true) {
+            view.myMenu.setGroupVisible(group1, false);
+            settingsGroupVisible = false;
+
+            view.onPrepareOptionsMenu(view.myMenu);
+
+            view.myMenu.close();
+            view.openOptionsMenu();
+
+            Log.d(LOG_TAG, "settingsGroupVisible3 = " + settingsGroupVisible);
+        }
+    */
+    }
+
+
+// TODO: 02.09.18 посмотреть про настройки у климова, использовать?
+
+    public void menuCreatePlayer(Menu myMenu){
+
+    }
+     public void menuEditPlayer(Menu myMenu){
+
+    }
+     public void menuDeletePlayer(Menu myMenu){
+
+    }
+     public void menuLevel(Menu myMenu){
+
+    }
+     public void menuRecords(Menu myMenu){
+
+    }
+     public void menuAbout(Menu myMenu){
+
+    }
+
+
+
+
+
     //меняем символ у игроков
     public void invertVariables() {
         String buferVariable;
@@ -202,6 +327,7 @@ public class MainPresenter {
         }
 
         model.statusGames = "ready";
+// TODO: 30.08.18 вынести в модель
 
         enableChangeSymbol();
         invertPlayersActivity();
@@ -211,6 +337,8 @@ public class MainPresenter {
             clickPlayFieldBtn(view.arrayOfButtons[logic.droidsStep(view.arrayOfButtons, leftPlayer, rightPlayer, model)]);
         }
     }
+
+
 
     //меняем активность игроков
     public void invertPlayersActivity() {
@@ -228,7 +356,7 @@ public class MainPresenter {
     }
 
     public void clickPlayFieldBtn(SquareButton btn) {
-   // public void clickPlayFieldBtn(Button btn) {
+        // public void clickPlayFieldBtn(Button btn) {
 
         // проверка нажатости кнопки и закончившесяй игры
         if ((model.statusGames != "finish") & (btn.getText().equals(""))) {
@@ -277,6 +405,8 @@ public class MainPresenter {
         view.spinnerLeft.setEnabled(false);
         view.spinnerRight.setEnabled(false);
         view.spinnerLevel.setEnabled(false);
+        setMenuEnabled(false);
+
     }
 
     //включение возможности менять игровые символы
@@ -286,6 +416,13 @@ public class MainPresenter {
         view.spinnerLeft.setEnabled(true);
         view.spinnerRight.setEnabled(true);
         view.spinnerLevel.setEnabled(true);
+        setMenuEnabled(true);
+    }
+
+    private void setMenuEnabled(boolean enabled) {
+
+        view.myMenu.setGroupEnabled(R.id.group1, enabled);
+
     }
 
     public void checkWin() {

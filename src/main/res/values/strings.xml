@@ -1,3 +1,37 @@
 <resources>
     <string name="app_name">KresNol</string>
+    <string name="pref_level_title">Выбрать сложность</string>
+    <string name="pref_checkbox_title">Запомнить настройки</string>
+    <string name="pref_checkbox_summary">Запомнить настройки и использовать в следующей игре</string>
+    <string name="about_text">
+        Крестики-нолики v1.0 \n
+        (c)2018 by Алексей Черкасов
+    </string>
+    <string name="about_title">О программе</string>
+
+    <string-array name="levels_array">
+        <item>Easy</item>
+        <item>Normal</item>
+        <item>Hard</item>
+    </string-array>
+    <string-array name="levels_array_values">
+        <item>Easy</item>
+        <item>Normal</item>
+        <item>Hard</item>
+    </string-array>
+
+    <string name="pref_players_title">Настройки игроков</string>
+    <string-array name="players_settings">
+        <item>Создать игрока</item>
+        <item>Изменить игрока</item>
+        <item>Удалить игрока</item>
+    </string-array>
+    <string-array name="players_settings_values">
+        <item>Создать игрока</item>
+        <item>Изменить игрока</item>
+        <item>Удалить игрока</item>
+    </string-array>
+    <string name="title_activity_high_score">Таблица рекордов</string>
+
+
 </resources>

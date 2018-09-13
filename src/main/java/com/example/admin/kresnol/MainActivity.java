@@ -1,38 +1,39 @@
 package com.example.admin.kresnol;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+
+//import static com.example.admin.kresnol.R.id.group1;
 
 //это вью паттерна мвп
 public class MainActivity extends AppCompatActivity {
 
     final String LOG_TAG = "myLogs";
 
-     SquareButton arrayOfButtons[] = new SquareButton[9];
+    SquareButton arrayOfButtons[] = new SquareButton[9];
 
     Button symbolOfBtnLeftPlayer;
     Button symbolOfBtnRightPlayer;
 
     Spinner spinnerLeft;
     Spinner spinnerRight;
-    //static Spinner spinnerLevel;
     Spinner spinnerLevel;
 
     ImageView imageOfRightPlayer;
 
     MainPresenter presenter;
 
+    Menu myMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,41 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(LOG_TAG, "41 test");
         init();
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        myMenu = menu;
+        getMenuInflater().inflate(R.menu.mymenu, menu);
+
+        //getFragmentManager().beginTransaction().replace(android.R.id.content, new Fragment()).commit();
+        //getFragmentManager().beginTransaction().replace(R.id.prefs_content, new Fragment()).commit();
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // обновление меню
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // пункты меню с ID группы = 1 видны, если в CheckBox стоит галка
+        //menu.setGroupVisible(1, chb.isChecked());
+        return super.onPrepareOptionsMenu(menu);
+        //onMenuOpened();
+
+
+    }
+
+
+    // TODO: 28.08.18 блокировать пункты меню в зависимости от статуса игры
+    // обработка нажатий
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        if (presenter.clickMenu(item.getItemId()) == true) {
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
 
@@ -57,17 +93,6 @@ public class MainActivity extends AppCompatActivity {
         arrayOfButtons[6] = (SquareButton) findViewById(R.id.button6);
         arrayOfButtons[7] = (SquareButton) findViewById(R.id.button7);
         arrayOfButtons[8] = (SquareButton) findViewById(R.id.button8);
-
-
-       /* arrayOfButtons[1] = (Button) findViewById(R.id.button1);
-        arrayOfButtons[2] = (Button) findViewById(R.id.button2);
-        arrayOfButtons[3] = (Button) findViewById(R.id.button3);
-        arrayOfButtons[4] = (Button) findViewById(R.id.button4);
-        arrayOfButtons[5] = (Button) findViewById(R.id.button5);
-        arrayOfButtons[6] = (Button) findViewById(R.id.button6);
-        arrayOfButtons[7] = (Button) findViewById(R.id.button7);
-        arrayOfButtons[8] = (Button) findViewById(R.id.button8);*/
-
 
         // адаптер
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfPlayers);
@@ -119,7 +144,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
             }
-        });
+
+
+        })
+
+
+        ;
 
         //ArrayAdapter<String> adapterLevel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfLevel);
         ArrayAdapter<String> adapterLevel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfLevel());
@@ -147,13 +177,13 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(LOG_TAG, "148 init test");
 
+
     }
 
     public void onclick(View v) {
 
         Log.d(LOG_TAG, "150 onclick test");
 
-        // TODO: 20.04.18 исправить разметку
 
         // TODO: 15.08.18 подсвечивать активного игрока при смене на андроид
 
@@ -183,6 +213,22 @@ public class MainActivity extends AppCompatActivity {
         // обработку нажатий
         presenter.click(v.getId());
 
+    }
+
+    public void setPrefs() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    public void menuRecords() {
+        Intent intent = new Intent(MainActivity.this, HighScoreActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void menuAbout() {
+        Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+        startActivity(intent);
     }
 
 
