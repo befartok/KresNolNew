@@ -1,17 +1,23 @@
 package com.example.admin.kresnol;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 //import static com.example.admin.kresnol.R.id.group1;
 
@@ -29,11 +35,19 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinnerRight;
     Spinner spinnerLevel;
 
+    TextView winLeft;
+    TextView winRight;
+
     ImageView imageOfRightPlayer;
+    ImageView imageOfLeftPlayer;
+
+    Animation animation;
 
     MainPresenter presenter;
 
     Menu myMenu;
+
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,35 +55,58 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(LOG_TAG, "41 test");
         init();
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // TODO: 24.09.18 тест, потом удалить
+        String prefTest = prefs.getString("pref_level", "");
+        winLeft.setText(prefTest);
+
+    }
+
+    protected void onResume() {
+        String prefTest = prefs.getString("pref_level", "");
+
+        // TODO: 28.09.18 тест, удалить после теста настроек
+        winLeft.setText(prefTest);
+
+        presenter.setSpinnerLevel(prefTest);
+
+
+        switch (prefTest) {
+            case "Easy":
+                // TODO: 28.07.18 вынести в метод?
+                spinnerLevel.setSelection(0);
+                break;
+
+            case "Normal":
+                spinnerLevel.setSelection(1);
+
+                break;
+            case "Hard":
+                spinnerLevel.setSelection(2);
+                break;
+        }
+        super.onResume();
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         myMenu = menu;
         getMenuInflater().inflate(R.menu.mymenu, menu);
-
-        //getFragmentManager().beginTransaction().replace(android.R.id.content, new Fragment()).commit();
-        //getFragmentManager().beginTransaction().replace(R.id.prefs_content, new Fragment()).commit();
-
         return super.onCreateOptionsMenu(menu);
     }
 
     // обновление меню
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // пункты меню с ID группы = 1 видны, если в CheckBox стоит галка
-        //menu.setGroupVisible(1, chb.isChecked());
+
         return super.onPrepareOptionsMenu(menu);
-        //onMenuOpened();
-
-
     }
 
-
-    // TODO: 28.08.18 блокировать пункты меню в зависимости от статуса игры
     // обработка нажатий
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
 
         if (presenter.clickMenu(item.getItemId()) == true) {
             return true;
@@ -94,12 +131,19 @@ public class MainActivity extends AppCompatActivity {
         arrayOfButtons[7] = (SquareButton) findViewById(R.id.button7);
         arrayOfButtons[8] = (SquareButton) findViewById(R.id.button8);
 
+        //определени текст вью для счета
+        winLeft = (TextView) findViewById(R.id.totalWinLeftPlayer);
+        winRight = (TextView) findViewById(R.id.totalWinRightPlayer);
+        //winLeft.setText(SettingsActivity.SettingsFragment.settingLevel.getEntry());
+
+
         // адаптер
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfPlayers);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfPlayer());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        imageOfLeftPlayer = (ImageView) findViewById(R.id.imageView);
         imageOfRightPlayer = (ImageView) findViewById(R.id.imageView2);
+
 
         spinnerLeft = (Spinner) findViewById(R.id.spinnerLeft);
         spinnerLeft.setAdapter(adapter);
@@ -107,9 +151,15 @@ public class MainActivity extends AppCompatActivity {
         spinnerRight = (Spinner) findViewById(R.id.spinnerRight);
         spinnerRight.setAdapter(adapter);
 
-        // выделяем элемент
-        spinnerLeft.setSelection(0);
+        // устанавливаем элемент
+        spinnerLeft.setSelection(0, true);
+        //spinnerRight.setSelection(1,true);
+
+        //spinnerLeft.setSelection(0);
         spinnerRight.setSelection(1);
+
+        //устанавливаем цвет спинера
+        ((TextView) spinnerLeft.getSelectedView()).setTextColor(getResources().getColor(R.color.buttonsTextActive));
 
         // устанавливаем обработчик нажатия
         spinnerLeft.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -164,6 +214,9 @@ public class MainActivity extends AppCompatActivity {
                                        int position, long id) {
                 //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
                 presenter.setSpinnerLevel(spinnerLevel.getSelectedItem().toString());
+
+                //установка  уровня  в преференс из спинера
+                prefs.edit().putString("pref_level", spinnerLevel.getSelectedItem().toString()).commit();
             }
 
             @Override
@@ -175,8 +228,12 @@ public class MainActivity extends AppCompatActivity {
         symbolOfBtnLeftPlayer = (Button) findViewById(R.id.buttonSymbolLeftPlayer);
         symbolOfBtnRightPlayer = (Button) findViewById(R.id.buttonSymbolRightPlayer);
 
-        Log.d(LOG_TAG, "148 init test");
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tv_animation);
 
+        // анимацию запуск для левого в первый раз
+        imageOfLeftPlayer.startAnimation(animation);
+
+        //Log.d(LOG_TAG, "148 init test");
 
     }
 
@@ -191,10 +248,6 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: 20.04.18 сделать анимацию зачеркивания выигрышных кнопок
 
-        // TODO: 12.03.18 заменить подсветку ходящего на анимацию
-
-        // TODO: 13.05.18 добавить меню с настройками
-
         // TODO: 13.05.18 добавить создание нового игрока
 
         // TODO: 13.05.18 добавить бд с игроками
@@ -208,6 +261,12 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 08.08.18 запретить выбирать в спинере выбранного с другой стороны игрока
 
         // TODO: 12.08.18 вынести имя Андроид в ресурсы
+
+        //// TODO: 22.09.18 добавить в настройки выбор игроков
+
+        //// TODO: 22.09.18 добавить тесты
+
+        // TODO: 24.09.18 сделать иконки неактивного серыми
 
 
         // обработку нажатий

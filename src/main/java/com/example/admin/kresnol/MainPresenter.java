@@ -33,12 +33,8 @@ public class MainPresenter {
     public MainPresenter(MainActivity mainActivity) {
         view = mainActivity;
         model = new MainModel();
-// TODO: 30.08.18 вынести в модель
-//        setMenuEnabled();
 
         logic = new LogicOfDroid();
-
-        //view.menu.setGroupVisible(group1, false);
 
         //создание левого и правого игрока
         leftPlayer = new Player(model.getSpinnerLeftValue());
@@ -46,6 +42,7 @@ public class MainPresenter {
 
         leftPlayer.setSymbol("x");
         leftPlayer.setActive(true);
+
         rightPlayer.setSymbol("o");
         rightPlayer.setActive(false);
 
@@ -78,7 +75,7 @@ public class MainPresenter {
     }
 
     public void setImageRight() {
-        if (model.getSpinnerRightValue().equals("Android")) {
+        if (model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) {
             view.imageOfRightPlayer.setImageResource(R.drawable.ic_android_black_24dp);
         } else view.imageOfRightPlayer.setImageResource(R.drawable.ic_accessibility_black_24dp);
     }
@@ -89,7 +86,8 @@ public class MainPresenter {
     }
 
     public void checkVisibilitySpinnerLevel() {
-        if (model.getSpinnerRightValue().equals("Android")) {
+
+        if (model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) {
 
 
             view.spinnerLevel.setVisibility(View.VISIBLE);
@@ -169,16 +167,13 @@ public class MainPresenter {
         Log.d(LOG_TAG, "clickMenu test ");
 
         switch (idMenu) {
-            /*case R.id.menu_setting_player:
-                //Log.d(LOG_TAG, "menu_setting test ");
 
-                menuSettingPlayer();
-                return true;
-*/
             case R.id.menu_settings:
                 view.setPrefs();
 
+
                 return true;
+
 
             case R.id.menu_records:
                 view.menuRecords();
@@ -186,74 +181,14 @@ public class MainPresenter {
             case R.id.menu_about:
                 view.menuAbout();
                 return true;
-          /*  case R.id.menu_create_player:
-                menuCreatePlayer(myMenu);
-                return true;
-            case R.id.menu_edit_player:
-                menuEditPlayer(myMenu);
-                return true;
-            case R.id.menu_delete_player:
-                menuDeletePlayer(myMenu);
-                return true;
-            case R.id.menu_level:
-                menuLevel(myMenu);
-                return true;
-            case R.id.menu_records:
-                menuRecords(myMenu);
-                return true;
-            case R.id.menu_about:
-                menuAbout(myMenu);
-                return true;*/
-           /* case R.id.create_player:
 
-
-                showHelp();
-                return true;*/
             default:
                 return false;
         }
 
+
     }
 
-
-
-
-    public void menuSettingPlayer() {
-
-        Log.d(LOG_TAG, "menuSetting ");
-        Log.d(LOG_TAG, "settingsGroupVisible = " + settingsGroupVisible);
-
-
-        /*if (settingsGroupVisible == false) {
-            Log.d(LOG_TAG, "settingsGroupVisible1 = " + settingsGroupVisible);
-            view.myMenu.setGroupVisible(group1, true);
-            settingsGroupVisible = true;
-
-            //view.myMenu.onMenuPressed();
-            //invalidateOptionsMenu();
-
-            //view.onPrepareOptionsMenu(view.myMenu);
-
-            view.myMenu.close();
-            view.openOptionsMenu();
-
-            Log.d(LOG_TAG, "settingsGroupVisible2 = " + settingsGroupVisible);
-        } else if (settingsGroupVisible = true) {
-            view.myMenu.setGroupVisible(group1, false);
-            settingsGroupVisible = false;
-
-            view.onPrepareOptionsMenu(view.myMenu);
-
-            view.myMenu.close();
-            view.openOptionsMenu();
-
-            Log.d(LOG_TAG, "settingsGroupVisible3 = " + settingsGroupVisible);
-        }
-    */
-    }
-
-
-// TODO: 02.09.18 посмотреть про настройки у климова, использовать?
 
     public void menuCreatePlayer(Menu myMenu){
 
@@ -274,10 +209,6 @@ public class MainPresenter {
 
     }
 
-
-
-
-
     //меняем символ у игроков
     public void invertVariables() {
         String buferVariable;
@@ -294,21 +225,25 @@ public class MainPresenter {
     // TODO: 28.07.18 перенести в модель
     public void makeNameActive(String selectedSymbolsButton) {
 
+        stopOfAnimation();
+
         switch (selectedSymbolsButton) {
             case "leftButton":
-
                 ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
-                ((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
-
+                //((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
                 ((TextView) view.spinnerRight.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
-                ((TextView) view.spinnerRight.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
+                //((TextView) view.spinnerRight.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
+                view.imageOfLeftPlayer.startAnimation(view.animation);
+
                 break;
             case "rightButton":
+                //view.imageOfLeftPlayer.clearAnimation();
                 ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
-                ((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
+                //((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
 
                 ((TextView) view.spinnerRight.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
-                ((TextView) view.spinnerRight.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
+                //((TextView) view.spinnerRight.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
+                view.imageOfRightPlayer.startAnimation(view.animation);
 
                 break;
         }
@@ -332,13 +267,11 @@ public class MainPresenter {
         enableChangeSymbol();
         invertPlayersActivity();
 
-        if ((view.spinnerRight.getSelectedItem().toString().equals("Android")) & rightPlayer.isActive()) {
+        if ((view.spinnerRight.getSelectedItem().toString().equals(view.getResources().getString(R.string.droids_name)))& rightPlayer.isActive()) {
 
             clickPlayFieldBtn(view.arrayOfButtons[logic.droidsStep(view.arrayOfButtons, leftPlayer, rightPlayer, model)]);
         }
     }
-
-
 
     //меняем активность игроков
     public void invertPlayersActivity() {
@@ -380,11 +313,13 @@ public class MainPresenter {
             //проверка числа нажатых кнопок
             if (model.clickedButtonsTotal == 9) {
                 model.statusGames = "finish";
+                stopOfAnimation();
+
             }
 
             //передача ход 2му игроку если андроид, то ход по алгоритму, иначе обрабатывать нажатие
             // TODO: 13.04.18 заменить на имя из ресурсов
-            if ((model.getSpinnerRightValue().equals("Android")) & (leftPlayer.isActive())
+            if ((model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) & (leftPlayer.isActive())
                     & (model.statusGames.equals("inplay"))) {
                 invertPlayersActivity();
 
@@ -426,8 +361,6 @@ public class MainPresenter {
     }
 
     public void checkWin() {
-
-        // TODO: 10.03.18 присваивать символ актив перед иф
 
         String symbolActive;
         if (leftPlayer.isActive()) {
@@ -530,22 +463,32 @@ public class MainPresenter {
         }
     }
 
+
     public void saveResult(CharSequence winSimbol) {
 
-        TextView winLeft = (TextView) view.findViewById(R.id.totalWinLeftPlayer);
-        TextView winRight = (TextView) view.findViewById(R.id.totalWinRightPlayer);
+        stopOfAnimation();
 
         // TODO: 01.08.18 вынести винсимвол в модель?
         if (view.symbolOfBtnLeftPlayer.getText().equals(winSimbol)) {
 
             model.totalWinLeft++;
-            winLeft.setText(Integer.toString(model.totalWinLeft));
+            // TODO: 22.09.18 раскомментировать после отладки уровня игры
+
+            //view.winLeft.setText(Integer.toString(model.totalWinLeft));
+
+
         } else if (view.symbolOfBtnRightPlayer.getText().equals(winSimbol)) {
 
             model.totalWinRight++;
-            winRight.setText(Integer.toString(model.totalWinRight));
+            view.winRight.setText(Integer.toString(model.totalWinRight));
         }
     }
+
+    public void  stopOfAnimation(){
+        view.imageOfLeftPlayer.clearAnimation();
+        view.imageOfRightPlayer.clearAnimation();
+    };
+
 }
 
 
