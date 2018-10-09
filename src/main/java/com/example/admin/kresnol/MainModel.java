@@ -1,14 +1,30 @@
 package com.example.admin.kresnol;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 /**
  * Created by admin on 26.07.18.
  */
 
+
+
 public class MainModel {
+    final String LOG_TAG = "myLogs";
+
 
     int clickedButtonsTotal = 0;
 
-    // TODO: 30.08.18 проверить необходимость переменной и ее инициализации
+    public String getStatusGames() {
+        return statusGames;
+    }
+
+    public void setStatusGames(String statusGames) {
+        this.statusGames = statusGames;
+    }
+
     String statusGames = "ready";
 
     // TODO: 25.07.18 после реализации бд вместо 0 брать значения из бд
@@ -18,9 +34,9 @@ public class MainModel {
     int numOfRestart = 0;
 
     // TODO: 09.08.18 массивы игроков брать из разных списков без пересекающихся значений
-
+// TODO: 29.09.18  "android" передавать сетером?
     String[] arrayOfPlayers = {"Player 1", "Player 2", "Android"};
-    String[] arrayOfLevel = {"Easy", "Normal", "Hard"};
+
 
     boolean makeStep;
 
@@ -28,7 +44,17 @@ public class MainModel {
     String spinnerRightValue;
     String spinnerLevelValue;
 
-// TODO: 27.07.18 проверить гетеры и сеттеры насчет параметров и переменных
+    //массив уровней игры
+    String[] arrayOfLevel = new String[3];
+
+    public MainModel(String arrLv0, String arrLv1,String arrLv2) {
+        arrayOfLevel[0]=arrLv0;
+        arrayOfLevel[1]=arrLv1;
+        arrayOfLevel[2]=arrLv2;
+
+    }
+
+    // TODO: 27.07.18 проверить гетеры и сеттеры насчет параметров и переменных
 
     public String getSpinnerLeftValue() {
         return spinnerLeftValue;
@@ -52,6 +78,43 @@ public class MainModel {
     public String getSpinnerLevelValue() {
         return spinnerLevelValue;
     }
+
+
+
+
+
+/*
+
+    // создаем объект для создания и управления версиями БД
+    // подключаемся к БД
+    SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+
+
+
+    class DBHelper extends SQLiteOpenHelper {
+
+
+        public DBHelper(Context context) {
+            // конструктор суперкласса
+            super(context, "myDB", null, 1);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            Log.d(LOG_TAG, "--- onCreate database ---");
+            // создаем таблицу с полями
+            db.execSQL("create table mytable ("
+                    + "id integer primary key autoincrement,"
+                    + "name text,"
+                    + "email text" + ");");
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        }
+    }*/
 
 
 }

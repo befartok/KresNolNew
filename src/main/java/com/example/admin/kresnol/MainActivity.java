@@ -19,7 +19,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-//import static com.example.admin.kresnol.R.id.group1;
+import java.util.List;
+
 
 //это вью паттерна мвп
 public class MainActivity extends AppCompatActivity {
@@ -49,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences prefs;
 
+
+    Db db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +66,34 @@ public class MainActivity extends AppCompatActivity {
         String prefTest = prefs.getString("pref_level", "");
         winLeft.setText(prefTest);
 
+
+        db = new Db(this);
+        int mCount = db.getItemCount();
+        Log.d(LOG_TAG, "Количество записей в базе:" + mCount);
+
+
+       /* // получаем количество записей в базе перед изменениями
+        int mCount = db.getItemCount();
+        Log.d(LOG_TAG, "Количество записей в базе:" + mCount);
+
+        // обновляем запись с id = 1 (меняем email)
+        //db.updateEmail("Igor", "newemail@newemail.com");
+
+        // удаляем запись с id = 3
+        //db.deleteItem(3);
+
+        // выводим все имеющиеся записи в лог
+        List<RecordOfDb> records = db.getRecordOfDb();
+        for (RecordOfDb record : records) {
+            Log.d(LOG_TAG, "Имя: " + record.getName() + " сыграно: " + record.getTotalPlay());
+        }*/
+
+        db.close();
     }
 
     protected void onResume() {
+
+        // TODO: 30.09.18 вынести в метод? или в модель?
         String prefTest = prefs.getString("pref_level", "");
 
         // TODO: 28.09.18 тест, удалить после теста настроек
@@ -279,8 +308,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void menuRecords() {
+    public void menuHighScore() {
         Intent intent = new Intent(MainActivity.this, HighScoreActivity.class);
+
         startActivity(intent);
 
     }
@@ -289,6 +319,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, AboutActivity.class);
         startActivity(intent);
     }
+
+
 
 
 }

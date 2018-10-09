@@ -2,6 +2,14 @@
     <string name="app_name">KresNol</string>
 
     <string name="droids_name">Android</string>
+    <string name="level_easy">Easy</string>
+    <string name="level_normal">Normal</string>
+    <string name="level_hard">Hard</string>
+
+
+    <string name="statusGamesReady">ready</string>
+    <string name="statusGamesInplay">inplay</string>
+    <string name="statusGamesFinish">finish</string>
 
 
 

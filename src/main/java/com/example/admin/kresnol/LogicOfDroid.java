@@ -1,5 +1,7 @@
 package com.example.admin.kresnol;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Button;
 
@@ -10,13 +12,16 @@ import android.widget.Button;
 
 public class LogicOfDroid {
 
+    public LogicOfDroid(Resources res) {
+        this.res=res;
+    }
+    Resources res;
     boolean makeStep;
     int btnToDroidStep;
     int btnToStep;
     Button[] arrayOfBtn;
     Player leftPlr;
     Player rightPlr;
-    //MainModel model;
 
     final String LOG_TAG = "myLogs";
 
@@ -26,65 +31,63 @@ public class LogicOfDroid {
         arrayOfBtn=arr;
         leftPlr = lPlr;
         rightPlr = rPlr;
-        Log.d(LOG_TAG, "42 mainModel.getSpinnerLevelValue()" + mainModel.getSpinnerLevelValue());
 
-        switch (mainModel.getSpinnerLevelValue()) {
-            case "Easy":
+        // логика для 1 уровня
+        if (mainModel.getSpinnerLevelValue().equals(res.getString(R.string.level_easy))){
+            // рэндом нажатие кнопки андроидом
+            btnToDroidStep = makeRandomStep();
+        }
 
+        //логика для 2 уровня;
+        if (mainModel.getSpinnerLevelValue().equals(res.getString(R.string.level_normal))){
+            makeStep = false;
+            Log.d(LOG_TAG, "62 test" );
+
+            //проверка возможности выигрыша
+            btnToDroidStep = checkWinStep();
+            Log.d(LOG_TAG, "66 test" );
+
+            //проверка возможности проигрыша
+            btnToDroidStep = checkLooseStep();
+            Log.d(LOG_TAG, "70 test" );
+
+            //проверка возможности поставить в центр
+            btnToDroidStep = makeCenterStep();
+            Log.d(LOG_TAG, "74 test" );
+
+            //если раньше не было ходов то сделать случайный ход
+            if (makeStep == false) {
                 // рэндом нажатие кнопки андроидом
                 btnToDroidStep = makeRandomStep();
-
-                break;
-            case "Normal":
-                //логика для 2 уровня;
-                makeStep = false;
-                Log.d(LOG_TAG, "62 test" );
-
-                //проверка возможности выигрыша
-                btnToDroidStep = checkWinStep();
-                Log.d(LOG_TAG, "66 test" );
-
-                //проверка возможности проигрыша
-                btnToDroidStep = checkLooseStep();
-                Log.d(LOG_TAG, "70 test" );
-
-                //проверка возможности поставить в центр
-                btnToDroidStep = makeCenterStep();
-                Log.d(LOG_TAG, "74 test" );
-
-                //если раньше не было ходов то сделать случайный ход
-                if (makeStep == false) {
-                    // рэндом нажатие кнопки андроидом
-                    btnToDroidStep = makeRandomStep();
-                }
-                Log.d(LOG_TAG, "82 test" );
-
-                break;
-
-            case "Hard":
-                // логику для 3 уровня
-
-                makeStep = false;
-
-                //проверка возможности выигрыша
-                btnToDroidStep = checkWinStep();
-
-                //проверка возможности проигрыша
-                btnToDroidStep = checkLooseStep();
-
-                //проверка возможности поставить в центр
-                btnToDroidStep = makeCenterStep();
-
-                //ставить в угол
-                btnToDroidStep = makeCornerStep();
-
-                //если раньше не было ходов то сделать случайный ход
-                if (makeStep == false) {
-                    // рэндом нажатие кнопки андроидом
-                    btnToDroidStep = makeRandomStep();
-                }
-                break;
+            }
+            Log.d(LOG_TAG, "82 test" );
         }
+
+        // логику для 3 уровня
+
+        if (mainModel.getSpinnerLevelValue().equals(res.getString(R.string.level_hard))){
+
+            makeStep = false;
+
+            //проверка возможности выигрыша
+            btnToDroidStep = checkWinStep();
+
+            //проверка возможности проигрыша
+            btnToDroidStep = checkLooseStep();
+
+            //проверка возможности поставить в центр
+            btnToDroidStep = makeCenterStep();
+
+            //ставить в угол
+            btnToDroidStep = makeCornerStep();
+
+            //если раньше не было ходов то сделать случайный ход
+            if (makeStep == false) {
+                // рэндом нажатие кнопки андроидом
+                btnToDroidStep = makeRandomStep();
+            }
+        }
+
         return btnToDroidStep;
     }
 
@@ -93,6 +96,7 @@ public class LogicOfDroid {
 
         Log.d(LOG_TAG, " 115 test  checkEmptyButton");
 
+        // TODO: 04.10.18 заменить хардкод на ресурсы - нет оставить, т.к. от них зависит первый ход
         while ((arrayOfBtn[numberOfButton].getText().equals("x"))
                 | (arrayOfBtn[numberOfButton].getText().equals("o"))) {
             numberOfButton = numberOfButton + 1;
@@ -147,8 +151,6 @@ public class LogicOfDroid {
 
     public int checkWinStep() {
         Log.d(LOG_TAG, "181 test" );
-        Log.d(LOG_TAG, "182 arrayOfBtn[4].getText()=" + arrayOfBtn[4].getText() );
-        Log.d(LOG_TAG, "184 rightPlr.getSymbol=" + rightPlr.getSymbol() );
 
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))

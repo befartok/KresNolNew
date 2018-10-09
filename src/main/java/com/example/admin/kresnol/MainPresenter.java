@@ -32,13 +32,18 @@ public class MainPresenter {
 
     public MainPresenter(MainActivity mainActivity) {
         view = mainActivity;
-        model = new MainModel();
 
-        logic = new LogicOfDroid();
+        //в модель передаю уровни игры из ресурсов
+        model = new MainModel(view.getResources().getString(R.string.level_easy),
+                view.getResources().getString(R.string.level_normal),
+                view.getResources().getString(R.string.level_hard));
+
+        logic = new LogicOfDroid(view.getResources());
 
         //создание левого и правого игрока
         leftPlayer = new Player(model.getSpinnerLeftValue());
         rightPlayer = new Player(model.getSpinnerRightValue());
+
 
         leftPlayer.setSymbol("x");
         leftPlayer.setActive(true);
@@ -56,9 +61,9 @@ public class MainPresenter {
         return model.arrayOfLevel;
     }
 
-    public void getSpinnerLeft() {
+    /*public void getSpinnerLeft() {
         model.getSpinnerLeftValue();
-    }
+    }*/
 
     public void setSpinnerLeft(String spinLeft) {
 
@@ -102,7 +107,8 @@ public class MainPresenter {
 
 
                 // TODO: 28.07.18 вынести в модель?
-                if (model.statusGames == "ready") {
+                //if (model.statusGames == "ready") {
+                if (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesReady))) {
 
                     // меняет символ
                     invertVariables();
@@ -113,6 +119,8 @@ public class MainPresenter {
                         //Log.d(LOG_TAG, "128 clickedButtonsTotal=" + clickedButtonsTotal);
                         if (leftPlayer.getSymbol().equals("x")) {
                             leftPlayer.setActive(true);
+
+                            // TODO: 04.10.18 заменить на лефтНэйм
                             makeNameActive("leftButton");
                             rightPlayer.setActive(false);
                         } else if (leftPlayer.getSymbol().equals("o")) {
@@ -126,7 +134,9 @@ public class MainPresenter {
 
             //перезапуск
             case R.id.layout0:
-                if (model.statusGames == "finish") {
+
+                //if (model.statusGames == "finish") {
+                if (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesFinish))) {
                     restartGame();
                 }
                 break;
@@ -176,7 +186,7 @@ public class MainPresenter {
 
 
             case R.id.menu_records:
-                view.menuRecords();
+                view.menuHighScore();
                 return true;
             case R.id.menu_about:
                 view.menuAbout();
@@ -189,7 +199,7 @@ public class MainPresenter {
 
     }
 
-
+    // TODO: 04.10.18 доделать меню
     public void menuCreatePlayer(Menu myMenu){
 
     }
@@ -228,6 +238,7 @@ public class MainPresenter {
         stopOfAnimation();
 
         switch (selectedSymbolsButton) {
+
             case "leftButton":
                 ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
                 //((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
@@ -261,7 +272,8 @@ public class MainPresenter {
             view.arrayOfButtons[i].setText("");
         }
 
-        model.statusGames = "ready";
+        //model.statusGames = "ready";
+        model.setStatusGames(view.getResources().getString(R.string.statusGamesReady));
 // TODO: 30.08.18 вынести в модель
 
         enableChangeSymbol();
@@ -282,6 +294,9 @@ public class MainPresenter {
         rightPlayer.setActive(tempActive);
 
         if (leftPlayer.isActive()) {
+
+            // TODO: 04.10.18 заменить
+
             makeNameActive("leftButton");
         } else if (rightPlayer.isActive()) {
             makeNameActive("rightButton");
@@ -292,8 +307,12 @@ public class MainPresenter {
         // public void clickPlayFieldBtn(Button btn) {
 
         // проверка нажатости кнопки и закончившесяй игры
-        if ((model.statusGames != "finish") & (btn.getText().equals(""))) {
-            model.statusGames = "inplay";
+        //if ((model.statusGames != "finish") & (btn.getText().equals(""))) {
+        if ((!model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesFinish)))
+                & (btn.getText().equals(""))) {
+
+            //model.statusGames = "inplay";
+            model.setStatusGames(view.getResources().getString(R.string.statusGamesInplay));
             //отключение изменяемости кнопок выбора символа и игроков
             disableChangeSymbol();
 
@@ -312,23 +331,29 @@ public class MainPresenter {
 
             //проверка числа нажатых кнопок
             if (model.clickedButtonsTotal == 9) {
-                model.statusGames = "finish";
+                //model.statusGames = "finish";
+                model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
                 stopOfAnimation();
 
             }
 
             //передача ход 2му игроку если андроид, то ход по алгоритму, иначе обрабатывать нажатие
-            // TODO: 13.04.18 заменить на имя из ресурсов
+            //if ((model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) & (leftPlayer.isActive())
+              //      & (model.statusGames.equals("inplay"))) {
             if ((model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) & (leftPlayer.isActive())
-                    & (model.statusGames.equals("inplay"))) {
+                    & (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesInplay)))) {
                 invertPlayersActivity();
 
                 clickPlayFieldBtn(view.arrayOfButtons[logic.droidsStep(view.arrayOfButtons, leftPlayer, rightPlayer, model)]);
-            } else if (model.statusGames == "inplay") {
+            }
+            //else if (model.statusGames == "inplay") {
+            else if (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesInplay))) {
                 invertPlayersActivity();
             }
 
-        } else if (model.statusGames == "finish") {
+        }
+        //else if (model.statusGames == "finish") {
+        else if (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesFinish))){
             restartGame();
         }
     }
@@ -371,7 +396,9 @@ public class MainPresenter {
                 & (view.arrayOfButtons[1].getText().equals(symbolActive))
                 & (view.arrayOfButtons[2].getText().equals(symbolActive))) {
 
-            model.statusGames = "finish";
+
+            //model.statusGames = "finish";
+            model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
             view.arrayOfButtons[0].setTextColor(Color.RED);
             view.arrayOfButtons[1].setTextColor(Color.RED);
             view.arrayOfButtons[2].setTextColor(Color.RED);
@@ -383,7 +410,8 @@ public class MainPresenter {
                 & (view.arrayOfButtons[4].getText().equals(symbolActive))
                 & (view.arrayOfButtons[5].getText().equals(symbolActive))) {
 
-            model.statusGames = "finish";
+            //model.statusGames = "finish";
+            model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[3].setTextColor(Color.RED);
             view.arrayOfButtons[4].setTextColor(Color.RED);
@@ -396,7 +424,8 @@ public class MainPresenter {
                 & (view.arrayOfButtons[7].getText().equals(symbolActive))
                 & (view.arrayOfButtons[8].getText().equals(symbolActive))) {
 
-            model.statusGames = "finish";
+            //model.statusGames = "finish";
+            model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[6].setTextColor(Color.RED);
             view.arrayOfButtons[7].setTextColor(Color.RED);
@@ -408,7 +437,8 @@ public class MainPresenter {
         if ((view.arrayOfButtons[0].getText().equals(symbolActive))
                 & (view.arrayOfButtons[3].getText().equals(symbolActive))
                 & (view.arrayOfButtons[6].getText().equals(symbolActive))) {
-            model.statusGames = "finish";
+            //model.statusGames = "finish";
+            model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[0].setTextColor(Color.RED);
             view.arrayOfButtons[3].setTextColor(Color.RED);
@@ -420,7 +450,8 @@ public class MainPresenter {
         if ((view.arrayOfButtons[1].getText().equals(symbolActive))
                 & (view.arrayOfButtons[4].getText().equals(symbolActive))
                 & (view.arrayOfButtons[7].getText().equals(symbolActive))) {
-            model.statusGames = "finish";
+            //model.statusGames = "finish";
+            model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[1].setTextColor(Color.RED);
             view.arrayOfButtons[4].setTextColor(Color.RED);
@@ -431,7 +462,8 @@ public class MainPresenter {
         if ((view.arrayOfButtons[2].getText().equals(symbolActive))
                 & (view.arrayOfButtons[5].getText().equals(symbolActive))
                 & (view.arrayOfButtons[8].getText().equals(symbolActive))) {
-            model.statusGames = "finish";
+            //model.statusGames = "finish";
+            model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[2].setTextColor(Color.RED);
             view.arrayOfButtons[5].setTextColor(Color.RED);
@@ -442,7 +474,8 @@ public class MainPresenter {
         if ((view.arrayOfButtons[0].getText().equals(symbolActive))
                 & (view.arrayOfButtons[4].getText().equals(symbolActive))
                 & (view.arrayOfButtons[8].getText().equals(symbolActive))) {
-            model.statusGames = "finish";
+            //model.statusGames = "finish";
+            model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[0].setTextColor(Color.RED);
             view.arrayOfButtons[4].setTextColor(Color.RED);
@@ -454,7 +487,9 @@ public class MainPresenter {
                 & (view.arrayOfButtons[4].getText().equals(symbolActive))
                 & (view.arrayOfButtons[6].getText().equals(symbolActive))) {
 
-            model.statusGames = "finish";
+            //model.statusGames = "finish";
+            model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
+
             view.arrayOfButtons[2].setTextColor(Color.RED);
             view.arrayOfButtons[4].setTextColor(Color.RED);
             view.arrayOfButtons[6].setTextColor(Color.RED);
@@ -464,12 +499,12 @@ public class MainPresenter {
     }
 
 
-    public void saveResult(CharSequence winSimbol) {
+    public void saveResult(CharSequence winSymbol) {
 
         stopOfAnimation();
 
         // TODO: 01.08.18 вынести винсимвол в модель?
-        if (view.symbolOfBtnLeftPlayer.getText().equals(winSimbol)) {
+        if (view.symbolOfBtnLeftPlayer.getText().equals(winSymbol)) {
 
             model.totalWinLeft++;
             // TODO: 22.09.18 раскомментировать после отладки уровня игры
@@ -477,7 +512,7 @@ public class MainPresenter {
             //view.winLeft.setText(Integer.toString(model.totalWinLeft));
 
 
-        } else if (view.symbolOfBtnRightPlayer.getText().equals(winSimbol)) {
+        } else if (view.symbolOfBtnRightPlayer.getText().equals(winSymbol)) {
 
             model.totalWinRight++;
             view.winRight.setText(Integer.toString(model.totalWinRight));
