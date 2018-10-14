@@ -7,4 +7,5 @@
     <color name="buttonsTextActive">#8EC34F</color>
     <color name="buttonBackground">#ffd6d7d7 </color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#090909</color>
 </resources>

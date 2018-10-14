@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -25,12 +26,16 @@ public class HighScoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_high_score);
 
+        TextView high_score_name= (TextView) findViewById(R.id.high_score_name);
+        TextView high_score_totalPlay= (TextView) findViewById(R.id.high_score_totalPlay);
+        TextView high_score_totalWin= (TextView) findViewById(R.id.high_score_totalWin);
+        TextView high_score_totalLose= (TextView) findViewById(R.id.high_score_totalLose);
+
         db = new Db(this);
 
 
+
         //SQLiteOpenHelper openHelper = new DataBaseOpenHelper(this);
-
-
 
         // получаем количество записей в базе перед изменениями
         int mCount = db.getItemCount();
@@ -43,10 +48,27 @@ public class HighScoreActivity extends AppCompatActivity {
         //db.deleteItem(3);
 
         // выводим все имеющиеся записи в лог
+
         List<RecordOfDb> records = db.getRecordOfDb();
+
+        //high_score_name.setText(records.get(1).getName());
+        //
+        high_score_name.setText("Игрок"+"\n\n\n" );
+        high_score_totalPlay.setText("Всего сыграно"+"\n\n" );
+        high_score_totalWin.setText("Всего выиграно"+"\n\n" );
+        high_score_totalLose.setText("Всего проиграно"+"\n\n" );
+
         for (RecordOfDb record : records) {
             Log.d(LOG_TAG, "Имя: " + record.getName() + " сыграно: " + record.getTotalPlay());
+
+            high_score_name.append(record.getName()+ "\n");
+            high_score_totalPlay.append(record.getTotalPlay().toString()+ "\n");
+            high_score_totalWin.append(record.getTotalWin().toString()+ "\n");
+            high_score_totalLose.append(record.getTotalLose().toString() + "\n");
         }
+
+
+
         db.close();
 
 

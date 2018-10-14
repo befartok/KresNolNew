@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by admin on 09.10.18.
@@ -57,6 +58,9 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_TOTAL_WIN, "0");
         cv.put(KEY_TOTAL_LOSE, "0");
         db.insert(TABLE_NAME, null, cv);
+
+        Log.d(LOG_TAG, "test onCreate");
+
     }
 
     @Override

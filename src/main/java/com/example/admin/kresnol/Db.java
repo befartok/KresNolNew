@@ -18,6 +18,7 @@ public class Db {
     //private static final String LOG_TAG = "my_tag";
     final String LOG_TAG = "myLogs";
 
+    int id;
     DbHelper dbHelper;
     Context context;
     Cursor cursor;
@@ -39,6 +40,19 @@ public class Db {
 
         return cnt;
     }
+    public String getName(int id) {
+
+        this.id=id;
+        db = dbHelper.getReadableDatabase();
+
+        cursor = db.query(DbHelper.TABLE_NAME, null, null, null, null, null, null);
+        //int nameColInd = cursor.getColumnIndex(DbHelper.KEY_NAME);
+        String  name = cursor.getString(id);
+        cursor.close();
+
+        return name;
+    }
+
     // метод для обновления email
 /*    public void updateEmail(String name, String newEmail){
         db = dbHelper.getWritableDatabase();
@@ -89,61 +103,3 @@ public class Db {
     }
 
 }
-
-/* class DbHelper extends SQLiteOpenHelper {
-
-    private static final String LOG_TAG = "my_tag";
-
-    //public static final String TABLE_NAME = "friends";
-    public static final String TABLE_NAME = "records";
-
-    public static final String KEY_ID = "_id";
-    public static final String KEY_NAME = "name";
-    public static final String KEY_TOTAL_PLAY = "totalPlay";
-    public static final String KEY_TOTAL_WIN = "totalWin";
-    public static final String KEY_TOTAL_LOSE = "totalLose";
-
-    private static final String DATABASE_NAME = "recordsDB";
-    private static final int DATABASE_VERSION = 1;
-
-    public DbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-
-        db.execSQL("create table " + TABLE_NAME +" ("
-                + KEY_ID + " integer primary key autoincrement,"
-                + KEY_NAME + " text,"
-                + KEY_TOTAL_PLAY + " text,"
-                + KEY_TOTAL_WIN + " text,"
-                + KEY_TOTAL_LOSE + " text" + ");");
-
-        ContentValues cv = new ContentValues();
-
-        cv.put(KEY_NAME, "Player1");
-        cv.put(KEY_TOTAL_PLAY, "0");
-        cv.put(KEY_TOTAL_WIN, "0");
-        cv.put(KEY_TOTAL_LOSE, "0");
-        db.insert(TABLE_NAME, null, cv);
-
-        cv.put(KEY_NAME, "Player2");
-        cv.put(KEY_TOTAL_PLAY, "0");
-        cv.put(KEY_TOTAL_WIN, "0");
-        cv.put(KEY_TOTAL_LOSE, "0");
-        db.insert(TABLE_NAME, null, cv);
-
-        cv.put(KEY_NAME, "Android");
-        cv.put(KEY_TOTAL_PLAY, "0");
-        cv.put(KEY_TOTAL_WIN, "0");
-        cv.put(KEY_TOTAL_LOSE, "0");
-        db.insert(TABLE_NAME, null, cv);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        this.onCreate(db);
-        }
-    }*/
