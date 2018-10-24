@@ -41,13 +41,13 @@ public class DbHelper extends SQLiteOpenHelper {
 
         ContentValues cv = new ContentValues();
 
-        cv.put(KEY_NAME, "Player1");
+        cv.put(KEY_NAME, "Player 1");
         cv.put(KEY_TOTAL_PLAY, "0");
         cv.put(KEY_TOTAL_WIN, "0");
         cv.put(KEY_TOTAL_LOSE, "0");
         db.insert(TABLE_NAME, null, cv);
 
-        cv.put(KEY_NAME, "Player2");
+        cv.put(KEY_NAME, "Player 2");
         cv.put(KEY_TOTAL_PLAY, "0");
         cv.put(KEY_TOTAL_WIN, "0");
         cv.put(KEY_TOTAL_LOSE, "0");

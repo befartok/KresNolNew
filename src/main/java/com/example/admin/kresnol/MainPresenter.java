@@ -1,5 +1,6 @@
 package com.example.admin.kresnol;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
@@ -24,8 +25,13 @@ public class MainPresenter {
     Player leftPlayer;
     Player rightPlayer;
 
+    String NameForLeftPlayer;
+    String NameForRightPlayer;
+
     boolean settingsGroupVisible = false;
 
+    Db db;
+    Context context;
 
     final String LOG_TAG = "myLogs";
 
@@ -40,10 +46,14 @@ public class MainPresenter {
 
         logic = new LogicOfDroid(view.getResources());
 
-        //создание левого и правого игрока
-        leftPlayer = new Player(model.getSpinnerLeftValue());
-        rightPlayer = new Player(model.getSpinnerRightValue());
 
+        // брать имена игроков из базы для создания объектов игрок
+        db = new Db(view);
+
+        leftPlayer = new Player(db.getNameForCreateLeftPlayer());
+        rightPlayer = new Player(db.getNameForCreateRightPlayer());
+
+        db.close();
 
         leftPlayer.setSymbol("x");
         leftPlayer.setActive(true);
@@ -68,6 +78,8 @@ public class MainPresenter {
     public void setSpinnerLeft(String spinLeft) {
 
         model.setSpinnerLeftValue(spinLeft);
+        leftPlayer.setName(spinLeft);
+        Log.d(LOG_TAG, "левый игрок = " + leftPlayer.getName());
     }
 
     /*public void getSpinnerRight() {
@@ -76,6 +88,10 @@ public class MainPresenter {
 
     public void setSpinnerRight(String spinRight) {
         model.setSpinnerRightValue(spinRight);
+        rightPlayer.setName(spinRight);
+
+        Log.d(LOG_TAG, "правый игрок = " + rightPlayer.getName());
+
         setImageRight();
     }
 
@@ -232,7 +248,6 @@ public class MainPresenter {
 
     }
 
-    // TODO: 28.07.18 перенести в модель
     public void makeNameActive(String selectedSymbolsButton) {
 
         stopOfAnimation();
@@ -272,9 +287,10 @@ public class MainPresenter {
             view.arrayOfButtons[i].setText("");
         }
 
-        //model.statusGames = "ready";
         model.setStatusGames(view.getResources().getString(R.string.statusGamesReady));
+
 // TODO: 30.08.18 вынести в модель
+        // TODO: 19.10.18 подумать над брать игрока не из спинера а из гетера модели игрока
 
         enableChangeSymbol();
         invertPlayersActivity();
@@ -311,8 +327,9 @@ public class MainPresenter {
         if ((!model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesFinish)))
                 & (btn.getText().equals(""))) {
 
-            //model.statusGames = "inplay";
             model.setStatusGames(view.getResources().getString(R.string.statusGamesInplay));
+
+
             //отключение изменяемости кнопок выбора символа и игроков
             disableChangeSymbol();
 
@@ -324,8 +341,10 @@ public class MainPresenter {
 
             //увеличить счетчик нажатых кнопок
             model.clickedButtonsTotal++;
-            //Log.d(LOG_TAG, "223 clickedButtonsTotal " + clickedButtonsTotal);
-
+            // плюсовать в БД игры для первого нажатия кнопки
+            if (model.clickedButtonsTotal == 1){
+                addGameToDb();
+            }
             // проверка на выигрыш
             checkWin();
 
@@ -356,6 +375,22 @@ public class MainPresenter {
         else if (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesFinish))){
             restartGame();
         }
+    }
+
+    //добавление запущенной игры в базу
+    private void addGameToDb() {
+
+        db = new Db(view);
+        /*leftPlayer.getName();
+        rightPlayer.getName();*/
+
+        Log.d(LOG_TAG, "leftPlayer = " + leftPlayer.getName());
+        Log.d(LOG_TAG, "rightPlayer = " + rightPlayer.getName());
+
+        db.addGame(leftPlayer.getName(), rightPlayer.getName());
+        //db.addGame("Player1", "Player2");
+
+        db.close();
     }
 
     //отключение возможности менять игровые символы
@@ -502,21 +537,30 @@ public class MainPresenter {
     public void saveResult(CharSequence winSymbol) {
 
         stopOfAnimation();
+        db = new Db(view);
 
         // TODO: 01.08.18 вынести винсимвол в модель?
         if (view.symbolOfBtnLeftPlayer.getText().equals(winSymbol)) {
 
             model.totalWinLeft++;
-            // TODO: 22.09.18 раскомментировать после отладки уровня игры
 
-            //view.winLeft.setText(Integer.toString(model.totalWinLeft));
+            db = new Db(view);
+            // TODO: 15.10.18 добавлять в бд выигрыш
+            db.addWinToDb(leftPlayer.getName());
+
+
+            view.winLeft.setText(Integer.toString(model.totalWinLeft));
 
 
         } else if (view.symbolOfBtnRightPlayer.getText().equals(winSymbol)) {
 
             model.totalWinRight++;
+            // TODO: 15.10.18 добавлять в бд выигрыш
+            db.addWinToDb(rightPlayer.getName());
+
             view.winRight.setText(Integer.toString(model.totalWinRight));
         }
+        db.close();
     }
 
     public void  stopOfAnimation(){

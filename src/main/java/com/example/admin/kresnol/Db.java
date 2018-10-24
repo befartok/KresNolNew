@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by admin on 07.10.18.
  */
-
+// TODO: 15.10.18 удалить проигрыши в бд
 public class Db {
     //private static final String LOG_TAG = "my_tag";
     final String LOG_TAG = "myLogs";
@@ -25,10 +25,19 @@ public class Db {
     SQLiteDatabase db;
     List<RecordOfDb> mRecordOfDbList;
 
+    String NameForCreateLeftPlayer;
+    String NameForCreateRightPlayer;
+
     public Db(Context context) {
         this.context = context;
         dbHelper = new DbHelper(context);
     }
+
+    public Cursor getAllItems() {
+        db = dbHelper.getReadableDatabase();
+        return db.query(DbHelper.TABLE_NAME, null, null, null, null, null, null);
+    }
+
     // возвращает количество записей в таблице
     public int getItemCount() {
 
@@ -39,18 +48,6 @@ public class Db {
         cursor.close();
 
         return cnt;
-    }
-    public String getName(int id) {
-
-        this.id=id;
-        db = dbHelper.getReadableDatabase();
-
-        cursor = db.query(DbHelper.TABLE_NAME, null, null, null, null, null, null);
-        //int nameColInd = cursor.getColumnIndex(DbHelper.KEY_NAME);
-        String  name = cursor.getString(id);
-        cursor.close();
-
-        return name;
     }
 
     // метод для обновления email
@@ -66,6 +63,94 @@ public class Db {
         db = dbHelper.getWritableDatabase();
         db.delete(DbHelper.TABLE_NAME, DbHelper.KEY_ID + "=" + id, null);
     }
+
+    public String getNameForCreateLeftPlayer(){
+        db = dbHelper.getReadableDatabase();
+        String[] idFirstRecord = new String[]{Integer.toString(1)};
+        Log.d(LOG_TAG, "idFirstRecord = " + idFirstRecord);
+
+        cursor = db.query(DbHelper.TABLE_NAME, null, "_id =?", idFirstRecord, null, null, null);
+        int nameColInd = cursor.getColumnIndex(DbHelper.KEY_NAME);
+        Log.d(LOG_TAG, "cursor = " + cursor);
+        Log.d(LOG_TAG, "nameColInd = " + nameColInd);
+
+        cursor.moveToFirst();
+        NameForCreateLeftPlayer = cursor.getString(nameColInd);
+        //Log.d(LOG_TAG, "NameForCreateLeftPlayer = " + NameForCreateLeftPlayer);
+
+        cursor.close();
+        return NameForCreateLeftPlayer;
+
+    }
+
+    public String getNameForCreateRightPlayer(){
+        db = dbHelper.getReadableDatabase();
+        String[] idSecondRecord = new String[]{Integer.toString(2)};
+
+        cursor = db.query(DbHelper.TABLE_NAME, null, "_id =?", idSecondRecord, null, null, null);
+        int nameColInd = cursor.getColumnIndex(DbHelper.KEY_NAME);
+
+        cursor.moveToFirst();
+        String NameForCreateRightPlayer = cursor.getString(nameColInd);
+        cursor.close();
+        return NameForCreateRightPlayer;
+
+    }
+
+    public void addGame(String leftPlayer, String rightPlayer){
+ //       сделать 2 квери с игроками
+        db = dbHelper.getReadableDatabase();
+
+       /* Log.d(LOG_TAG, "leftPlayer = " + leftPlayer);
+        Log.d(LOG_TAG, "rightPlayer = " + rightPlayer);
+*/
+
+        String[] nameOfLeftPlayer = new String[]{leftPlayer};
+        String[] nameOfRightPlayer = new String[]{rightPlayer};
+        String[] totalColumn = new String[]{DbHelper.KEY_TOTAL_PLAY};
+
+        cursor = db.query(DbHelper.TABLE_NAME, null, "name = ?", nameOfLeftPlayer, null, null, null);
+
+        int totalPlayColInd = cursor.getColumnIndex(DbHelper.KEY_TOTAL_PLAY);
+        Log.d(LOG_TAG, "totalPlayColInd = " + totalPlayColInd);
+
+        int cnt = cursor.getCount();
+        Log.d(LOG_TAG, "getCount  = " + cnt);
+
+        cursor.moveToFirst();
+
+        int totalPlayLeft = cursor.getInt(totalPlayColInd);
+        Log.d(LOG_TAG, "totalPlayLeft from DB = " + totalPlayLeft);
+
+        cursor.close();
+
+        totalPlayLeft++;
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_TOTAL_PLAY, totalPlayLeft);
+        db.update(DbHelper.TABLE_NAME, cv, "name = ?", nameOfLeftPlayer);
+
+
+        cursor = db.query(DbHelper.TABLE_NAME, null, "name = ?", nameOfRightPlayer, null, null, null);
+
+        totalPlayColInd = cursor.getColumnIndex(DbHelper.KEY_TOTAL_PLAY);
+        Log.d(LOG_TAG, "totalPlayColInd = " + totalPlayColInd);
+
+        cnt = cursor.getCount();
+        Log.d(LOG_TAG, "getCount  = " + cnt);
+
+        cursor.moveToFirst();
+
+        int totalPlayRight = cursor.getInt(totalPlayColInd);
+        Log.d(LOG_TAG, "totalPlayRight from DB = " + totalPlayRight);
+
+        cursor.close();
+
+        totalPlayRight++;
+        cv.put(DbHelper.KEY_TOTAL_PLAY, totalPlayRight);
+        //String[] args = new String[]{name};
+        db.update(DbHelper.TABLE_NAME, cv, "name = ?", nameOfRightPlayer);
+    }
+
     // метод возвращающий коллекцию всех данных
     public List<RecordOfDb> getRecordOfDb() {
         cursor = db.query(DbHelper.TABLE_NAME, null, null, null, null, null, null);
@@ -102,4 +187,30 @@ public class Db {
         db.close();
     }
 
+    public void addWinToDb(String name)
+    {
+        db = dbHelper.getReadableDatabase();
+
+        String[] nameOfWinner = new String[]{name};
+
+        cursor = db.query(DbHelper.TABLE_NAME, null, "name = ?", nameOfWinner, null, null, null);
+
+        int totalWinColInd = cursor.getColumnIndex(DbHelper.KEY_TOTAL_WIN);
+        Log.d(LOG_TAG, "totalPlayColInd = " + totalWinColInd);
+
+        int cnt = cursor.getCount();
+        Log.d(LOG_TAG, "getCount  = " + cnt);
+
+        cursor.moveToFirst();
+
+        int totalWin = cursor.getInt(totalWinColInd);
+        Log.d(LOG_TAG, "totalWin from DB = " + totalWin);
+
+        cursor.close();
+
+        totalWin++;
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_TOTAL_WIN, totalWin);
+        db.update(DbHelper.TABLE_NAME, cv, "name = ?", nameOfWinner);
+    }
 }

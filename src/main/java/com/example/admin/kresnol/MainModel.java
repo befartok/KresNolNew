@@ -35,7 +35,8 @@ public class MainModel {
 
     // TODO: 09.08.18 массивы игроков брать из разных списков без пересекающихся значений
 // TODO: 29.09.18  "android" передавать сетером?
-    String[] arrayOfPlayers = {"Player 1", "Player 2", "Android"};
+    // TODO: 24.10.18 брать из базы?
+    String[] arrayOfPlayers = {"Player1", "Player2", "Android"};
 
 
     boolean makeStep;

@@ -64,12 +64,16 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: 24.09.18 тест, потом удалить
         String prefTest = prefs.getString("pref_level", "");
-        winLeft.setText(prefTest);
+        //winLeft.setText(prefTest);
+        Log.d(LOG_TAG, "Уровень сложности сохраненный в настройках" + prefTest);
 
 
-        db = new Db(this);
+/*        db = new Db(this);
         int mCount = db.getItemCount();
         Log.d(LOG_TAG, "Количество записей в базе:" + mCount);
+
+
+        db.addGame("Player1", "Player2");*/
 
 
        /* // получаем количество записей в базе перед изменениями
@@ -88,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Имя: " + record.getName() + " сыграно: " + record.getTotalPlay());
         }*/
 
-        db.close();
+        //db.close();
     }
 
     protected void onResume() {
@@ -96,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 30.09.18 вынести в метод? или в модель?
         String prefTest = prefs.getString("pref_level", "");
 
-        // TODO: 28.09.18 тест, удалить после теста настроек
-        winLeft.setText(prefTest);
+        //winLeft.setText(prefTest);
+        Log.d(LOG_TAG, "Уровень сложности установленный в настройках" + prefTest);
 
         presenter.setSpinnerLevel(prefTest);
 
@@ -289,13 +293,15 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: 08.08.18 запретить выбирать в спинере выбранного с другой стороны игрока
 
-        // TODO: 12.08.18 вынести имя Андроид в ресурсы
-
         //// TODO: 22.09.18 добавить в настройки выбор игроков
 
         //// TODO: 22.09.18 добавить тесты
 
         // TODO: 24.09.18 сделать иконки неактивного серыми
+
+        // TODO: 15.10.18 вынести БД в другой поток
+
+        // TODO: 15.10.18 убрать проиграно из БД
 
 
         // обработку нажатий

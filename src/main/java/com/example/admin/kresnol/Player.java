@@ -4,21 +4,22 @@ import android.util.Log;
 
 public class Player {
 
-    public CharSequence name;
+    public String name;
     public String symbol;
     private boolean active;
 
     final String LOG_TAG = "myLogs";
 
 
-    public Player(CharSequence name) {
-    }
-
-    public void setName(CharSequence name) {
+    public Player(String name) {
         this.name = name;
     }
 
-    public CharSequence getName() {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
         return name;
     }
 
