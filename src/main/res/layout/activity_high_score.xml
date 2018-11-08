@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Сыграно"
+            android:text="Игры"
             android:textAlignment="center"
 
             android:textStyle="bold" />
@@ -39,16 +39,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Победы"
-            android:textAlignment="center"
-
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/high_score_totalLose_header"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Проиграно"
             android:textAlignment="center"
 
             android:textStyle="bold" />

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textViewHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="11dp"
+
+        android:text="Введите имя"/>
+
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:layout_margin="11dp"
+
+        android:layout_marginTop="22dp"
+
+        android:text="Name" />
+
+    <TextView
+        android:layout_marginTop="22dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="11dp"
+
+        android:text="Выбрать игрока для игры"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        >
+
+
+
+        <RadioButton
+            android:id="@+id/radioButtonLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Установить левым"
+            android:layout_margin="11dp"
+
+            android:layout_weight="1"
+
+            />
+
+        <RadioButton
+            android:id="@+id/radioButtonRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Установить правым"
+            android:layout_margin="11dp"
+
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="33dp"
+        >
+
+        <Button
+            android:id="@+id/buttonCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:onClick="onclick"
+            android:layout_margin="11dp"
+            android:text="СОЗДАТЬ" />
+
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="11dp"
+
+            android:layout_weight="0.7"
+            android:text="Отмена" />
+    </LinearLayout>
+
+</LinearLayout>

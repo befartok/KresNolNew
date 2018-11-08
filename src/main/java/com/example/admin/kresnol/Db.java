@@ -24,6 +24,7 @@ public class Db {
     Cursor cursor;
     SQLiteDatabase db;
     List<RecordOfDb> mRecordOfDbList;
+    List<RecordOfDb> NamesFromDbList;
 
     String NameForCreateLeftPlayer;
     String NameForCreateRightPlayer;
@@ -58,11 +59,20 @@ public class Db {
         String[] args = new String[]{name};
         db.update(DbHelper.TABLE_NAME, cv, "name = ?", args);
     }*/
+
+
+
+
     // метод для удаления строки по id
     public void deleteItem(int id) {
         db = dbHelper.getWritableDatabase();
         db.delete(DbHelper.TABLE_NAME, DbHelper.KEY_ID + "=" + id, null);
     }
+
+    public void upgradeBase(){
+    db = dbHelper.getWritableDatabase();
+    dbHelper.onUpgrade(db, 1, 2);
+}
 
     public String getNameForCreateLeftPlayer(){
         db = dbHelper.getReadableDatabase();
@@ -97,13 +107,27 @@ public class Db {
 
     }
 
+
+
+
+    public void addPlayer(String name){
+        db = dbHelper.getWritableDatabase();
+
+        String nameOfPlayer = name;
+        ContentValues cv = new ContentValues();
+
+        cv.put(DbHelper.KEY_NAME, nameOfPlayer);
+        cv.put(DbHelper.KEY_TOTAL_PLAY, "0");
+        cv.put(DbHelper.KEY_TOTAL_WIN, "0");
+
+        db.insert(DbHelper.TABLE_NAME, null, cv);
+
+
+
+    }
     public void addGame(String leftPlayer, String rightPlayer){
  //       сделать 2 квери с игроками
         db = dbHelper.getReadableDatabase();
-
-       /* Log.d(LOG_TAG, "leftPlayer = " + leftPlayer);
-        Log.d(LOG_TAG, "rightPlayer = " + rightPlayer);
-*/
 
         String[] nameOfLeftPlayer = new String[]{leftPlayer};
         String[] nameOfRightPlayer = new String[]{rightPlayer};
@@ -153,6 +177,8 @@ public class Db {
 
     // метод возвращающий коллекцию всех данных
     public List<RecordOfDb> getRecordOfDb() {
+        db = dbHelper.getReadableDatabase();
+
         cursor = db.query(DbHelper.TABLE_NAME, null, null, null, null, null, null);
         mRecordOfDbList = new ArrayList<RecordOfDb>();
 
@@ -162,13 +188,13 @@ public class Db {
             int nameColInd = cursor.getColumnIndex(DbHelper.KEY_NAME);
             int totalPlayColInd = cursor.getColumnIndex(DbHelper.KEY_TOTAL_PLAY);
             int totalWinColInd = cursor.getColumnIndex(DbHelper.KEY_TOTAL_WIN);
-            int totalLoseColInd = cursor.getColumnIndex(DbHelper.KEY_TOTAL_LOSE);
+            //int totalLoseColInd = cursor.getColumnIndex(DbHelper.KEY_TOTAL_LOSE);
 
             do {
                 RecordOfDb record = new RecordOfDb(cursor.getInt(idColInd),
                         cursor.getString(nameColInd), cursor.getInt(totalPlayColInd),
-                        cursor.getInt(totalWinColInd), cursor.getInt(totalLoseColInd)
-                );
+                        cursor.getInt(totalWinColInd));
+                        //, cursor.getInt(totalLoseColInd));
                 mRecordOfDbList.add(record);
             } while (cursor.moveToNext());
 
@@ -181,6 +207,33 @@ public class Db {
         return mRecordOfDbList;
 
     }
+
+    public List<RecordOfDb> getNamesFromDb() {
+        db = dbHelper.getReadableDatabase();
+
+        cursor = db.query(DbHelper.TABLE_NAME, null, null, null, null, null, null);
+        NamesFromDbList = new ArrayList<RecordOfDb>();
+
+        if (cursor.moveToFirst()) {
+
+            int nameColInd = cursor.getColumnIndex(DbHelper.KEY_NAME);
+
+            do {
+                RecordOfDb record = new RecordOfDb(cursor.getString(nameColInd));
+                NamesFromDbList.add(record);
+            } while (cursor.moveToNext());
+
+        } else {
+            Log.d(LOG_TAG, "В базе нет данных!");
+        }
+
+        cursor.close();
+
+        return NamesFromDbList;
+
+    }
+
+
     // здесь закрываем все соединения с базой и класс-помощник
     public void close() {
         dbHelper.close();

@@ -36,27 +36,29 @@ public class DbHelper extends SQLiteOpenHelper {
                 + KEY_ID + " integer primary key autoincrement,"
                 + KEY_NAME + " text,"
                 + KEY_TOTAL_PLAY + " text,"
-                + KEY_TOTAL_WIN + " text,"
-                + KEY_TOTAL_LOSE + " text" + ");");
+                + KEY_TOTAL_WIN + " text"
+                //+ KEY_TOTAL_WIN + " text,"
+                //+ KEY_TOTAL_LOSE + " text"
+                + ");");
 
         ContentValues cv = new ContentValues();
 
         cv.put(KEY_NAME, "Player 1");
         cv.put(KEY_TOTAL_PLAY, "0");
         cv.put(KEY_TOTAL_WIN, "0");
-        cv.put(KEY_TOTAL_LOSE, "0");
+        //cv.put(KEY_TOTAL_LOSE, "0");
         db.insert(TABLE_NAME, null, cv);
 
         cv.put(KEY_NAME, "Player 2");
         cv.put(KEY_TOTAL_PLAY, "0");
         cv.put(KEY_TOTAL_WIN, "0");
-        cv.put(KEY_TOTAL_LOSE, "0");
+        //cv.put(KEY_TOTAL_LOSE, "0");
         db.insert(TABLE_NAME, null, cv);
 
         cv.put(KEY_NAME, "Android");
         cv.put(KEY_TOTAL_PLAY, "0");
         cv.put(KEY_TOTAL_WIN, "0");
-        cv.put(KEY_TOTAL_LOSE, "0");
+        //cv.put(KEY_TOTAL_LOSE, "0");
         db.insert(TABLE_NAME, null, cv);
 
         Log.d(LOG_TAG, "test onCreate");

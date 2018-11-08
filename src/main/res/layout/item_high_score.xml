@@ -32,14 +32,5 @@
 
         android:textAlignment="center" />
 
-    <TextView
-        android:id="@+id/high_score_totalLose"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="testtest"
-
-        android:textAlignment="center" />
-
 
 </LinearLayout>

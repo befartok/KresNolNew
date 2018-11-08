@@ -14,14 +14,21 @@ public class RecordOfDb {
     private Integer totalWin;
     private Integer totalLose;
 
-    RecordOfDb(){}
+    RecordOfDb() {
+    }
 
-    public RecordOfDb(Integer id, String name, Integer totalPlay, Integer totalWin, Integer totalLose) {
+    public RecordOfDb(Integer id, String name, Integer totalPlay, Integer totalWin
+                      //        , Integer totalLose
+    ) {
         this.id = id;
         this.name = name;
         this.totalPlay = totalPlay;
         this.totalWin = totalWin;
-        this.totalLose = totalLose;
+        //       this.totalLose = totalLose;
+    }
+
+    public RecordOfDb(String name) {
+        this.name = name;
     }
 
     public Integer getId() {
@@ -56,11 +63,5 @@ public class RecordOfDb {
         this.totalWin = totalWin;
     }
 
-    public Integer getTotalLose() {
-        return totalLose;
-    }
 
-    public void setTotalLose(Integer totalLose) {
-        this.totalLose = totalLose;
-    }
 }

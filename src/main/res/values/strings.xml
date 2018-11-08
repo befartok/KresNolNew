@@ -45,6 +45,7 @@
         <item>Удалить игрока</item>
     </string-array>
     <string name="title_activity_high_score">Таблица рекордов</string>
+ <string name="title_activity_сreate_зlayer">Создать игрока</string>
 
 
 </resources>

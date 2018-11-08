@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -58,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(LOG_TAG, "41 test");
+
+
+
+
         init();
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -67,32 +72,50 @@ public class MainActivity extends AppCompatActivity {
         //winLeft.setText(prefTest);
         Log.d(LOG_TAG, "Уровень сложности сохраненный в настройках" + prefTest);
 
+        /*db = new Db(this);
+        db.upgradeBase();
+        *//*db.deleteItem(1);
+        db.deleteItem(2);*//*
 
-/*        db = new Db(this);
-        int mCount = db.getItemCount();
+        //db.addPlayer("Player 1");
+
+
+        db.close();*/
+
+
+       //db = new Db(this);
+
+        //db.addGame("Player1", "Player2");
+
+
+        // получаем количество записей в базе перед изменениями
+        /*int mCount = db.getItemCount();
         Log.d(LOG_TAG, "Количество записей в базе:" + mCount);
-
-
-        db.addGame("Player1", "Player2");*/
-
-
-       /* // получаем количество записей в базе перед изменениями
-        int mCount = db.getItemCount();
-        Log.d(LOG_TAG, "Количество записей в базе:" + mCount);
-
+*/
         // обновляем запись с id = 1 (меняем email)
         //db.updateEmail("Igor", "newemail@newemail.com");
 
         // удаляем запись с id = 3
         //db.deleteItem(3);
 
+
         // выводим все имеющиеся записи в лог
+        //        List<RecordOfDb> records = db.getNamesFromDb();
+        //Log.d(LOG_TAG, "Имя: " + record.getName());
+
+
+        /*db = new Db(this);
         List<RecordOfDb> records = db.getRecordOfDb();
         for (RecordOfDb record : records) {
             Log.d(LOG_TAG, "Имя: " + record.getName() + " сыграно: " + record.getTotalPlay());
-        }*/
+        }
 
-        //db.close();
+
+
+
+        db.close();*/
+
+       // presenter.getArrayOfPlayer();
     }
 
     protected void onResume() {
@@ -169,9 +192,17 @@ public class MainActivity extends AppCompatActivity {
         winRight = (TextView) findViewById(R.id.totalWinRightPlayer);
         //winLeft.setText(SettingsActivity.SettingsFragment.settingLevel.getEntry());
 
+/*        List<String> catNames = new ArrayList<String>();
+        catNames.add("Барсик");
+        catNames.add("Мурзик");
+        catNames.add("Рыжик");*/
+
+
+        //presenter.getArrayOfPlayer();
 
         // адаптер
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfPlayer());
+       //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfPlayer());
+       ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.arrayOfPlayer);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         imageOfLeftPlayer = (ImageView) findViewById(R.id.imageView);

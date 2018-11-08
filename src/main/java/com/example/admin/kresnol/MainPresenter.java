@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //import static com.example.admin.kresnol.R.id.group1;
 
 
@@ -50,6 +53,8 @@ public class MainPresenter {
         // брать имена игроков из базы для создания объектов игрок
         db = new Db(view);
 
+        /*leftPlayer = new Player("Player 1");
+        rightPlayer = new Player("Player 2");*/
         leftPlayer = new Player(db.getNameForCreateLeftPlayer());
         rightPlayer = new Player(db.getNameForCreateRightPlayer());
 
@@ -61,10 +66,30 @@ public class MainPresenter {
         rightPlayer.setSymbol("o");
         rightPlayer.setActive(false);
 
-    }
+        getArrayOfPlayer();
 
-    public String[] getArrayOfPlayer() {
-        return model.arrayOfPlayers;
+
+    }
+    List<String> arrayOfPlayer = new ArrayList<String>();
+
+    //public String[] getArrayOfPlayer() {
+    public List<RecordOfDb> getArrayOfPlayer() {
+        db = new Db(view);
+
+
+        List<RecordOfDb> records = db.getNamesFromDb();
+        for (RecordOfDb record : records) {
+            arrayOfPlayer.add(record.getName());
+
+            //Log.d(LOG_TAG, "Имя: " + record.getName() + " сыграно: " + record.getTotalPlay());
+            Log.d(LOG_TAG, "Имя: " + record.getName());
+        }
+        //return model.arrayOfPlayers;
+        db.close();
+        return records;
+
+
+
     }
 
     public String[] getArrayOfLevel() {

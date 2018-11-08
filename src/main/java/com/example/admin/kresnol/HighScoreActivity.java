@@ -43,9 +43,9 @@ public class HighScoreActivity extends AppCompatActivity {
         mCursor = db.getAllItems();
 
         String[] from = new String[] { DbHelper.KEY_NAME, DbHelper.KEY_TOTAL_PLAY,
-                DbHelper.KEY_TOTAL_WIN,DbHelper.KEY_TOTAL_LOSE };
+                DbHelper.KEY_TOTAL_WIN};
         int[] to = new int[] { R.id.high_score_name, R.id.high_score_totalPlay,
-                R.id.high_score_totalWin, R.id.high_score_totalLose};
+                R.id.high_score_totalWin};
 
         mCursorAd = new SimpleCursorAdapter(this, R.layout.item_high_score, mCursor, from, to, 0);
         mLv = (ListView) findViewById(R.id.lv);

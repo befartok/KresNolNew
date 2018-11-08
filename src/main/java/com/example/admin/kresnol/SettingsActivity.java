@@ -1,13 +1,15 @@
 package com.example.admin.kresnol;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
+
 
 /**
  * Created by admin on 12.09.18.
@@ -26,43 +28,53 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-
     public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener{
 
         public static ListPreference settingLevel;
-        ListPreference settingPlayers;
+        //ListPreference settingPlayers;
+        PreferenceCategory settingPlayers;
+        Preference createPlayers;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
             addPreferencesFromResource(R.xml.preferences);
-            settingLevel=(ListPreference)this.findPreference("pref_level");
-            settingPlayers = (ListPreference)this.findPreference("pref_players");
+            settingLevel = (ListPreference) this.findPreference("pref_level");
+            //settingPlayers = (ListPreference)this.findPreference("pref_players");
+            settingPlayers = (PreferenceCategory) this.findPreference("pref_players");
+            createPlayers = (Preference) this.findPreference("pref_create_players");
 
             // устанавливаем слушатель
             settingLevel.setOnPreferenceChangeListener(this);
             settingPlayers.setOnPreferenceChangeListener(this);
+            createPlayers.setOnPreferenceChangeListener(this);
+
 
             // пишем в summary текущее значение
             settingLevel.setSummary(settingLevel.getEntry());
-            settingPlayers.setSummary(settingPlayers.getEntry());
+            //settingPlayers.setSummary(settingPlayers.getEntry());
 
         }
 
         @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue)
-        {
-            preference.setSummary((CharSequence)newValue);
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            preference.setSummary((CharSequence) newValue);
+
+
+
+            /*Toast.makeText(getActivity(),"Test of toast", Toast.LENGTH_SHORT).show();
+            createPlayers.setText("zzzz");
+*/
+
             return true;
         }
 
 
-
     }
 
 
-
-    }
+}
 
 
 
