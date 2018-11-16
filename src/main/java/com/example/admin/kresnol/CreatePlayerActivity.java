@@ -47,6 +47,7 @@ public class CreatePlayerActivity extends AppCompatActivity {
 
     // TODO: 08.11.18 проверить на уникальность имен при создании нового
     // TODO: 08.11.18 выходить на первый экран после создания и обновлять спинер
+    // TODO: 16.11.18 кнопку отмена настроить
 
     public void onclick(View v) {
 

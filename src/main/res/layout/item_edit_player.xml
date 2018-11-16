@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:orientation="horizontal">
+
+
+    <TextView
+        android:id="@+id/edit_player_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_weight="0.8"
+        android:text="testtest"
+        android:onClick="onclick"
+
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/edit_player_item_totalPlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+
+        android:text="testtest"
+        android:textAlignment="center"
+
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/edit_player_item_totalWin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+
+        android:text="testtest"
+        android:textAlignment="center"
+
+        android:textSize="18dp" />
+
+
+</LinearLayout>

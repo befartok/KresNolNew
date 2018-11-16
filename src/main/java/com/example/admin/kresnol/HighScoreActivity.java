@@ -44,6 +44,7 @@ public class HighScoreActivity extends AppCompatActivity {
 
         String[] from = new String[] { DbHelper.KEY_NAME, DbHelper.KEY_TOTAL_PLAY,
                 DbHelper.KEY_TOTAL_WIN};
+        //массив из полей шаблона item_high_score
         int[] to = new int[] { R.id.high_score_name, R.id.high_score_totalPlay,
                 R.id.high_score_totalWin};
 

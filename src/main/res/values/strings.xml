@@ -1,16 +1,17 @@
 <resources>
-    <string name="app_name">KresNol</string>
+    <string name="app_name">Крестики-нолики</string>
+    <string name="preferences_name">Настройки</string>
 
     <string name="droids_name">Android</string>
-    <string name="level_easy">Easy</string>
-    <string name="level_normal">Normal</string>
-    <string name="level_hard">Hard</string>
+    <string name="level_easy">Легко</string>
+    <string name="level_normal">Нормально</string>
+    <string name="level_hard">Сложно</string>
+    <string name="level_header">Сложность игры</string>
 
 
     <string name="statusGamesReady">ready</string>
     <string name="statusGamesInplay">inplay</string>
     <string name="statusGamesFinish">finish</string>
-
 
 
     <string name="pref_level_title">Выбрать сложность</string>
@@ -45,7 +46,8 @@
         <item>Удалить игрока</item>
     </string-array>
     <string name="title_activity_high_score">Таблица рекордов</string>
- <string name="title_activity_сreate_зlayer">Создать игрока</string>
+    <string name="title_activity_сreate_player">Создать игрока</string>
+    <string name="title_activity_edit_player">Изменить игрока</string>
 
 
 </resources>

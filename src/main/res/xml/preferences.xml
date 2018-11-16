@@ -6,12 +6,12 @@
             android:summary="@string/pref_checkbox_summary"
             android:title="@string/pref_checkbox_title">
         </CheckBoxPreference>-->
-    <PreferenceCategory android:title="qwerty">
+    <PreferenceCategory android:title="@string/level_header">
         <ListPreference
             android:entries="@array/levels_array"
             android:entryValues="@array/levels_array_values"
             android:key="pref_level"
-            android:summary="qwe"
+            android:summary=""
             android:title="@string/pref_level_title">
 
         </ListPreference>
@@ -22,7 +22,7 @@
         android:key="pref_players">
 
         <Preference
-            android:title="Создание нового игрока йцук"
+            android:title="@string/title_activity_сreate_player"
 
             android:key="pref_create_players">
             <intent
@@ -31,16 +31,20 @@
 
             </Preference>
 
-
-        <PreferenceScreen
-
-            android:key="pref_create_players"
-            android:title="Изменение игрока фыва">
-
-
-
-        </PreferenceScreen>
     </PreferenceCategory>
+
+        <Preference
+            android:title="@string/title_activity_edit_player"
+
+            android:key="pref_edit_players">
+
+            <intent
+                android:action="intent.action.edit.player">
+            </intent>
+
+
+
+        </Preference>
 
     <!--<ListPreference
         android:entries="@array/players_settings"

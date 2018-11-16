@@ -18,24 +18,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity">
-            android:label="Preferences"
-        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/preferences_name" />
         <activity
             android:name=".AboutActivity"
-            android:label="@string/about_title"></activity>
+            android:label="@string/about_title" />
         <activity
             android:name=".HighScoreActivity"
-            android:label="@string/title_activity_high_score"></activity>
-         <activity
+            android:label="@string/title_activity_high_score" />
+        <activity
             android:name=".CreatePlayerActivity"
-            android:label="@string/title_activity_сreate_зlayer">
-             <intent-filter>
-                 <action android:name="intent.action.create.player" />
-                 <category android:name="android.intent.category.DEFAULT" />
-             </intent-filter>
+            android:label="@string/title_activity_сreate_player">
+            <intent-filter>
+                <action android:name="intent.action.create.player" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
 
-         </activity>
+        </activity>
+        <activity
+            android:name=".EditPlayerActivity"
+            android:label="@string/title_activity_edit_player">
+            <intent-filter>
+                <action android:name="intent.action.edit.player" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

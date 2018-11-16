@@ -1,14 +1,11 @@
 package com.example.admin.kresnol;
 
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceScreen;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 
 /**
@@ -28,12 +25,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-    public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener{
+    public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
         public static ListPreference settingLevel;
         //ListPreference settingPlayers;
         PreferenceCategory settingPlayers;
         Preference createPlayers;
+        Preference editPlayers;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -45,10 +43,13 @@ public class SettingsActivity extends AppCompatActivity {
             settingPlayers = (PreferenceCategory) this.findPreference("pref_players");
             createPlayers = (Preference) this.findPreference("pref_create_players");
 
+            editPlayers = (Preference) this.findPreference("pref_edit_players");
+
             // устанавливаем слушатель
             settingLevel.setOnPreferenceChangeListener(this);
             settingPlayers.setOnPreferenceChangeListener(this);
             createPlayers.setOnPreferenceChangeListener(this);
+            editPlayers.setOnPreferenceChangeListener(this);
 
 
             // пишем в summary текущее значение
