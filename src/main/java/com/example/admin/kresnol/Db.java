@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -61,20 +60,18 @@ public class Db {
     }*/
 
 
-
-
     // метод для удаления строки по id
-    public void deleteItem(int id) {
+    public void deleteItem(long id) {
         db = dbHelper.getWritableDatabase();
         db.delete(DbHelper.TABLE_NAME, DbHelper.KEY_ID + "=" + id, null);
     }
 
-    public void upgradeBase(){
-    db = dbHelper.getWritableDatabase();
-    dbHelper.onUpgrade(db, 1, 2);
-}
+    public void upgradeBase() {
+        db = dbHelper.getWritableDatabase();
+        dbHelper.onUpgrade(db, 1, 2);
+    }
 
-    public String getNameForCreateLeftPlayer(){
+    public String getNameForCreateLeftPlayer() {
         db = dbHelper.getReadableDatabase();
         String[] idFirstRecord = new String[]{Integer.toString(1)};
         Log.d(LOG_TAG, "idFirstRecord = " + idFirstRecord);
@@ -93,7 +90,7 @@ public class Db {
 
     }
 
-    public String getNameForCreateRightPlayer(){
+    public String getNameForCreateRightPlayer() {
         db = dbHelper.getReadableDatabase();
         String[] idSecondRecord = new String[]{Integer.toString(2)};
 
@@ -107,10 +104,26 @@ public class Db {
 
     }
 
+    public String getNameFromRecordOfDb(long id) {
+        db = dbHelper.getReadableDatabase();
 
 
+        String idInString = String.valueOf(id);
+        //String[] idFromRecord = new String[]{Integer.toString(id)};
+        String[] idFromRecord = new String[]{idInString};
 
-    public void addPlayer(String name){
+        cursor = db.query(DbHelper.TABLE_NAME, null, "_id =?", idFromRecord, null, null, null);
+        int nameColInd = cursor.getColumnIndex(DbHelper.KEY_NAME);
+
+        cursor.moveToFirst();
+        String NameFromRecordOfDb = cursor.getString(nameColInd);
+        cursor.close();
+        return NameFromRecordOfDb;
+
+    }
+
+
+    public void addPlayer(String name) {
         db = dbHelper.getWritableDatabase();
 
         String nameOfPlayer = name;
@@ -123,10 +136,10 @@ public class Db {
         db.insert(DbHelper.TABLE_NAME, null, cv);
 
 
-
     }
-    public void addGame(String leftPlayer, String rightPlayer){
- //       сделать 2 квери с игроками
+
+    public void addGame(String leftPlayer, String rightPlayer) {
+        //       сделать 2 квери с игроками
         db = dbHelper.getReadableDatabase();
 
         String[] nameOfLeftPlayer = new String[]{leftPlayer};
@@ -194,7 +207,7 @@ public class Db {
                 RecordOfDb record = new RecordOfDb(cursor.getInt(idColInd),
                         cursor.getString(nameColInd), cursor.getInt(totalPlayColInd),
                         cursor.getInt(totalWinColInd));
-                        //, cursor.getInt(totalLoseColInd));
+                //, cursor.getInt(totalLoseColInd));
                 mRecordOfDbList.add(record);
             } while (cursor.moveToNext());
 
@@ -240,8 +253,7 @@ public class Db {
         db.close();
     }
 
-    public void addWinToDb(String name)
-    {
+    public void addWinToDb(String name) {
         db = dbHelper.getReadableDatabase();
 
         String[] nameOfWinner = new String[]{name};

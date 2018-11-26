@@ -1,21 +1,19 @@
 package com.example.admin.kresnol;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 /**
  * Created by admin on 10.11.18.
@@ -31,77 +29,145 @@ public class EditPlayerActivity extends AppCompatActivity {
     private ListView mLv;
 
     final int DIALOG = 1;
-    int lvClicked;
+
+    Dialog dialog;
+    int viewClicked;
+    String playersName;
+
+    EditText nameToDialog;
+
+    RadioButton rename;
+    RadioButton clearStats;
+    RadioButton deletePlayer;
+    long idOfRecord;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_player);
+
+
+        //initView();
+
 
         db = new Db(this);
 
 
         mCursor = db.getAllItems();
 
-        String[] from = new String[] { DbHelper.KEY_NAME, DbHelper.KEY_TOTAL_PLAY,
+        String[] from = new String[]{DbHelper.KEY_NAME, DbHelper.KEY_TOTAL_PLAY,
                 DbHelper.KEY_TOTAL_WIN};
 
         //массив из полей шаблона item_edit_player
-        int[] to = new int[] { R.id.edit_player_item_name, R.id.edit_player_item_totalPlay,
+        int[] to = new int[]{R.id.edit_player_item_name, R.id.edit_player_item_totalPlay,
                 R.id.edit_player_item_totalWin};
 
-        mCursorAd = new SimpleCursorAdapter(this, R.layout.item_edit_player, mCursor, from, to, 0);
+
         mLv = (ListView) findViewById(R.id.edit_player_lv);
+
+        Log.d(LOG_TAG, "test ");
+
+        mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(LOG_TAG, "position = " + position + " && id = " + id);
+                Log.i(LOG_TAG, "имя = " + db.getNameFromRecordOfDb(id));
+                playersName = db.getNameFromRecordOfDb(id);
+                removeDialog(DIALOG);
+                showDialog(DIALOG);
+                idOfRecord = id;
+
+
+            }
+        });
+
+        mCursorAd = new SimpleCursorAdapter(this, R.layout.item_edit_player, mCursor, from, to, 0);
+
+
         mLv.setAdapter(mCursorAd);
 
 
 
-        db.close();
-
-
     }
 
+
     public void onclick(View v) {
-        lvClicked = v.getId();
-        showDialog(DIALOG);
+        viewClicked = v.getId();
+
+        switch (viewClicked) {
+
+            case R.id.dialog_button_cancel:
+                dialog.dismiss();
+                break;
+            case R.id.dialog_button_ok:
+
+                if (rename.isChecked()){
+                    Log.d(LOG_TAG, "rename");
+
+                }
+                if (clearStats.isChecked()){
+                    Log.d(LOG_TAG, "clearStats");
+
+                }
+                if (deletePlayer.isChecked()){
+                    Log.d(LOG_TAG, "deletePlayer");
+
+                    db.deleteItem(idOfRecord);
+                    mCursor = db.getAllItems();
+                    mCursorAd.changeCursor(mCursor); // обновить список
+                    removeDialog(DIALOG);
+
+                }
+
+
+
+                break;
+
+        }
     }
 
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        /*AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setTitle("Custom dialog");*/
-        // создаем view из dialog.xml
 
+        // создаем view из dialog_edit_player.xml
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.dialog_edit_player,
                 null);
 
-        TextView nameHeader = (TextView)layout.findViewById(R.id.dialog_edit_player_name_header);
-        TextView totalPlayHeader = (TextView)layout.findViewById(R.id.dialog_edit_player_totalPlay_header);
-        TextView totalWinHeader = (TextView)layout.findViewById(R.id.dialog_edit_player_totalWin_header);
 
-        EditText  name= (EditText) layout.findViewById(R.id.dialog_edit_player_item_name);
-        TextView totalPlay = (TextView)layout.findViewById(R.id.dialog_edit_player_item_totalPlay);
+        nameToDialog = (EditText) layout.findViewById(R.id.dialog_edit_player_item_name);
+        /*TextView totalPlay = (TextView)layout.findViewById(R.id.dialog_edit_player_item_totalPlay);
         TextView totalWin = (TextView)layout.findViewById(R.id.dialog_edit_player_item_totalWin);
 
-        RadioButton rename = (RadioButton)layout.findViewById(R.id.dialog_rename);
-        RadioButton clearStats = (RadioButton)layout.findViewById(R.id.dialog_clear_stats);
-        RadioButton deletePlayer = (RadioButton)layout.findViewById(R.id.dialog_delete_player);
-        Button buttonOk = (Button)layout.findViewById(R.id.dialog_button_ok);
-        Button buttonCancel = (Button)layout.findViewById(R.id.dialog_button_cancel);
-        //text.setText("Закрыть? Вы уверены?");
+      */
 
 
-        //Далее создается объект AlertDialog.Builder и методом setView() для него устанавливается полученная ранее разметка:
+        rename = (RadioButton) layout.findViewById(R.id.dialog_rename);
+        clearStats = (RadioButton) layout.findViewById(R.id.dialog_clear_stats);
+        deletePlayer = (RadioButton) layout.findViewById(R.id.dialog_delete_player);
+        Button buttonOk = (Button) layout.findViewById(R.id.dialog_button_ok);
+        Button buttonCancel = (Button) layout.findViewById(R.id.dialog_button_cancel);
 
+        nameToDialog.setText(playersName);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
         builder.setView(layout);
 
-        return builder.create();
+        dialog = builder.create();
+        return dialog;
 
 
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Закрываем подключение и курсор
+        db.close();
+        //userCursor.close();
     }
 
 }
