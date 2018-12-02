@@ -138,6 +138,50 @@ public class Db {
 
     }
 
+
+    public void clearStats(long id) {
+
+        db = dbHelper.getReadableDatabase();
+
+        String idInString = String.valueOf(id);
+        String[] idFromRecord = new String[]{idInString};
+
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_TOTAL_PLAY, 0);
+        cv.put(DbHelper.KEY_TOTAL_WIN, 0);
+        db.update(DbHelper.TABLE_NAME, cv, "_id =?", idFromRecord);
+
+
+    }
+
+    public void editName(long id, String name) {
+
+        db = dbHelper.getReadableDatabase();
+
+        String idInString = String.valueOf(id);
+        String[] idFromRecord = new String[]{idInString};
+
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_NAME, name);
+        db.update(DbHelper.TABLE_NAME, cv, "_id =?", idFromRecord);
+
+
+    }
+
+    public boolean checkName(String name) {
+
+        db = dbHelper.getReadableDatabase();
+
+        String[] nameToSearch = new String[]{name};
+
+        cursor = db.query(DbHelper.TABLE_NAME, null, "name = ?", nameToSearch, null, null, null);
+
+        if ((cursor != null) && (cursor.getCount() > 0)) {
+            return true;
+        }else return false;
+
+    }
+
     public void addGame(String leftPlayer, String rightPlayer) {
         //       сделать 2 квери с игроками
         db = dbHelper.getReadableDatabase();

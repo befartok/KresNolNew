@@ -27,7 +27,6 @@ public class MainModel {
 
     String statusGames = "ready";
 
-    // TODO: 25.07.18 после реализации бд вместо 0 брать значения из бд
     int totalWinLeft = 0;
     int totalWinRight = 0;
 

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,7 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 /**
  * Created by admin on 10.11.18.
@@ -36,7 +39,7 @@ public class EditPlayerActivity extends AppCompatActivity {
 
     EditText nameToDialog;
 
-    RadioButton rename;
+    RadioButton renamePlayer;
     RadioButton clearStats;
     RadioButton deletePlayer;
     long idOfRecord;
@@ -46,9 +49,7 @@ public class EditPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_player);
 
-
         //initView();
-
 
         db = new Db(this);
 
@@ -61,7 +62,6 @@ public class EditPlayerActivity extends AppCompatActivity {
         //массив из полей шаблона item_edit_player
         int[] to = new int[]{R.id.edit_player_item_name, R.id.edit_player_item_totalPlay,
                 R.id.edit_player_item_totalWin};
-
 
         mLv = (ListView) findViewById(R.id.edit_player_lv);
 
@@ -78,16 +78,12 @@ public class EditPlayerActivity extends AppCompatActivity {
                 showDialog(DIALOG);
                 idOfRecord = id;
 
-
             }
         });
 
         mCursorAd = new SimpleCursorAdapter(this, R.layout.item_edit_player, mCursor, from, to, 0);
 
-
         mLv.setAdapter(mCursorAd);
-
-
 
     }
 
@@ -97,19 +93,66 @@ public class EditPlayerActivity extends AppCompatActivity {
 
         switch (viewClicked) {
 
+            case R.id.dialog_rename:
+                    Log.i(LOG_TAG, "переименовать");
+
+                    nameToDialog.setEnabled(true);
+
+
+               break;
+            case R.id.dialog_clear_stats:
+                    Log.i(LOG_TAG, "dialog_clear_stats");
+
+                    nameToDialog.setEnabled(false);
+
+
+               break;
+            case R.id.dialog_delete_player:
+                    Log.i(LOG_TAG, "delete_player");
+
+                    nameToDialog.setEnabled(false);
+
+
+               break;
+
             case R.id.dialog_button_cancel:
                 dialog.dismiss();
                 break;
             case R.id.dialog_button_ok:
 
-                if (rename.isChecked()){
+                if (renamePlayer.isChecked()){
                     Log.d(LOG_TAG, "rename");
 
+                    // TODO: 01.12.18 проверить на уникальность имени
+
+                    if (db.checkName(nameToDialog.getText().toString())) {
+
+                        Toast toast= Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует",Toast.LENGTH_LONG);
+                        //Выставляем положение сообщения вверху экрана:
+                        toast.setGravity(Gravity.TOP,0,0);
+                        toast.show();
+                        //Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        db.editName(idOfRecord, nameToDialog.getText().toString());
+// TODO: 02.12.18 вынести в метод
+                        mCursor = db.getAllItems();
+                        mCursorAd.changeCursor(mCursor); // обновить список
+                        removeDialog(DIALOG);
+
+                    }
                 }
                 if (clearStats.isChecked()){
                     Log.d(LOG_TAG, "clearStats");
 
+                    db.clearStats(idOfRecord);
+                    mCursor = db.getAllItems();
+                    mCursorAd.changeCursor(mCursor); // обновить список
+                    removeDialog(DIALOG);
+
                 }
+
+                // TODO: 02.12.18 проверять и запретить удалять имена по умолчанию
                 if (deletePlayer.isChecked()){
                     Log.d(LOG_TAG, "deletePlayer");
 
@@ -120,10 +163,7 @@ public class EditPlayerActivity extends AppCompatActivity {
 
                 }
 
-
-
                 break;
-
         }
     }
 
@@ -136,21 +176,20 @@ public class EditPlayerActivity extends AppCompatActivity {
         View layout = inflater.inflate(R.layout.dialog_edit_player,
                 null);
 
-
         nameToDialog = (EditText) layout.findViewById(R.id.dialog_edit_player_item_name);
-        /*TextView totalPlay = (TextView)layout.findViewById(R.id.dialog_edit_player_item_totalPlay);
-        TextView totalWin = (TextView)layout.findViewById(R.id.dialog_edit_player_item_totalWin);
 
-      */
+        nameToDialog.setEnabled(false);
+        nameToDialog.setTextColor(getResources().getColor(R.color.colorBlack));
 
-
-        rename = (RadioButton) layout.findViewById(R.id.dialog_rename);
+        renamePlayer = (RadioButton) layout.findViewById(R.id.dialog_rename);
         clearStats = (RadioButton) layout.findViewById(R.id.dialog_clear_stats);
         deletePlayer = (RadioButton) layout.findViewById(R.id.dialog_delete_player);
         Button buttonOk = (Button) layout.findViewById(R.id.dialog_button_ok);
         Button buttonCancel = (Button) layout.findViewById(R.id.dialog_button_cancel);
 
+
         nameToDialog.setText(playersName);
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -159,15 +198,13 @@ public class EditPlayerActivity extends AppCompatActivity {
         dialog = builder.create();
         return dialog;
 
-
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // Закрываем подключение и курсор
+        // Закрываем подключение
         db.close();
-        //userCursor.close();
     }
 
 }

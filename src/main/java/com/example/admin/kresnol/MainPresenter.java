@@ -570,7 +570,7 @@ public class MainPresenter {
             model.totalWinLeft++;
 
             db = new Db(view);
-            // TODO: 15.10.18 добавлять в бд выигрыш
+            // добавлять в бд выигрыш
             db.addWinToDb(leftPlayer.getName());
 
 
@@ -580,7 +580,7 @@ public class MainPresenter {
         } else if (view.symbolOfBtnRightPlayer.getText().equals(winSymbol)) {
 
             model.totalWinRight++;
-            // TODO: 15.10.18 добавлять в бд выигрыш
+            //  добавлять в бд выигрыш
             db.addWinToDb(rightPlayer.getName());
 
             view.winRight.setText(Integer.toString(model.totalWinRight));

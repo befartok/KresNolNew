@@ -2,10 +2,12 @@ package com.example.admin.kresnol;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 /**
  * Created by admin on 03.11.18.
@@ -61,8 +63,19 @@ public class CreatePlayerActivity extends AppCompatActivity {
 
                 db = new Db(this);
 
-                db.addPlayer(etNameOfPlayer.getText().toString());
+                if (db.checkName(etNameOfPlayer.getText().toString())) {
 
+                    Toast toast= Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует",Toast.LENGTH_LONG);
+                    //Выставляем положение сообщения вверху экрана:
+                    toast.setGravity(Gravity.TOP,0,0);
+                    toast.show();
+                    //Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует", Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    db.addPlayer(etNameOfPlayer.getText().toString());
+
+                }
                 db.close();
                 break;
 

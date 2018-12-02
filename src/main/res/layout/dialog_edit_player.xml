@@ -11,12 +11,14 @@
         android:layout_marginTop="15dp"
         android:layout_marginStart="5dp"
         android:background="@android:color/transparent"
-        android:cursorVisible="false"
-        android:editable="false"
+
+
         android:text="testtest"
         android:textSize="18dp" />
 
     <RadioGroup
+        android:id="@+id/dialog_radio_group"
+
         android:layout_marginTop="10dp"
 
         android:layout_width="match_parent"
@@ -28,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:onClick="onclick"
 
             android:layout_weight="1"
             android:text="Переименовать"
@@ -37,6 +40,8 @@
         <RadioButton
             android:id="@+id/dialog_clear_stats"
             android:layout_width="match_parent"
+            android:onClick="onclick"
+
             android:layout_height="wrap_content"
             android:text="Очистить статистику"
             android:textSize="16dp" />
@@ -46,6 +51,8 @@
             android:id="@+id/dialog_delete_player"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="onclick"
+
 
             android:text="Удалить игрока"
             android:textSize="16dp" />
@@ -77,3 +84,11 @@
             android:text="Cancel" />
     </LinearLayout>
 </LinearLayout>
+
+<!--
+    android:cursorVisible="false"
+    android:clickable="false"-->
+
+<!--
+    android:editable="false"
+-->
