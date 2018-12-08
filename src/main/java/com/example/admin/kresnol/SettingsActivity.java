@@ -7,13 +7,11 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 
-
 /**
  * Created by admin on 12.09.18.
  */
 
 public class SettingsActivity extends AppCompatActivity {
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +49,6 @@ public class SettingsActivity extends AppCompatActivity {
             createPlayers.setOnPreferenceChangeListener(this);
             editPlayers.setOnPreferenceChangeListener(this);
 
-
             // пишем в summary текущее значение
             settingLevel.setSummary(settingLevel.getEntry());
             //settingPlayers.setSummary(settingPlayers.getEntry());
@@ -62,19 +59,12 @@ public class SettingsActivity extends AppCompatActivity {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             preference.setSummary((CharSequence) newValue);
 
-
-
             /*Toast.makeText(getActivity(),"Test of toast", Toast.LENGTH_SHORT).show();
             createPlayers.setText("zzzz");
 */
-
             return true;
         }
-
-
     }
-
-
 }
 
 

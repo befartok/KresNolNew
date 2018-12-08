@@ -12,9 +12,7 @@ import java.util.List;
 /**
  * Created by admin on 07.10.18.
  */
-// TODO: 15.10.18 удалить проигрыши в бд
 public class Db {
-    //private static final String LOG_TAG = "my_tag";
     final String LOG_TAG = "myLogs";
 
     int id;
@@ -33,6 +31,7 @@ public class Db {
         dbHelper = new DbHelper(context);
     }
 
+
     public Cursor getAllItems() {
         db = dbHelper.getReadableDatabase();
         return db.query(DbHelper.TABLE_NAME, null, null, null, null, null, null);
@@ -49,15 +48,6 @@ public class Db {
 
         return cnt;
     }
-
-    // метод для обновления email
-/*    public void updateEmail(String name, String newEmail){
-        db = dbHelper.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put(DbHelper.KEY_EMAIL, "newemail@newemail.com");
-        String[] args = new String[]{name};
-        db.update(DbHelper.TABLE_NAME, cv, "name = ?", args);
-    }*/
 
 
     // метод для удаления строки по id
@@ -168,6 +158,7 @@ public class Db {
 
     }
 
+    // проверка на уникальность имен
     public boolean checkName(String name) {
 
         db = dbHelper.getReadableDatabase();
@@ -245,13 +236,11 @@ public class Db {
             int nameColInd = cursor.getColumnIndex(DbHelper.KEY_NAME);
             int totalPlayColInd = cursor.getColumnIndex(DbHelper.KEY_TOTAL_PLAY);
             int totalWinColInd = cursor.getColumnIndex(DbHelper.KEY_TOTAL_WIN);
-            //int totalLoseColInd = cursor.getColumnIndex(DbHelper.KEY_TOTAL_LOSE);
 
             do {
                 RecordOfDb record = new RecordOfDb(cursor.getInt(idColInd),
                         cursor.getString(nameColInd), cursor.getInt(totalPlayColInd),
                         cursor.getInt(totalWinColInd));
-                //, cursor.getInt(totalLoseColInd));
                 mRecordOfDbList.add(record);
             } while (cursor.moveToNext());
 
@@ -291,7 +280,7 @@ public class Db {
     }
 
 
-    // здесь закрываем все соединения с базой и класс-помощник
+    // здесь закрываем все соединения
     public void close() {
         dbHelper.close();
         db.close();

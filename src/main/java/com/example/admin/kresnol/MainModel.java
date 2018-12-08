@@ -1,9 +1,11 @@
 package com.example.admin.kresnol;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.view.ViewGroup;
 
 /**
  * Created by admin on 26.07.18.
@@ -32,11 +34,7 @@ public class MainModel {
 
     int numOfRestart = 0;
 
-    // TODO: 09.08.18 массивы игроков брать из разных списков без пересекающихся значений
-// TODO: 29.09.18  "android" передавать сетером?
-    // TODO: 24.10.18 брать из базы
     String[] arrayOfPlayers = {"Player 1", "Player 2", "Android"};
-
 
     boolean makeStep;
 
@@ -80,41 +78,6 @@ public class MainModel {
     }
 
 
-
-
-
-/*
-
-    // создаем объект для создания и управления версиями БД
-    // подключаемся к БД
-    SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-
-
-
-    class DBHelper extends SQLiteOpenHelper {
-
-
-        public DBHelper(Context context) {
-            // конструктор суперкласса
-            super(context, "myDB", null, 1);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            Log.d(LOG_TAG, "--- onCreate database ---");
-            // создаем таблицу с полями
-            db.execSQL("create table mytable ("
-                    + "id integer primary key autoincrement,"
-                    + "name text,"
-                    + "email text" + ");");
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        }
-    }*/
 
 
 }

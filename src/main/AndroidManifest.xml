@@ -29,7 +29,7 @@
             android:label="@string/title_activity_high_score" />
         <activity
             android:name=".CreatePlayerActivity"
-            android:label="@string/title_activity_сreate_player">
+            android:label="@string/title_activity_create_player">
             <intent-filter>
                 <action android:name="intent.action.create.player" />
                 <category android:name="android.intent.category.DEFAULT" />

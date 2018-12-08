@@ -3,6 +3,10 @@
     <string name="preferences_name">Настройки</string>
 
     <string name="droids_name">Android</string>
+    <string name="players1_name">Player 1</string>
+    <string name="players2_name">Player 2</string>
+
+
     <string name="level_easy">Легко</string>
     <string name="level_normal">Нормально</string>
     <string name="level_hard">Сложно</string>
@@ -46,7 +50,7 @@
         <item>Удалить игрока</item>
     </string-array>
     <string name="title_activity_high_score">Таблица рекордов</string>
-    <string name="title_activity_сreate_player">Создать игрока</string>
+    <string name="title_activity_create_player">Создать игрока</string>
     <string name="title_activity_edit_player">Изменить игрока</string>
 
 

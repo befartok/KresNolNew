@@ -92,6 +92,19 @@ public class MainPresenter {
 
     }
 
+    public  boolean updateSpinner(){
+        boolean updSpin=false;
+        if (CreatePlayerActivity.isUpdateSpinner()| EditPlayerActivity.isUpdSpinner()){
+            arrayOfPlayer.clear();
+            getArrayOfPlayer();
+            view.updateSpinner();
+
+            updSpin=true;
+        }
+//добавить через адд новое значение
+        return updSpin;
+    }
+
     public String[] getArrayOfLevel() {
         return model.arrayOfLevel;
     }
@@ -147,7 +160,6 @@ public class MainPresenter {
                 Log.d(LOG_TAG, "92 click test");
 
 
-                // TODO: 28.07.18 вынести в модель?
                 //if (model.statusGames == "ready") {
                 if (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesReady))) {
 
@@ -155,7 +167,6 @@ public class MainPresenter {
                     invertVariables();
 
                     //первый выбор символа, установка активности
-                    // TODO: 28.07.18 вынести в модель?
                     if ((model.clickedButtonsTotal == 0) & (model.numOfRestart == 0)) {
                         //Log.d(LOG_TAG, "128 clickedButtonsTotal=" + clickedButtonsTotal);
                         if (leftPlayer.getSymbol().equals("x")) {

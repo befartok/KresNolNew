@@ -2,7 +2,6 @@ package com.example.admin.kresnol;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,9 +17,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 //это вью паттерна мвп
@@ -54,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
     Db db;
 
+    ArrayAdapter<String> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,13 +59,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "41 test");
 
 
-
-
         init();
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // TODO: 24.09.18 тест, потом удалить
+        // TODO: 24.09.18 тест, потом удалить или сохранять в модели
         String prefTest = prefs.getString("pref_level", "");
         //winLeft.setText(prefTest);
         Log.d(LOG_TAG, "Уровень сложности сохраненный в настройках" + prefTest);
@@ -83,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         db.close();*/
 
 
-       //db = new Db(this);
+        //db = new Db(this);
 
         //db.addGame("Player1", "Player2");
 
@@ -115,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         db.close();*/
 
-       // presenter.getArrayOfPlayer();
+        // presenter.getArrayOfPlayer();
     }
 
     protected void onResume() {
@@ -131,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
 
         switch (prefTest) {
             case "Easy":
-                // TODO: 28.07.18 вынести в метод?
                 spinnerLevel.setSelection(0);
                 break;
 
@@ -143,6 +138,9 @@ public class MainActivity extends AppCompatActivity {
                 spinnerLevel.setSelection(2);
                 break;
         }
+
+        presenter.updateSpinner();
+
         super.onResume();
 
     }
@@ -190,19 +188,12 @@ public class MainActivity extends AppCompatActivity {
         //определени текст вью для счета
         winLeft = (TextView) findViewById(R.id.totalWinLeftPlayer);
         winRight = (TextView) findViewById(R.id.totalWinRightPlayer);
-        //winLeft.setText(SettingsActivity.SettingsFragment.settingLevel.getEntry());
 
-/*        List<String> catNames = new ArrayList<String>();
-        catNames.add("Барсик");
-        catNames.add("Мурзик");
-        catNames.add("Рыжик");*/
-
-
-        //presenter.getArrayOfPlayer();
 
         // адаптер
-       //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfPlayer());
-       ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.arrayOfPlayer);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfPlayer());
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.arrayOfPlayer);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.arrayOfPlayer);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         imageOfLeftPlayer = (ImageView) findViewById(R.id.imageView);
@@ -240,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
+
 
         spinnerRight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -301,6 +293,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void updateSpinner() {
+        adapter.notifyDataSetChanged();
+        //spinnerLeft.setAdapter(adapter);
+        //spinnerRight.setAdapter(adapter);
+
+        Log.d(LOG_TAG, "updateSpinner main");
+
+
+    }
+
+
+
+
     public void onclick(View v) {
 
         Log.d(LOG_TAG, "150 onclick test");
@@ -312,11 +317,6 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: 20.04.18 сделать анимацию зачеркивания выигрышных кнопок
 
-        // TODO: 13.05.18 добавить создание нового игрока
-
-        // TODO: 13.05.18 добавить бд с игроками
-
-        // TODO: 13.05.18 добавить в бд результаты
 
         // TODO: 15.04.18 расставить паузы
 
@@ -356,8 +356,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, AboutActivity.class);
         startActivity(intent);
     }
-
-
 
 
 }

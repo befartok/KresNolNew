@@ -20,45 +20,58 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String KEY_NAME = "name";
     public static final String KEY_TOTAL_PLAY = "totalPlay";
     public static final String KEY_TOTAL_WIN = "totalWin";
-    public static final String KEY_TOTAL_LOSE = "totalLose";
 
     private static final String DATABASE_NAME = "recordsDB";
     private static final int DATABASE_VERSION = 1;
 
+    Context cnt;
+
+    String PlayersOneName;
+    String PlayersTwoName;
+    String PlayersAndroidName;
+
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
     }
+
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+
+        PlayersOneName=cnt.getResources().getString(R.string.players1_name);
+        PlayersTwoName=cnt.getResources().getString(R.string.players2_name);
+        PlayersAndroidName=cnt.getResources().getString(R.string.droids_name);
+
 
         db.execSQL("create table " + TABLE_NAME +" ("
                 + KEY_ID + " integer primary key autoincrement,"
                 + KEY_NAME + " text,"
                 + KEY_TOTAL_PLAY + " text,"
                 + KEY_TOTAL_WIN + " text"
-                //+ KEY_TOTAL_WIN + " text,"
-                //+ KEY_TOTAL_LOSE + " text"
+
                 + ");");
 
         ContentValues cv = new ContentValues();
 
-        cv.put(KEY_NAME, "Player 1");
+        cv.put(KEY_NAME, PlayersOneName);
+        //cv.put(KEY_NAME, "Player 1");
         cv.put(KEY_TOTAL_PLAY, "0");
         cv.put(KEY_TOTAL_WIN, "0");
-        //cv.put(KEY_TOTAL_LOSE, "0");
         db.insert(TABLE_NAME, null, cv);
 
-        cv.put(KEY_NAME, "Player 2");
+        cv.put(KEY_NAME, PlayersTwoName);
+        //cv.put(KEY_NAME, "Player 2");
         cv.put(KEY_TOTAL_PLAY, "0");
         cv.put(KEY_TOTAL_WIN, "0");
-        //cv.put(KEY_TOTAL_LOSE, "0");
         db.insert(TABLE_NAME, null, cv);
 
-        cv.put(KEY_NAME, "Android");
+        cv.put(KEY_NAME, PlayersAndroidName);
+        //cv.put(KEY_NAME, "Android");
         cv.put(KEY_TOTAL_PLAY, "0");
         cv.put(KEY_TOTAL_WIN, "0");
-        //cv.put(KEY_TOTAL_LOSE, "0");
         db.insert(TABLE_NAME, null, cv);
 
         Log.d(LOG_TAG, "test onCreate");

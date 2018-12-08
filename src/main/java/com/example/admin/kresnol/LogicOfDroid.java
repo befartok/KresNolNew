@@ -27,7 +27,6 @@ public class LogicOfDroid {
 
     public int droidsStep(Button[] arr, Player lPlr, Player rPlr, MainModel mainModel) {
 
-        // TODO: 03.08.18 подумать над созданием разных массивов с перезаписью их при вызове метода
         arrayOfBtn=arr;
         leftPlr = lPlr;
         rightPlr = rPlr;

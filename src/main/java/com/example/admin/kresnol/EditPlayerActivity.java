@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
@@ -44,6 +43,10 @@ public class EditPlayerActivity extends AppCompatActivity {
     RadioButton deletePlayer;
     long idOfRecord;
 
+    static boolean updSpinner=false;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +55,6 @@ public class EditPlayerActivity extends AppCompatActivity {
         //initView();
 
         db = new Db(this);
-
 
         mCursor = db.getAllItems();
 
@@ -98,20 +100,18 @@ public class EditPlayerActivity extends AppCompatActivity {
 
                     nameToDialog.setEnabled(true);
 
-
                break;
+
             case R.id.dialog_clear_stats:
                     Log.i(LOG_TAG, "dialog_clear_stats");
 
                     nameToDialog.setEnabled(false);
-
 
                break;
             case R.id.dialog_delete_player:
                     Log.i(LOG_TAG, "delete_player");
 
                     nameToDialog.setEnabled(false);
-
 
                break;
 
@@ -123,8 +123,7 @@ public class EditPlayerActivity extends AppCompatActivity {
                 if (renamePlayer.isChecked()){
                     Log.d(LOG_TAG, "rename");
 
-                    // TODO: 01.12.18 проверить на уникальность имени
-
+                    // проверка на уникальность имени
                     if (db.checkName(nameToDialog.getText().toString())) {
 
                         Toast toast= Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует",Toast.LENGTH_LONG);
@@ -135,10 +134,10 @@ public class EditPlayerActivity extends AppCompatActivity {
 
                     } else {
                         db.editName(idOfRecord, nameToDialog.getText().toString());
-// TODO: 02.12.18 вынести в метод
-                        mCursor = db.getAllItems();
-                        mCursorAd.changeCursor(mCursor); // обновить список
-                        removeDialog(DIALOG);
+
+                        updSpinner = true;
+
+                        closeDialog();
 
                     }
                 }
@@ -146,29 +145,51 @@ public class EditPlayerActivity extends AppCompatActivity {
                     Log.d(LOG_TAG, "clearStats");
 
                     db.clearStats(idOfRecord);
-                    mCursor = db.getAllItems();
-                    mCursorAd.changeCursor(mCursor); // обновить список
-                    removeDialog(DIALOG);
+
+                    closeDialog();
+
 
                 }
 
-                // TODO: 02.12.18 проверять и запретить удалять имена по умолчанию
+                // проверять и запретить удалять имена по умолчанию
+                // TODO: 02.12.18 вынести в метод
+                // TODO: 02.12.18 раскидать на MVP?
                 if (deletePlayer.isChecked()){
                     Log.d(LOG_TAG, "deletePlayer");
+                    if (playersName.equals(getResources().getString(R.string.droids_name))
+                        |(playersName.equals(getResources().getString(R.string.players1_name)))
+                            |(playersName.equals(getResources().getString(R.string.players2_name))))
+                    {
+                        Toast.makeText(getBaseContext(),"Стандартного игрока "+playersName+" удалять нельзя",
+                                Toast.LENGTH_SHORT).show();
+                    }else {
 
-                    db.deleteItem(idOfRecord);
-                    mCursor = db.getAllItems();
-                    mCursorAd.changeCursor(mCursor); // обновить список
-                    removeDialog(DIALOG);
+                        db.deleteItem(idOfRecord);
+                        updSpinner = true;
 
+                        closeDialog();
+                    }
                 }
 
                 break;
         }
     }
 
+    public static boolean isUpdSpinner() {
+        return updSpinner;
+    }
 
-    @Override
+    public void closeDialog() {
+        mCursor = db.getAllItems();
+        mCursorAd.changeCursor(mCursor); // обновить список
+        removeDialog(DIALOG);
+
+    }
+
+
+
+
+        @Override
     protected Dialog onCreateDialog(int id) {
 
         // создаем view из dialog_edit_player.xml
@@ -184,12 +205,8 @@ public class EditPlayerActivity extends AppCompatActivity {
         renamePlayer = (RadioButton) layout.findViewById(R.id.dialog_rename);
         clearStats = (RadioButton) layout.findViewById(R.id.dialog_clear_stats);
         deletePlayer = (RadioButton) layout.findViewById(R.id.dialog_delete_player);
-        Button buttonOk = (Button) layout.findViewById(R.id.dialog_button_ok);
-        Button buttonCancel = (Button) layout.findViewById(R.id.dialog_button_cancel);
-
 
         nameToDialog.setText(playersName);
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 

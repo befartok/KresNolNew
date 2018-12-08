@@ -2,6 +2,7 @@ package com.example.admin.kresnol;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +23,9 @@ public class CreatePlayerActivity extends AppCompatActivity {
     Button btnCancel;
 
     Db db;
+    static boolean  updateSpinner=false;
 
+    final String LOG_TAG = "myLogs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,22 +37,20 @@ public class CreatePlayerActivity extends AppCompatActivity {
     }
 
 
+    private void initCreatePlayerActivity() {
 
-
-    private  void initCreatePlayerActivity() {
-
-        etNameOfPlayer= (EditText) findViewById(R.id.editTextName);
-        rbForLeft= (RadioButton) findViewById(R.id.radioButtonLeft);
-        rbForRight= (RadioButton) findViewById(R.id.radioButtonRight);
-        btnCreate= (Button) findViewById(R.id.buttonCreate);
-        btnCancel= (Button) findViewById(R.id.buttonCancel);
+        etNameOfPlayer = (EditText) findViewById(R.id.editTextName);
+        rbForLeft = (RadioButton) findViewById(R.id.radioButtonLeft);
+        rbForRight = (RadioButton) findViewById(R.id.radioButtonRight);
+        btnCreate = (Button) findViewById(R.id.buttonCreate);
+        btnCancel = (Button) findViewById(R.id.btnCancel);
 
 
     }
 
-    // TODO: 08.11.18 проверить на уникальность имен при создании нового
-    // TODO: 08.11.18 выходить на первый экран после создания и обновлять спинер
-    // TODO: 16.11.18 кнопку отмена настроить
+    public static boolean isUpdateSpinner() {
+        return updateSpinner;
+    }
 
     public void onclick(View v) {
 
@@ -60,14 +61,13 @@ public class CreatePlayerActivity extends AppCompatActivity {
 
                 //nameOfPlayer = etNameOfPlayer.getText().toString();
 
-
                 db = new Db(this);
 
                 if (db.checkName(etNameOfPlayer.getText().toString())) {
 
-                    Toast toast= Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует",Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(getBaseContext(), "Игрок с таким именем уже существует", Toast.LENGTH_LONG);
                     //Выставляем положение сообщения вверху экрана:
-                    toast.setGravity(Gravity.TOP,0,0);
+                    toast.setGravity(Gravity.TOP, 0, 0);
                     toast.show();
                     //Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует", Toast.LENGTH_SHORT).show();
 
@@ -75,14 +75,25 @@ public class CreatePlayerActivity extends AppCompatActivity {
 
                     db.addPlayer(etNameOfPlayer.getText().toString());
 
+                    updateSpinner = true;
+                    onBackPressed();// возврат на предыдущий activity
+
+
                 }
                 db.close();
                 break;
 
 
+            case R.id.btnCancel:
+                Log.i(LOG_TAG, "btnCancel");
+
+                onBackPressed();// возврат на предыдущий activity
+
+                break;
         }
 
     }
 
 
-    }
+
+}

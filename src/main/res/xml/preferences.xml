@@ -22,7 +22,7 @@
         android:key="pref_players">
 
         <Preference
-            android:title="@string/title_activity_сreate_player"
+            android:title="@string/title_activity_create_player"
 
             android:key="pref_create_players">
             <intent
