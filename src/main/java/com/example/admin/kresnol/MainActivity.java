@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     Db db;
 
     ArrayAdapter<String> adapter;
+    ArrayAdapter<String> adapterForLeft;
     ArrayAdapter<String> adapterLevel;
 
     @Override
@@ -73,8 +74,9 @@ public class MainActivity extends AppCompatActivity {
         String lastSpinRight = prefs.getString(presenter.LASTRIGHTSPINN, "");
         String lastSpinLevel = prefs.getString(presenter.LASTLEVELSPINN, "");
 
-        int positionLastSpinLeft = adapter.getPosition(lastSpinLeft);
+        int positionLastSpinLeft = adapterForLeft.getPosition(lastSpinLeft);
         spinnerLeft.setSelection(positionLastSpinLeft);
+
         int positionLastSpinRight = adapter.getPosition(lastSpinRight);
         spinnerRight.setSelection(positionLastSpinRight);
 
@@ -219,12 +221,15 @@ public class MainActivity extends AppCompatActivity {
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.arrayOfPlayer);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        adapterForLeft = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.arrayOfPlayerForLeft);
+        adapterForLeft.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         imageOfLeftPlayer = (ImageView) findViewById(R.id.imageView);
         imageOfRightPlayer = (ImageView) findViewById(R.id.imageView2);
 
 
         spinnerLeft = (Spinner) findViewById(R.id.spinnerLeft);
-        spinnerLeft.setAdapter(adapter);
+        spinnerLeft.setAdapter(adapterForLeft);
 
         spinnerRight = (Spinner) findViewById(R.id.spinnerRight);
         spinnerRight.setAdapter(adapter);
@@ -244,7 +249,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                // показываем позиция нажатого элемента
                 //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
                 presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
 
@@ -320,13 +324,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateSpinner() {
         adapter.notifyDataSetChanged();
+        adapterForLeft.notifyDataSetChanged();
 
         Log.d(LOG_TAG, "updateSpinner main");
 
 
     }
-
-
 
 
     public void onclick(View v) {
@@ -356,7 +359,6 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 11.12.18 дизайн кнопок заменить
 
         // TODO: 14.12.18 убрать из левого спинера игрока андроид
-
 
 
         // обработку нажатий

@@ -1,14 +1,11 @@
 package com.example.admin.kresnol;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -40,7 +37,6 @@ public class MainPresenter {
     final String LASTLEVELSPINN = "lastLevelSpinn";
 
 
-
     public MainPresenter(MainActivity mainActivity) {
         view = mainActivity;
 
@@ -70,8 +66,11 @@ public class MainPresenter {
 
         getArrayOfPlayer();
 
+        getArrayOfPlayerForLeft();
+
 
     }
+
     List<String> arrayOfPlayer = new ArrayList<String>();
 
     //public String[] getArrayOfPlayer() {
@@ -89,38 +88,62 @@ public class MainPresenter {
         //return model.arrayOfPlayers;
         db.close();
         return records;
-
-
-
     }
 
-    public  boolean updateSpinner(){
-        boolean updSpin=false;
-        if (CreatePlayerActivity.isUpdateSpinner()| EditPlayerActivity.isUpdSpinner()){
+    List<String> arrayOfPlayerForLeft = new ArrayList<String>();
+
+//создание массива для спинера левого без игрока Андроид
+    public List<RecordOfDb> getArrayOfPlayerForLeft() {
+        db = new Db(view);
+
+        List<RecordOfDb> records = db.getNamesFromDb();
+        for (RecordOfDb record : records) {
+
+            if (!record.getName().equals(view.getResources().getString(R.string.droids_name))){
+                arrayOfPlayerForLeft.add(record.getName());
+
+                //Log.d(LOG_TAG, "Имя: " + record.getName() + " сыграно: " + record.getTotalPlay());
+                Log.d(LOG_TAG, "Имя1: " + record.getName());
+            }
+
+        }
+        //return model.arrayOfPlayers;
+        db.close();
+        return records;
+    }
+
+    public boolean updateSpinner() {
+        boolean updSpin = false;
+        if (CreatePlayerActivity.isUpdateSpinner() | EditPlayerActivity.isUpdSpinner()) {
             arrayOfPlayer.clear();
+            arrayOfPlayerForLeft.clear();
             getArrayOfPlayer();
+            getArrayOfPlayerForLeft();
             view.updateSpinner();
 
-            updSpin=true;
+            updSpin = true;
         }
         return updSpin;
     }
-    public  boolean setSpinnerToNewPlayer(){
-        boolean setSpinnerToNewPlayer=false;
-        if (CreatePlayerActivity.isSetPlayerToGame()){
-            int position = view.adapter.getPosition(CreatePlayerActivity.getNamePlayerToSet());
 
-            if (CreatePlayerActivity.getPositionToSet().equals("left")){
-                view.spinnerLeft.setSelection(position);
+    public boolean setSpinnerToNewPlayer() {
+        boolean setSpinnerToNewPlayer = false;
+        if (CreatePlayerActivity.isSetPlayerToGame()) {
+            //int position = view.adapter.getPosition(CreatePlayerActivity.getNamePlayerToSet());
+
+            if (CreatePlayerActivity.getPositionToSet().equals("left")) {
+                int positionForLeft = view.adapterForLeft.getPosition(CreatePlayerActivity.getNamePlayerToSet());
+                view.spinnerLeft.setSelection(positionForLeft);
             }
 
             if (CreatePlayerActivity.getPositionToSet().equals("right")) {
+                int position = view.adapter.getPosition(CreatePlayerActivity.getNamePlayerToSet());
                 view.spinnerRight.setSelection(position);
 
             }
 
 
-            setSpinnerToNewPlayer=true;
+            setSpinnerToNewPlayer = true;
         }
         return setSpinnerToNewPlayer;
     }
@@ -274,22 +297,27 @@ public class MainPresenter {
     }
 
     // TODO: 04.10.18 доделать меню
-    public void menuCreatePlayer(Menu myMenu){
+    public void menuCreatePlayer(Menu myMenu) {
 
     }
-     public void menuEditPlayer(Menu myMenu){
+
+    public void menuEditPlayer(Menu myMenu) {
 
     }
-     public void menuDeletePlayer(Menu myMenu){
+
+    public void menuDeletePlayer(Menu myMenu) {
 
     }
-     public void menuLevel(Menu myMenu){
+
+    public void menuLevel(Menu myMenu) {
 
     }
-     public void menuRecords(Menu myMenu){
+
+    public void menuRecords(Menu myMenu) {
 
     }
-     public void menuAbout(Menu myMenu){
+
+    public void menuAbout(Menu myMenu) {
 
     }
 
@@ -355,7 +383,7 @@ public class MainPresenter {
         enableChangeSymbol();
         invertPlayersActivity();
 
-        if ((view.spinnerRight.getSelectedItem().toString().equals(view.getResources().getString(R.string.droids_name)))& rightPlayer.isActive()) {
+        if ((view.spinnerRight.getSelectedItem().toString().equals(view.getResources().getString(R.string.droids_name))) & rightPlayer.isActive()) {
 
             clickPlayFieldBtn(view.arrayOfButtons[logic.droidsStep(view.arrayOfButtons, leftPlayer, rightPlayer, model)]);
         }
@@ -385,7 +413,7 @@ public class MainPresenter {
         ed.putString(LASTLEFTSPINN, view.spinnerLeft.getSelectedItem().toString());
         ed.putString(LASTRIGHTSPINN, view.spinnerRight.getSelectedItem().toString());
 
-        if (view.spinnerRight.getSelectedItem().toString().equals(view.getResources().getString(R.string.droids_name))){
+        if (view.spinnerRight.getSelectedItem().toString().equals(view.getResources().getString(R.string.droids_name))) {
             ed.putString(LASTLEVELSPINN, view.spinnerLevel.getSelectedItem().toString());
 
         }
@@ -414,7 +442,7 @@ public class MainPresenter {
             //увеличить счетчик нажатых кнопок
             model.clickedButtonsTotal++;
             // плюсовать в БД игры для первого нажатия кнопки
-            if (model.clickedButtonsTotal == 1){
+            if (model.clickedButtonsTotal == 1) {
                 addGameToDb();
             }
             // проверка на выигрыш
@@ -430,7 +458,7 @@ public class MainPresenter {
 
             //передача ход 2му игроку если андроид, то ход по алгоритму, иначе обрабатывать нажатие
             //if ((model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) & (leftPlayer.isActive())
-              //      & (model.statusGames.equals("inplay"))) {
+            //      & (model.statusGames.equals("inplay"))) {
             if ((model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) & (leftPlayer.isActive())
                     & (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesInplay)))) {
                 invertPlayersActivity();
@@ -444,7 +472,7 @@ public class MainPresenter {
 
         }
         //else if (model.statusGames == "finish") {
-        else if (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesFinish))){
+        else if (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesFinish))) {
             restartGame();
         }
     }
@@ -635,10 +663,12 @@ public class MainPresenter {
         db.close();
     }
 
-    public void  stopOfAnimation(){
+    public void stopOfAnimation() {
         view.imageOfLeftPlayer.clearAnimation();
         view.imageOfRightPlayer.clearAnimation();
-    };
+    }
+
+    ;
 
 }
 
