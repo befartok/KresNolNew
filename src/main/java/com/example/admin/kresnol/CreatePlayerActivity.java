@@ -17,13 +17,36 @@ import android.widget.Toast;
 public class CreatePlayerActivity extends AppCompatActivity {
 
     EditText etNameOfPlayer;
-    RadioButton rbForLeft;
-    RadioButton rbForRight;
+    RadioButton rbSetLeft;
+    RadioButton rbSetRight;
     Button btnCreate;
     Button btnCancel;
 
     Db db;
+
+    public static boolean isUpdateSpinner() {
+        return updateSpinner;
+    }
+
     static boolean  updateSpinner=false;
+
+    public static boolean isSetPlayerToGame() {
+        return setPlayerToGame;
+    }
+
+    static boolean  setPlayerToGame=false;
+
+    static public String getPositionToSet() {
+        return positionToSet;
+    }
+
+    static public String getNamePlayerToSet() {
+        return namePlayerToSet;
+    }
+
+    static String positionToSet;
+    static String namePlayerToSet;
+
 
     final String LOG_TAG = "myLogs";
 
@@ -40,17 +63,14 @@ public class CreatePlayerActivity extends AppCompatActivity {
     private void initCreatePlayerActivity() {
 
         etNameOfPlayer = (EditText) findViewById(R.id.editTextName);
-        rbForLeft = (RadioButton) findViewById(R.id.radioButtonLeft);
-        rbForRight = (RadioButton) findViewById(R.id.radioButtonRight);
+        rbSetLeft = (RadioButton) findViewById(R.id.radioButtonLeft);
+        rbSetRight = (RadioButton) findViewById(R.id.radioButtonRight);
         btnCreate = (Button) findViewById(R.id.buttonCreate);
         btnCancel = (Button) findViewById(R.id.btnCancel);
 
 
     }
 
-    public static boolean isUpdateSpinner() {
-        return updateSpinner;
-    }
 
     public void onclick(View v) {
 
@@ -76,6 +96,22 @@ public class CreatePlayerActivity extends AppCompatActivity {
                     db.addPlayer(etNameOfPlayer.getText().toString());
 
                     updateSpinner = true;
+                    if (rbSetLeft.isChecked()) {
+                        positionToSet="left";
+                        namePlayerToSet=etNameOfPlayer.getText().toString();
+
+                        setPlayerToGame = true;
+
+                    };
+                    if (rbSetRight.isChecked()) {
+
+                        positionToSet="right";
+                        namePlayerToSet=etNameOfPlayer.getText().toString();
+
+                        setPlayerToGame = true;
+
+                    }
+
                     onBackPressed();// возврат на предыдущий activity
 
 
@@ -93,6 +129,7 @@ public class CreatePlayerActivity extends AppCompatActivity {
         }
 
     }
+
 
 
 

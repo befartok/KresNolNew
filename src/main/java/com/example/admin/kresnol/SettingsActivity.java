@@ -26,6 +26,9 @@ public class SettingsActivity extends AppCompatActivity {
     public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
         public static ListPreference settingLevel;
+
+
+
         //ListPreference settingPlayers;
         PreferenceCategory settingPlayers;
         Preference createPlayers;
@@ -34,6 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
 
             addPreferencesFromResource(R.xml.preferences);
             settingLevel = (ListPreference) this.findPreference("pref_level");

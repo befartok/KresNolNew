@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     Db db;
 
     ArrayAdapter<String> adapter;
+    ArrayAdapter<String> adapterLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,26 @@ public class MainActivity extends AppCompatActivity {
         String prefTest = prefs.getString("pref_level", "");
         //winLeft.setText(prefTest);
         Log.d(LOG_TAG, "Уровень сложности сохраненный в настройках" + prefTest);
+
+        String lastSpinLeft = prefs.getString(presenter.LASTLEFTSPINN, "");
+        String lastSpinRight = prefs.getString(presenter.LASTRIGHTSPINN, "");
+        String lastSpinLevel = prefs.getString(presenter.LASTLEVELSPINN, "");
+
+        int positionLastSpinLeft = adapter.getPosition(lastSpinLeft);
+        spinnerLeft.setSelection(positionLastSpinLeft);
+        int positionLastSpinRight = adapter.getPosition(lastSpinRight);
+        spinnerRight.setSelection(positionLastSpinRight);
+
+
+        if (spinnerRight.getSelectedItem().toString().equals(getResources().getString(R.string.droids_name))) {
+            int positionLastSpinLevel = adapterLevel.getPosition(lastSpinLevel);
+            spinnerLevel.setSelection(positionLastSpinLevel);
+
+        }
+
+
+
+
 
         /*db = new Db(this);
         db.upgradeBase();
@@ -141,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
 
         presenter.updateSpinner();
 
+        presenter.setSpinnerToNewPlayer();
+
         super.onResume();
 
     }
@@ -158,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    // обработка нажатий
+    // обработка нажатий меню
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -208,11 +231,11 @@ public class MainActivity extends AppCompatActivity {
 
         // устанавливаем элемент
         spinnerLeft.setSelection(0, true);
+        // TODO: 13.12.18 запоминать спинер //presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
+
         //spinnerRight.setSelection(1,true);
-
-        //spinnerLeft.setSelection(0);
         spinnerRight.setSelection(1);
-
+// TODO: 13.12.18 запоминать спинер
         //устанавливаем цвет спинера
         ((TextView) spinnerLeft.getSelectedView()).setTextColor(getResources().getColor(R.color.buttonsTextActive));
 
@@ -224,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 // показываем позиция нажатого элемента
                 //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
                 presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
+
 
             }
 
@@ -258,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
         ;
 
         //ArrayAdapter<String> adapterLevel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfLevel);
-        ArrayAdapter<String> adapterLevel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfLevel());
+        adapterLevel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfLevel());
         adapterLevel.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinnerLevel = (Spinner) findViewById(R.id.spinnerLevel);
@@ -272,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
                 presenter.setSpinnerLevel(spinnerLevel.getSelectedItem().toString());
 
                 //установка  уровня  в преференс из спинера
+                // TODO: 13.12.18 проверить не работает?
                 prefs.edit().putString("pref_level", spinnerLevel.getSelectedItem().toString()).commit();
             }
 
@@ -295,8 +320,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateSpinner() {
         adapter.notifyDataSetChanged();
-        //spinnerLeft.setAdapter(adapter);
-        //spinnerRight.setAdapter(adapter);
 
         Log.d(LOG_TAG, "updateSpinner main");
 
@@ -317,14 +340,12 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: 20.04.18 сделать анимацию зачеркивания выигрышных кнопок
 
-
         // TODO: 15.04.18 расставить паузы
 
         // TODO: 09.07.18 при смене игроков менять счет
 
         // TODO: 08.08.18 запретить выбирать в спинере выбранного с другой стороны игрока
 
-        //// TODO: 22.09.18 добавить в настройки выбор игроков
 
         //// TODO: 22.09.18 добавить тесты
 
@@ -332,7 +353,10 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: 15.10.18 вынести БД в другой поток
 
-        // TODO: 02.12.18 обновлять спинеры после изменения и создания игроков
+        // TODO: 11.12.18 дизайн кнопок заменить
+
+        // TODO: 14.12.18 убрать из левого спинера игрока андроид
+
 
 
         // обработку нажатий

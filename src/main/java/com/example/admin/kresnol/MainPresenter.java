@@ -2,6 +2,7 @@ package com.example.admin.kresnol;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
 import android.util.TypedValue;
@@ -28,15 +29,16 @@ public class MainPresenter {
     Player leftPlayer;
     Player rightPlayer;
 
-    String NameForLeftPlayer;
-    String NameForRightPlayer;
-
-    boolean settingsGroupVisible = false;
-
     Db db;
     Context context;
 
     final String LOG_TAG = "myLogs";
+
+    //константы для запоминания в настройках выбора спинеров
+    final String LASTLEFTSPINN = "lastLeftSpinn";
+    final String LASTRIGHTSPINN = "lastRightSpinn";
+    final String LASTLEVELSPINN = "lastLevelSpinn";
+
 
 
     public MainPresenter(MainActivity mainActivity) {
@@ -101,8 +103,26 @@ public class MainPresenter {
 
             updSpin=true;
         }
-//добавить через адд новое значение
         return updSpin;
+    }
+    public  boolean setSpinnerToNewPlayer(){
+        boolean setSpinnerToNewPlayer=false;
+        if (CreatePlayerActivity.isSetPlayerToGame()){
+            int position = view.adapter.getPosition(CreatePlayerActivity.getNamePlayerToSet());
+
+            if (CreatePlayerActivity.getPositionToSet().equals("left")){
+                view.spinnerLeft.setSelection(position);
+            }
+
+            if (CreatePlayerActivity.getPositionToSet().equals("right")) {
+                view.spinnerRight.setSelection(position);
+
+            }
+
+
+            setSpinnerToNewPlayer=true;
+        }
+        return setSpinnerToNewPlayer;
     }
 
     public String[] getArrayOfLevel() {
@@ -173,11 +193,13 @@ public class MainPresenter {
                             leftPlayer.setActive(true);
 
                             // TODO: 04.10.18 заменить на лефтНэйм
-                            makeNameActive("leftButton");
+                            //makeNameActive("leftButton");
+                            makeNameActive("leftName");
                             rightPlayer.setActive(false);
                         } else if (leftPlayer.getSymbol().equals("o")) {
                             leftPlayer.setActive(false);
-                            makeNameActive("rightButton");
+                            //makeNameActive("rightButton");
+                            makeNameActive("rightName");
                             rightPlayer.setActive(true);
                         }
                     }
@@ -273,11 +295,11 @@ public class MainPresenter {
 
     //меняем символ у игроков
     public void invertVariables() {
-        String buferVariable;
+        String bufferVariable;
 
-        buferVariable = leftPlayer.getSymbol();
+        bufferVariable = leftPlayer.getSymbol();
         leftPlayer.setSymbol(rightPlayer.getSymbol());
-        rightPlayer.setSymbol(buferVariable);
+        rightPlayer.setSymbol(bufferVariable);
 
         view.symbolOfBtnLeftPlayer.setText(leftPlayer.getSymbol());
         view.symbolOfBtnRightPlayer.setText(rightPlayer.getSymbol());
@@ -290,7 +312,8 @@ public class MainPresenter {
 
         switch (selectedSymbolsButton) {
 
-            case "leftButton":
+            //case "leftButton":
+            case "leftName":
                 ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
                 //((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
                 ((TextView) view.spinnerRight.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
@@ -298,7 +321,8 @@ public class MainPresenter {
                 view.imageOfLeftPlayer.startAnimation(view.animation);
 
                 break;
-            case "rightButton":
+            //case "rightButton":
+            case "rightName":
                 //view.imageOfLeftPlayer.clearAnimation();
                 ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
                 //((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
@@ -346,16 +370,28 @@ public class MainPresenter {
         rightPlayer.setActive(tempActive);
 
         if (leftPlayer.isActive()) {
-
-            // TODO: 04.10.18 заменить
-
-            makeNameActive("leftButton");
+            //makeNameActive("leftButton");
+            makeNameActive("leftName");
         } else if (rightPlayer.isActive()) {
-            makeNameActive("rightButton");
+            //makeNameActive("rightButton");
+            makeNameActive("rightName");
         }
     }
 
     public void clickPlayFieldBtn(SquareButton btn) {
+
+        //запоминаем в настройках спинеры
+        SharedPreferences.Editor ed = view.prefs.edit();
+        ed.putString(LASTLEFTSPINN, view.spinnerLeft.getSelectedItem().toString());
+        ed.putString(LASTRIGHTSPINN, view.spinnerRight.getSelectedItem().toString());
+
+        if (view.spinnerRight.getSelectedItem().toString().equals(view.getResources().getString(R.string.droids_name))){
+            ed.putString(LASTLEVELSPINN, view.spinnerLevel.getSelectedItem().toString());
+
+        }
+        ed.commit();
+
+
         // public void clickPlayFieldBtn(Button btn) {
 
         // проверка нажатости кнопки и закончившесяй игры
