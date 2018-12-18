@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 //это вью паттерна мвп
@@ -76,14 +77,18 @@ public class MainActivity extends AppCompatActivity {
 
         int positionLastSpinLeft = adapterForLeft.getPosition(lastSpinLeft);
         spinnerLeft.setSelection(positionLastSpinLeft);
+        presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
+
 
         int positionLastSpinRight = adapter.getPosition(lastSpinRight);
         spinnerRight.setSelection(positionLastSpinRight);
+        presenter.setSpinnerRight(spinnerRight.getSelectedItem().toString());
 
 
         if (spinnerRight.getSelectedItem().toString().equals(getResources().getString(R.string.droids_name))) {
             int positionLastSpinLevel = adapterLevel.getPosition(lastSpinLevel);
             spinnerLevel.setSelection(positionLastSpinLevel);
+            presenter.setSpinnerLevel(spinnerLevel.getSelectedItem().toString());
 
         }
 
@@ -236,11 +241,12 @@ public class MainActivity extends AppCompatActivity {
 
         // устанавливаем элемент
         spinnerLeft.setSelection(0, true);
-        // TODO: 13.12.18 запоминать спинер //presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
+        // запоминать спинер
+        presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
 
         //spinnerRight.setSelection(1,true);
         spinnerRight.setSelection(1);
-// TODO: 13.12.18 запоминать спинер
+        presenter.setSpinnerRight(spinnerRight.getSelectedItem().toString());
         //устанавливаем цвет спинера
         ((TextView) spinnerLeft.getSelectedView()).setTextColor(getResources().getColor(R.color.buttonsTextActive));
 
@@ -249,9 +255,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
-                presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
 
+                if (spinnerLeft.getSelectedItem().toString().equals(presenter.getSpinnerRight())) {
+                    Toast.makeText(getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
+                    int positionCurrentSpinLeft = adapterForLeft.getPosition(presenter.getSpinnerLeft());
+                    spinnerLeft.setSelection(positionCurrentSpinLeft);
+
+                } else
+                    presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
 
             }
 
@@ -260,18 +271,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         spinnerRight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                // показываем позиция нажатого элемента
-                //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
 
-                //установить сеттер для модели транзитом через презентер
-                presenter.setSpinnerRight(spinnerRight.getSelectedItem().toString());
-                //видимость спинера уровня для игрока Андроид
-                presenter.checkVisibilitySpinnerLevel();
+                if (spinnerRight.getSelectedItem().toString().equals(presenter.getSpinnerLeft())) {
+                    Toast.makeText(getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
+                    int positionCurrentSpinRight = adapter.getPosition(presenter.getSpinnerRight());
+                    spinnerRight.setSelection(positionCurrentSpinRight);
+
+                } else {
+
+                    //установить сеттер для модели транзитом через презентер
+                    presenter.setSpinnerRight(spinnerRight.getSelectedItem().toString());
+                    //видимость спинера уровня для игрока Андроид
+                    presenter.checkVisibilitySpinnerLevel();
+                }
 
             }
 
@@ -349,7 +365,6 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: 08.08.18 запретить выбирать в спинере выбранного с другой стороны игрока
 
-
         //// TODO: 22.09.18 добавить тесты
 
         // TODO: 24.09.18 сделать иконки неактивного серыми
@@ -357,8 +372,6 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 15.10.18 вынести БД в другой поток
 
         // TODO: 11.12.18 дизайн кнопок заменить
-
-        // TODO: 14.12.18 убрать из левого спинера игрока андроид
 
 
         // обработку нажатий

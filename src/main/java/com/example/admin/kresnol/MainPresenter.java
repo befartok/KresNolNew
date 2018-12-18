@@ -134,11 +134,14 @@ public class MainPresenter {
             if (CreatePlayerActivity.getPositionToSet().equals("left")) {
                 int positionForLeft = view.adapterForLeft.getPosition(CreatePlayerActivity.getNamePlayerToSet());
                 view.spinnerLeft.setSelection(positionForLeft);
+                setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
+
             }
 
             if (CreatePlayerActivity.getPositionToSet().equals("right")) {
                 int position = view.adapter.getPosition(CreatePlayerActivity.getNamePlayerToSet());
                 view.spinnerRight.setSelection(position);
+                setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
 
             }
 
@@ -152,20 +155,12 @@ public class MainPresenter {
         return model.arrayOfLevel;
     }
 
-    /*public void getSpinnerLeft() {
-        model.getSpinnerLeftValue();
-    }*/
-
     public void setSpinnerLeft(String spinLeft) {
 
         model.setSpinnerLeftValue(spinLeft);
         leftPlayer.setName(spinLeft);
         Log.d(LOG_TAG, "левый игрок = " + leftPlayer.getName());
     }
-
-    /*public void getSpinnerRight() {
-        model.getSpinnerRightValue();
-    }*/
 
     public void setSpinnerRight(String spinRight) {
         model.setSpinnerRightValue(spinRight);
@@ -175,6 +170,13 @@ public class MainPresenter {
 
         setImageRight();
     }
+
+    public String getSpinnerLeft() {
+        return model.getSpinnerLeftValue();
+        }
+    public String getSpinnerRight() {
+        return model.getSpinnerRightValue();
+        }
 
     public void setImageRight() {
         if (model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) {
@@ -457,8 +459,7 @@ public class MainPresenter {
             }
 
             //передача ход 2му игроку если андроид, то ход по алгоритму, иначе обрабатывать нажатие
-            //if ((model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) & (leftPlayer.isActive())
-            //      & (model.statusGames.equals("inplay"))) {
+
             if ((model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) & (leftPlayer.isActive())
                     & (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesInplay)))) {
                 invertPlayersActivity();
