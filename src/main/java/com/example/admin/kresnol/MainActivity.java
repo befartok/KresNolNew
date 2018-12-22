@@ -252,17 +252,28 @@ public class MainActivity extends AppCompatActivity {
 
         // устанавливаем обработчик нажатия
         spinnerLeft.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            boolean equalsPlayersLeft=false;
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
 
                 if (spinnerLeft.getSelectedItem().toString().equals(presenter.getSpinnerRight())) {
                     Toast.makeText(getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
+
+                    equalsPlayersLeft = true;
+
                     int positionCurrentSpinLeft = adapterForLeft.getPosition(presenter.getSpinnerLeft());
                     spinnerLeft.setSelection(positionCurrentSpinLeft);
 
-                } else
+                } else {
                     presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
+
+                    //сброс счетчика счета
+                    if (equalsPlayersLeft ==false){
+                        presenter.clearScore();
+                    }
+                    equalsPlayersLeft=false;
+                }
 
             }
 
@@ -272,19 +283,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
         spinnerRight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            boolean equalsPlayers=false;
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-
                 if (spinnerRight.getSelectedItem().toString().equals(presenter.getSpinnerLeft())) {
+
                     Toast.makeText(getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
+                    equalsPlayers = true;
+
                     int positionCurrentSpinRight = adapter.getPosition(presenter.getSpinnerRight());
                     spinnerRight.setSelection(positionCurrentSpinRight);
-
                 } else {
-
                     //установить сеттер для модели транзитом через презентер
                     presenter.setSpinnerRight(spinnerRight.getSelectedItem().toString());
+
+                    //сброс счетчика счета
+                    if (equalsPlayers ==false){
+                    presenter.clearScore();
+                    }
+                    equalsPlayers=false;
+
                     //видимость спинера уровня для игрока Андроид
                     presenter.checkVisibilitySpinnerLevel();
                 }
@@ -294,12 +313,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
             }
-
-
-        })
-
-
-        ;
+        });
 
         //ArrayAdapter<String> adapterLevel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfLevel);
         adapterLevel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfLevel());
@@ -355,15 +369,9 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: 15.08.18 подсвечивать активного игрока при смене на андроид
 
-        // TODO: 20.04.18 после тура p-p, на дроид изи первый ход в центр не делает человек, если в предыдущем туре ход перешол к правому
-
         // TODO: 20.04.18 сделать анимацию зачеркивания выигрышных кнопок
 
         // TODO: 15.04.18 расставить паузы
-
-        // TODO: 09.07.18 при смене игроков менять счет
-
-        // TODO: 08.08.18 запретить выбирать в спинере выбранного с другой стороны игрока
 
         //// TODO: 22.09.18 добавить тесты
 
@@ -372,6 +380,8 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 15.10.18 вынести БД в другой поток
 
         // TODO: 11.12.18 дизайн кнопок заменить
+
+        // TODO: 22.12.18 перенести методы из вью в презентер
 
 
         // обработку нажатий

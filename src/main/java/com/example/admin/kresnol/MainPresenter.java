@@ -379,7 +379,6 @@ public class MainPresenter {
 
         model.setStatusGames(view.getResources().getString(R.string.statusGamesReady));
 
-// TODO: 30.08.18 вынести в модель
         // TODO: 19.10.18 подумать над брать игрока не из спинера а из гетера модели игрока
 
         enableChangeSymbol();
@@ -667,6 +666,15 @@ public class MainPresenter {
     public void stopOfAnimation() {
         view.imageOfLeftPlayer.clearAnimation();
         view.imageOfRightPlayer.clearAnimation();
+    }
+
+    //при смене игроков обнулять счет
+    public void clearScore() {
+        model.totalWinLeft=0;
+        view.winLeft.setText(Integer.toString(model.totalWinLeft));
+
+        model.totalWinRight=0;
+        view.winRight.setText(Integer.toString(model.totalWinRight));
     }
 
     ;
