@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     final String LOG_TAG = "myLogs";
 
     SquareButton arrayOfButtons[] = new SquareButton[9];
+    //Button arrayOfButtons[] = new Button[9];
 
     Button symbolOfBtnLeftPlayer;
     Button symbolOfBtnRightPlayer;
@@ -66,10 +67,10 @@ public class MainActivity extends AppCompatActivity {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // TODO: 24.09.18 тест, потом удалить или сохранять в модели
-        String prefTest = prefs.getString("pref_level", "");
-        //winLeft.setText(prefTest);
-        Log.d(LOG_TAG, "Уровень сложности сохраненный в настройках" + prefTest);
+/*        // TODO: 24.09.18 тест, потом удалить или сохранять в модели
+        String prefLevel = prefs.getString("pref_level", "");
+        //winLeft.setText(prefLevel);
+        Log.d(LOG_TAG, "Уровень сложности сохраненный в настройках" + prefLevel);*/
 
         String lastSpinLeft = prefs.getString(presenter.LASTLEFTSPINN, "");
         String lastSpinRight = prefs.getString(presenter.LASTRIGHTSPINN, "");
@@ -145,15 +146,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
 
         // TODO: 30.09.18 вынести в метод? или в модель?
-        String prefTest = prefs.getString("pref_level", "");
+        String prefLevel = prefs.getString("pref_level", "");
 
-        //winLeft.setText(prefTest);
-        Log.d(LOG_TAG, "Уровень сложности установленный в настройках" + prefTest);
+        //winLeft.setText(prefLevel);
+        Log.d(LOG_TAG, "Уровень сложности установленный в настройках" + prefLevel);
 
-        presenter.setSpinnerLevel(prefTest);
+        presenter.setSpinnerLevel(prefLevel);
 
 
-        switch (prefTest) {
+        switch (prefLevel) {
             case "Easy":
                 spinnerLevel.setSelection(0);
                 break;
@@ -367,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "150 onclick test");
 
 
-        // TODO: 15.08.18 подсвечивать активного игрока при смене на андроид
+        // TODO: 15.08.18 подсвечивать текст активного игрока при смене игроков
 
         // TODO: 20.04.18 сделать анимацию зачеркивания выигрышных кнопок
 
@@ -378,8 +379,6 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 24.09.18 сделать иконки неактивного серыми
 
         // TODO: 15.10.18 вынести БД в другой поток
-
-        // TODO: 11.12.18 дизайн кнопок заменить
 
         // TODO: 22.12.18 перенести методы из вью в презентер
 
