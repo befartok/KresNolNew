@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+
 //import static com.example.admin.kresnol.R.id.group1;
 
 
@@ -51,8 +52,6 @@ public class MainPresenter {
         // брать имена игроков из базы для создания объектов игрок
         db = new Db(view);
 
-        /*leftPlayer = new Player("Player 1");
-        rightPlayer = new Player("Player 2");*/
         leftPlayer = new Player(db.getNameForCreateLeftPlayer());
         rightPlayer = new Player(db.getNameForCreateRightPlayer());
 
@@ -77,7 +76,6 @@ public class MainPresenter {
     public List<RecordOfDb> getArrayOfPlayer() {
         db = new Db(view);
 
-
         List<RecordOfDb> records = db.getNamesFromDb();
         for (RecordOfDb record : records) {
             arrayOfPlayer.add(record.getName());
@@ -92,14 +90,14 @@ public class MainPresenter {
 
     List<String> arrayOfPlayerForLeft = new ArrayList<String>();
 
-//создание массива для спинера левого без игрока Андроид
+    //создание массива для спинера левого без игрока Андроид
     public List<RecordOfDb> getArrayOfPlayerForLeft() {
         db = new Db(view);
 
         List<RecordOfDb> records = db.getNamesFromDb();
         for (RecordOfDb record : records) {
 
-            if (!record.getName().equals(view.getResources().getString(R.string.droids_name))){
+            if (!record.getName().equals(view.getResources().getString(R.string.droids_name))) {
                 arrayOfPlayerForLeft.add(record.getName());
 
                 //Log.d(LOG_TAG, "Имя: " + record.getName() + " сыграно: " + record.getTotalPlay());
@@ -173,15 +171,24 @@ public class MainPresenter {
 
     public String getSpinnerLeft() {
         return model.getSpinnerLeftValue();
-        }
+    }
+
     public String getSpinnerRight() {
         return model.getSpinnerRightValue();
-        }
+    }
 
     public void setImageRight() {
         if (model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) {
-            view.imageOfRightPlayer.setImageResource(R.drawable.ic_android_black_24dp);
-        } else view.imageOfRightPlayer.setImageResource(R.drawable.ic_accessibility_black_24dp);
+            if (rightPlayer.isActive()) {
+                view.imageOfRightPlayer.setImageResource(R.drawable.ic_android_black_24dp);
+
+            } else view.imageOfRightPlayer.setImageResource(R.drawable.ic_android_gray_24dp);
+        } else if (rightPlayer.isActive()) {
+            view.imageOfRightPlayer.setImageResource(R.drawable.ic_accessibility_black_24dp);
+
+        } else view.imageOfRightPlayer.setImageResource(R.drawable.ic_human_gray_24dp);
+
+
     }
 
     public void setSpinnerLevel(String spinLevel) {
@@ -217,7 +224,6 @@ public class MainPresenter {
                         if (leftPlayer.getSymbol().equals("x")) {
                             leftPlayer.setActive(true);
 
-                            // TODO: 04.10.18 заменить на лефтНэйм
                             //makeNameActive("leftButton");
                             makeNameActive("leftName");
                             rightPlayer.setActive(false);
@@ -350,7 +356,17 @@ public class MainPresenter {
                 //((TextView) view.spinnerRight.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
                 view.imageOfLeftPlayer.startAnimation(view.animation);
 
+                view.imageOfLeftPlayer.setImageResource(R.drawable.ic_accessibility_black_24dp);
+
+                if (model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) {
+
+                    view.imageOfRightPlayer.setImageResource(R.drawable.ic_android_gray_24dp);
+                } else
+
+                    view.imageOfRightPlayer.setImageResource(R.drawable.ic_human_gray_24dp);
+
                 break;
+
             //case "rightButton":
             case "rightName":
                 //view.imageOfLeftPlayer.clearAnimation();
@@ -360,6 +376,13 @@ public class MainPresenter {
                 ((TextView) view.spinnerRight.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
                 //((TextView) view.spinnerRight.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
                 view.imageOfRightPlayer.startAnimation(view.animation);
+
+                if (model.getSpinnerRightValue().equals(view.getResources().getString(R.string.droids_name))) {
+                    view.imageOfRightPlayer.setImageResource(R.drawable.ic_android_black_24dp);
+                } else {
+                    view.imageOfRightPlayer.setImageResource(R.drawable.ic_accessibility_black_24dp);
+                }
+                view.imageOfLeftPlayer.setImageResource(R.drawable.ic_human_gray_24dp);
 
                 break;
         }
@@ -409,27 +432,13 @@ public class MainPresenter {
 
     public void clickPlayFieldBtn(SquareButton btn) {
 
-        //запоминаем в настройках спинеры
-        SharedPreferences.Editor ed = view.prefs.edit();
-        ed.putString(LASTLEFTSPINN, view.spinnerLeft.getSelectedItem().toString());
-        ed.putString(LASTRIGHTSPINN, view.spinnerRight.getSelectedItem().toString());
-
-        if (view.spinnerRight.getSelectedItem().toString().equals(view.getResources().getString(R.string.droids_name))) {
-            ed.putString(LASTLEVELSPINN, view.spinnerLevel.getSelectedItem().toString());
-
-        }
-        ed.commit();
-
-
-        // public void clickPlayFieldBtn(Button btn) {
+        saveSpinners();
 
         // проверка нажатости кнопки и закончившесяй игры
-        //if ((model.statusGames != "finish") & (btn.getText().equals(""))) {
         if ((!model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesFinish)))
                 & (btn.getText().equals(""))) {
 
             model.setStatusGames(view.getResources().getString(R.string.statusGamesInplay));
-
 
             //отключение изменяемости кнопок выбора символа и игроков
             disableChangeSymbol();
@@ -475,6 +484,20 @@ public class MainPresenter {
         else if (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesFinish))) {
             restartGame();
         }
+    }
+
+    // TODO: 12.01.19 вынести префс из вью в презентер
+    // запоминаем в настройках спинеры
+    private void saveSpinners() {
+        SharedPreferences.Editor ed = view.prefs.edit();
+        ed.putString(LASTLEFTSPINN, view.spinnerLeft.getSelectedItem().toString());
+        ed.putString(LASTRIGHTSPINN, view.spinnerRight.getSelectedItem().toString());
+
+        if (view.spinnerRight.getSelectedItem().toString().equals(view.getResources().getString(R.string.droids_name))) {
+            ed.putString(LASTLEVELSPINN, view.spinnerLevel.getSelectedItem().toString());
+
+        }
+        ed.commit();
     }
 
     //добавление запущенной игры в базу
@@ -670,10 +693,10 @@ public class MainPresenter {
 
     //при смене игроков обнулять счет
     public void clearScore() {
-        model.totalWinLeft=0;
+        model.totalWinLeft = 0;
         view.winLeft.setText(Integer.toString(model.totalWinLeft));
 
-        model.totalWinRight=0;
+        model.totalWinRight = 0;
         view.winRight.setText(Integer.toString(model.totalWinRight));
     }
 

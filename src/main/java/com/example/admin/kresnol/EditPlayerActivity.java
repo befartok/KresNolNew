@@ -65,6 +65,7 @@ public class EditPlayerActivity extends AppCompatActivity {
         int[] to = new int[]{R.id.edit_player_item_name, R.id.edit_player_item_totalPlay,
                 R.id.edit_player_item_totalWin};
 
+        //список игроков
         mLv = (ListView) findViewById(R.id.edit_player_lv);
 
         Log.d(LOG_TAG, "test ");
@@ -121,57 +122,69 @@ public class EditPlayerActivity extends AppCompatActivity {
             case R.id.dialog_button_ok:
 
                 if (renamePlayer.isChecked()){
-                    Log.d(LOG_TAG, "rename");
 
-                    // проверка на уникальность имени
-                    if (db.checkName(nameToDialog.getText().toString())) {
-
-                        Toast toast= Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует",Toast.LENGTH_LONG);
-                        //Выставляем положение сообщения вверху экрана:
-                        toast.setGravity(Gravity.TOP,0,0);
-                        toast.show();
-                        //Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует", Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        db.editName(idOfRecord, nameToDialog.getText().toString());
-
-                        updSpinner = true;
-
-                        closeDialog();
-
-                    }
+                    renamePlayer();
                 }
                 if (clearStats.isChecked()){
-                    Log.d(LOG_TAG, "clearStats");
 
-                    db.clearStats(idOfRecord);
-
-                    closeDialog();
-
-
+                    clearStats();
                 }
 
-                // проверять и запретить удалять имена по умолчанию
-                // TODO: 02.12.18 вынести в метод
                 // TODO: 02.12.18 раскидать на MVP?
                 if (deletePlayer.isChecked()){
-                    Log.d(LOG_TAG, "deletePlayer");
-                    if (playersName.equals(getResources().getString(R.string.droids_name))
-                        |(playersName.equals(getResources().getString(R.string.players1_name)))
-                            |(playersName.equals(getResources().getString(R.string.players2_name))))
-                    {
-                        Toast.makeText(getBaseContext(),"Стандартного игрока "+playersName+" удалять нельзя",
-                                Toast.LENGTH_SHORT).show();
-                    }else {
 
-                        db.deleteItem(idOfRecord);
-                        updSpinner = true;
-
-                        closeDialog();
-                    }
+                    deletePlayer();
                 }
 
                 break;
+        }
+    }
+
+    private void renamePlayer() {
+        Log.d(LOG_TAG, "rename");
+
+        // проверка на уникальность имени
+        if (db.checkName(nameToDialog.getText().toString())) {
+
+            Toast toast= Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует",Toast.LENGTH_LONG);
+            //Выставляем положение сообщения вверху экрана:
+            toast.setGravity(Gravity.TOP,0,0);
+            toast.show();
+
+        } else {
+            db.editName(idOfRecord, nameToDialog.getText().toString());
+
+            updSpinner = true;
+
+            closeDialog();
+
+        }
+    }
+
+    private void clearStats() {
+        Log.d(LOG_TAG, "clearStats");
+
+        db.clearStats(idOfRecord);
+
+        closeDialog();
+    }
+
+    private void deletePlayer() {
+        Log.d(LOG_TAG, "deletePlayer");
+
+        // запретить удалять имена по умолчанию
+        if (playersName.equals(getResources().getString(R.string.droids_name))
+                |(playersName.equals(getResources().getString(R.string.players1_name)))
+                |(playersName.equals(getResources().getString(R.string.players2_name))))
+        {
+            Toast.makeText(getBaseContext(),"Стандартного игрока "+playersName+" удалять нельзя",
+                    Toast.LENGTH_SHORT).show();
+        }else {
+
+            db.deleteItem(idOfRecord);
+            updSpinner = true;
+
+            closeDialog();
         }
     }
 

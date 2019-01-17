@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         //winLeft.setText(prefLevel);
         Log.d(LOG_TAG, "Уровень сложности сохраненный в настройках" + prefLevel);*/
 
+// TODO: 12.01.19 вынести в метод и перенести в презентер
         String lastSpinLeft = prefs.getString(presenter.LASTLEFTSPINN, "");
         String lastSpinRight = prefs.getString(presenter.LASTRIGHTSPINN, "");
         String lastSpinLevel = prefs.getString(presenter.LASTLEVELSPINN, "");
@@ -375,8 +376,6 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 15.04.18 расставить паузы
 
         //// TODO: 22.09.18 добавить тесты
-
-        // TODO: 24.09.18 сделать иконки неактивного серыми
 
         // TODO: 15.10.18 вынести БД в другой поток
 
