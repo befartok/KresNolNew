@@ -60,42 +60,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(LOG_TAG, "41 test");
-
 
         init();
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-/*        // TODO: 24.09.18 тест, потом удалить или сохранять в модели
-        String prefLevel = prefs.getString("pref_level", "");
-        //winLeft.setText(prefLevel);
-        Log.d(LOG_TAG, "Уровень сложности сохраненный в настройках" + prefLevel);*/
 
-// TODO: 12.01.19 вынести в метод и перенести в презентер
-        String lastSpinLeft = prefs.getString(presenter.LASTLEFTSPINN, "");
-        String lastSpinRight = prefs.getString(presenter.LASTRIGHTSPINN, "");
-        String lastSpinLevel = prefs.getString(presenter.LASTLEVELSPINN, "");
-
-        int positionLastSpinLeft = adapterForLeft.getPosition(lastSpinLeft);
-        spinnerLeft.setSelection(positionLastSpinLeft);
-        presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
-
-
-        int positionLastSpinRight = adapter.getPosition(lastSpinRight);
-        spinnerRight.setSelection(positionLastSpinRight);
-        presenter.setSpinnerRight(spinnerRight.getSelectedItem().toString());
-
-
-        if (spinnerRight.getSelectedItem().toString().equals(getResources().getString(R.string.droids_name))) {
-            int positionLastSpinLevel = adapterLevel.getPosition(lastSpinLevel);
-            spinnerLevel.setSelection(positionLastSpinLevel);
-            presenter.setSpinnerLevel(spinnerLevel.getSelectedItem().toString());
-
-        }
-
-
-
+        presenter.setSpinnersFromPreferences();
 
 
         /*db = new Db(this);
@@ -136,9 +107,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Имя: " + record.getName() + " сыграно: " + record.getTotalPlay());
         }
 
-
-
-
         db.close();*/
 
         // presenter.getArrayOfPlayer();
@@ -146,28 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onResume() {
 
-        // TODO: 30.09.18 вынести в метод? или в модель?
-        String prefLevel = prefs.getString("pref_level", "");
-
-        //winLeft.setText(prefLevel);
-        Log.d(LOG_TAG, "Уровень сложности установленный в настройках" + prefLevel);
-
-        presenter.setSpinnerLevel(prefLevel);
-
-
-        switch (prefLevel) {
-            case "Easy":
-                spinnerLevel.setSelection(0);
-                break;
-
-            case "Normal":
-                spinnerLevel.setSelection(1);
-
-                break;
-            case "Hard":
-                spinnerLevel.setSelection(2);
-                break;
-        }
+        presenter.setSpinnerLevelFromPreferences();
 
         presenter.updateSpinner();
 
@@ -249,15 +196,22 @@ public class MainActivity extends AppCompatActivity {
         //spinnerRight.setSelection(1,true);
         spinnerRight.setSelection(1);
         presenter.setSpinnerRight(spinnerRight.getSelectedItem().toString());
+
+
         //устанавливаем цвет спинера
         ((TextView) spinnerLeft.getSelectedView()).setTextColor(getResources().getColor(R.color.buttonsTextActive));
 
+
+        // Log.d(LOG_TAG, "тест цвета 2", ((TextView) spinnerLeft.getSelectedView()).getTextColors());
+
         // устанавливаем обработчик нажатия
         spinnerLeft.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            boolean equalsPlayersLeft=false;
+            boolean equalsPlayersLeft = false;
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
+                // TODO: 22.12.18 перенести методы из вью в презентер
 
                 if (spinnerLeft.getSelectedItem().toString().equals(presenter.getSpinnerRight())) {
                     Toast.makeText(getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
@@ -271,11 +225,18 @@ public class MainActivity extends AppCompatActivity {
                     presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
 
                     //сброс счетчика счета
-                    if (equalsPlayersLeft ==false){
+                    if (equalsPlayersLeft == false) {
                         presenter.clearScore();
                     }
-                    equalsPlayersLeft=false;
+                    equalsPlayersLeft = false;
                 }
+                // TODO: 22.12.18 перенести методы из вью в презентер
+
+                //устанавливаем цвет спинера
+                if (presenter.leftPlayer.isActive()) {
+                    ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.buttonsTextActive));
+                } else
+                    ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.buttonsText));
 
             }
 
@@ -285,7 +246,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         spinnerRight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            boolean equalsPlayers=false;
+            boolean equalsPlayers = false;
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
@@ -301,14 +263,20 @@ public class MainActivity extends AppCompatActivity {
                     presenter.setSpinnerRight(spinnerRight.getSelectedItem().toString());
 
                     //сброс счетчика счета
-                    if (equalsPlayers ==false){
-                    presenter.clearScore();
+                    if (equalsPlayers == false) {
+                        presenter.clearScore();
                     }
-                    equalsPlayers=false;
+                    equalsPlayers = false;
 
                     //видимость спинера уровня для игрока Андроид
                     presenter.checkVisibilitySpinnerLevel();
                 }
+
+                if (presenter.rightPlayer.isActive()) {
+                    ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.buttonsTextActive));
+                } else
+                    ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.buttonsText));
+
 
             }
 
@@ -369,11 +337,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "150 onclick test");
 
 
-        // TODO: 15.08.18 подсвечивать текст активного игрока при смене игроков
-
         // TODO: 20.04.18 сделать анимацию зачеркивания выигрышных кнопок
-
-        // TODO: 15.04.18 расставить паузы
 
         //// TODO: 22.09.18 добавить тесты
 
@@ -381,6 +345,7 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: 22.12.18 перенести методы из вью в презентер
 
+        //тексты вынести в константы или ресурсы
 
         // обработку нажатий
         presenter.click(v.getId());

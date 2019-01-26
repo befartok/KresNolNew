@@ -64,9 +64,7 @@ public class MainPresenter {
         rightPlayer.setActive(false);
 
         getArrayOfPlayer();
-
         getArrayOfPlayerForLeft();
-
 
     }
 
@@ -124,6 +122,7 @@ public class MainPresenter {
         return updSpin;
     }
 
+    // TODO: 25.01.19 проверить необходимость булеан
     public boolean setSpinnerToNewPlayer() {
         boolean setSpinnerToNewPlayer = false;
         if (CreatePlayerActivity.isSetPlayerToGame()) {
@@ -152,6 +151,33 @@ public class MainPresenter {
     public String[] getArrayOfLevel() {
         return model.arrayOfLevel;
     }
+
+
+    public void setSpinnersFromPreferences() {
+
+
+        String lastSpinLeft = view.prefs.getString(LASTLEFTSPINN, "");
+        String lastSpinRight = view.prefs.getString(LASTRIGHTSPINN, "");
+        String lastSpinLevel = view.prefs.getString(LASTLEVELSPINN, "");
+
+        int positionLastSpinLeft = view.adapterForLeft.getPosition(lastSpinLeft);
+        view.spinnerLeft.setSelection(positionLastSpinLeft);
+        setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
+
+
+        int positionLastSpinRight = view.adapter.getPosition(lastSpinRight);
+        view.spinnerRight.setSelection(positionLastSpinRight);
+        setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
+
+
+        if (view.spinnerRight.getSelectedItem().toString().equals(view.getResources().getString(R.string.droids_name))) {
+            int positionLastSpinLevel = view.adapterLevel.getPosition(lastSpinLevel);
+            view.spinnerLevel.setSelection(positionLastSpinLevel);
+            setSpinnerLevel(view.spinnerLevel.getSelectedItem().toString());
+
+        }
+    }
+
 
     public void setSpinnerLeft(String spinLeft) {
 
@@ -662,7 +688,6 @@ public class MainPresenter {
         stopOfAnimation();
         db = new Db(view);
 
-        // TODO: 01.08.18 вынести винсимвол в модель?
         if (view.symbolOfBtnLeftPlayer.getText().equals(winSymbol)) {
 
             model.totalWinLeft++;
@@ -700,8 +725,30 @@ public class MainPresenter {
         view.winRight.setText(Integer.toString(model.totalWinRight));
     }
 
-    ;
 
+    public void setSpinnerLevelFromPreferences() {
+        String prefLevel = view.prefs.getString("pref_level", "");
+
+        //winLeft.setText(prefLevel);
+        Log.d(LOG_TAG, "Уровень сложности установленный в настройках" + prefLevel);
+
+        setSpinnerLevel(prefLevel);
+
+
+        switch (prefLevel) {
+            case "Easy":
+                view.spinnerLevel.setSelection(0);
+                break;
+
+            case "Normal":
+                view.spinnerLevel.setSelection(1);
+
+                break;
+            case "Hard":
+                view.spinnerLevel.setSelection(2);
+                break;
+        }
+    }
 }
 
 
