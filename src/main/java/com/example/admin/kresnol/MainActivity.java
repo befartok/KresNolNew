@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     final String LOG_TAG = "myLogs";
 
     SquareButton arrayOfButtons[] = new SquareButton[9];
-    //Button arrayOfButtons[] = new Button[9];
 
     Button symbolOfBtnLeftPlayer;
     Button symbolOfBtnRightPlayer;
@@ -60,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(LOG_TAG, "onCreate");
 
         init();
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
 
         presenter.setSpinnersFromPreferences();
 
@@ -118,7 +117,20 @@ public class MainActivity extends AppCompatActivity {
 
         presenter.updateSpinner();
 
+
+        Log.d(LOG_TAG, " onResume " );
+       // presenter.setSpinnerColor();
+
+
         presenter.setSpinnerToNewPlayer();
+       // presenter.setSpinnerToOldPlayer();
+
+
+
+
+       // presenter.updateSpinner();
+
+        Log.d(LOG_TAG, " onResume end" );
 
         super.onResume();
 
@@ -150,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void init() {
+
+         Log.d(LOG_TAG, "init");
 
         presenter = new MainPresenter(this);
 
@@ -189,7 +203,8 @@ public class MainActivity extends AppCompatActivity {
         spinnerRight.setAdapter(adapter);
 
         // устанавливаем элемент
-        spinnerLeft.setSelection(0, true);
+        //spinnerLeft.setSelection(0, true);
+        spinnerLeft.setSelection(0);
         // запоминать спинер
         presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
 
@@ -199,44 +214,29 @@ public class MainActivity extends AppCompatActivity {
 
 
         //устанавливаем цвет спинера
-        ((TextView) spinnerLeft.getSelectedView()).setTextColor(getResources().getColor(R.color.buttonsTextActive));
+       /* ((TextView) spinnerLeft.getSelectedView()).setTextColor(getResources().getColor(R.color.buttonsTextActive));
+        ((TextView) spinnerRight.getSelectedView()).setTextColor(getResources().getColor(R.color.colorAccent));
+*/
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tv_animation);
 
-
+        // установка левого активным в первый раз
+        presenter.makeNameActive("leftName");
         // Log.d(LOG_TAG, "тест цвета 2", ((TextView) spinnerLeft.getSelectedView()).getTextColors());
 
         // устанавливаем обработчик нажатия
         spinnerLeft.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            boolean equalsPlayersLeft = false;
+           // boolean equalsPlayersLeft = false;
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                // TODO: 22.12.18 перенести методы из вью в презентер
+                Log.d(LOG_TAG, "218 ma presenter.checkEqualsSpinnerLeft();" );
 
-                if (spinnerLeft.getSelectedItem().toString().equals(presenter.getSpinnerRight())) {
-                    Toast.makeText(getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
 
-                    equalsPlayersLeft = true;
+                presenter.checkEqualsSpinnerLeft();
 
-                    int positionCurrentSpinLeft = adapterForLeft.getPosition(presenter.getSpinnerLeft());
-                    spinnerLeft.setSelection(positionCurrentSpinLeft);
+               // presenter.setSpinnerColor(presenter.leftPlayer,parent);
 
-                } else {
-                    presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
-
-                    //сброс счетчика счета
-                    if (equalsPlayersLeft == false) {
-                        presenter.clearScore();
-                    }
-                    equalsPlayersLeft = false;
-                }
-                // TODO: 22.12.18 перенести методы из вью в презентер
-
-                //устанавливаем цвет спинера
-                if (presenter.leftPlayer.isActive()) {
-                    ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.buttonsTextActive));
-                } else
-                    ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.buttonsText));
 
             }
 
@@ -246,38 +246,28 @@ public class MainActivity extends AppCompatActivity {
         });
 
         spinnerRight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            boolean equalsPlayers = false;
+            //boolean equalsPlayers = false;
+
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                if (spinnerRight.getSelectedItem().toString().equals(presenter.getSpinnerLeft())) {
+                Log.d(LOG_TAG, "240 ma presenter.checkEqualsSpinnerRight();" );
+                //((TextView) spinnerRight.getSelectedView()).setTextColor(getResources().getColor(R.color.colorAccent));
 
-                    Toast.makeText(getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
-                    equalsPlayers = true;
 
-                    int positionCurrentSpinRight = adapter.getPosition(presenter.getSpinnerRight());
-                    spinnerRight.setSelection(positionCurrentSpinRight);
-                } else {
-                    //установить сеттер для модели транзитом через презентер
-                    presenter.setSpinnerRight(spinnerRight.getSelectedItem().toString());
+                presenter.checkEqualsSpinnerRight();
 
-                    //сброс счетчика счета
-                    if (equalsPlayers == false) {
-                        presenter.clearScore();
-                    }
-                    equalsPlayers = false;
+// TODO: 29.01.19 ошибка при создании и правого и левого, после перезапуска первый раз ошибка
 
-                    //видимость спинера уровня для игрока Андроид
-                    presenter.checkVisibilitySpinnerLevel();
-                }
+                //presenter.setSpinnerColor(presenter.rightPlayer, parent);
 
-                if (presenter.rightPlayer.isActive()) {
+                /*if (presenter.rightPlayer.isActive()) {
                     ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.buttonsTextActive));
                 } else
                     ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.buttonsText));
 
-
+*/
             }
 
             @Override
@@ -309,24 +299,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        presenter.checkVisibilitySpinnerLevel();
+
+
         //определение кнопки выбора символов
         symbolOfBtnLeftPlayer = (Button) findViewById(R.id.buttonSymbolLeftPlayer);
         symbolOfBtnRightPlayer = (Button) findViewById(R.id.buttonSymbolRightPlayer);
 
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tv_animation);
 
-        // анимацию запуск для левого в первый раз
-        imageOfLeftPlayer.startAnimation(animation);
 
-        //Log.d(LOG_TAG, "148 init test");
+
 
     }
 
-    public void updateSpinner() {
+    //обновление адаптеров спинеров после создания новых игроков
+    public void updateAdapters() {
         adapter.notifyDataSetChanged();
         adapterForLeft.notifyDataSetChanged();
 
-        Log.d(LOG_TAG, "updateSpinner main");
+        Log.d(LOG_TAG, "updateAdapters main");
 
 
     }
@@ -345,7 +336,9 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: 22.12.18 перенести методы из вью в презентер
 
-        //тексты вынести в константы или ресурсы
+        //TODO тексты вынести в константы или ресурсы
+
+        // TODO: 05.02.19 меню выход сделать
 
         // обработку нажатий
         presenter.click(v.getId());

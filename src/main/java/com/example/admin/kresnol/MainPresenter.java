@@ -6,7 +6,9 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,10 @@ public class MainPresenter {
     Context context;
 
     final String LOG_TAG = "myLogs";
+
+    boolean equalsPlayersLeft = false;
+    boolean equalsPlayers = false;
+
 
     //константы для запоминания в настройках выбора спинеров
     final String LASTLEFTSPINN = "lastLeftSpinn";
@@ -108,6 +114,23 @@ public class MainPresenter {
         return records;
     }
 
+    //обновление массивов игроков и адаптеров спинеров после создания новых игроков
+    public void updateSpinner() {
+        //boolean updSpin = false;
+        if (CreatePlayerActivity.isUpdateSpinner() | EditPlayerActivity.isUpdSpinner()) {
+            arrayOfPlayer.clear();
+            arrayOfPlayerForLeft.clear();
+            getArrayOfPlayer();
+            getArrayOfPlayerForLeft();
+            view.updateAdapters();
+
+            //updSpin = true;
+        }
+        //return updSpin;
+    }
+
+ /*
+    //обновление массивов игроков и адаптеров спинеров после создания новых игроков
     public boolean updateSpinner() {
         boolean updSpin = false;
         if (CreatePlayerActivity.isUpdateSpinner() | EditPlayerActivity.isUpdSpinner()) {
@@ -115,14 +138,60 @@ public class MainPresenter {
             arrayOfPlayerForLeft.clear();
             getArrayOfPlayer();
             getArrayOfPlayerForLeft();
-            view.updateSpinner();
+            view.updateAdapters();
 
             updSpin = true;
         }
         return updSpin;
     }
 
+ */
+
     // TODO: 25.01.19 проверить необходимость булеан
+    public void setSpinnerToNewPlayer() {
+        //boolean setSpinnerToNewPlayer = false;
+        if (CreatePlayerActivity.isSetPlayerToGame()) {
+            //int position = view.adapter.getPosition(CreatePlayerActivity.getNamePlayerToSet());
+
+            if (CreatePlayerActivity.getPositionToSet().equals("left")) {
+                int positionForLeft = view.adapterForLeft.getPosition(CreatePlayerActivity.getNamePlayerToSet());
+                view.spinnerLeft.setSelection(positionForLeft);
+                setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
+
+            }
+
+            if (CreatePlayerActivity.getPositionToSet().equals("right")) {
+                int position = view.adapter.getPosition(CreatePlayerActivity.getNamePlayerToSet());
+                view.spinnerRight.setSelection(position);
+                setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
+
+
+            }
+
+
+            //setSpinnerToNewPlayer = true;
+        }
+        //return setSpinnerToNewPlayer;
+    }
+
+    public void setSpinnerToOldPlayer() {
+
+        view.spinnerLeft.setSelection(0, true);
+        //view.spinnerLeft.setSelection(0);
+        setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
+
+        //view.spinnerRight.setSelection(1);
+        view.spinnerRight.setSelection(1, true);
+        setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
+
+
+    }
+
+
+
+/*
+
+ // TODO: 25.01.19 проверить необходимость булеан
     public boolean setSpinnerToNewPlayer() {
         boolean setSpinnerToNewPlayer = false;
         if (CreatePlayerActivity.isSetPlayerToGame()) {
@@ -147,6 +216,8 @@ public class MainPresenter {
         }
         return setSpinnerToNewPlayer;
     }
+*/
+
 
     public String[] getArrayOfLevel() {
         return model.arrayOfLevel;
@@ -156,26 +227,45 @@ public class MainPresenter {
     public void setSpinnersFromPreferences() {
 
 
+
         String lastSpinLeft = view.prefs.getString(LASTLEFTSPINN, "");
         String lastSpinRight = view.prefs.getString(LASTRIGHTSPINN, "");
         String lastSpinLevel = view.prefs.getString(LASTLEVELSPINN, "");
 
-        int positionLastSpinLeft = view.adapterForLeft.getPosition(lastSpinLeft);
-        view.spinnerLeft.setSelection(positionLastSpinLeft);
-        setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
+        //view.adapterForLeft.getPosition(lastSpinLeft);
 
 
-        int positionLastSpinRight = view.adapter.getPosition(lastSpinRight);
-        view.spinnerRight.setSelection(positionLastSpinRight);
-        setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
 
 
-        if (view.spinnerRight.getSelectedItem().toString().equals(view.getResources().getString(R.string.droids_name))) {
-            int positionLastSpinLevel = view.adapterLevel.getPosition(lastSpinLevel);
-            view.spinnerLevel.setSelection(positionLastSpinLevel);
-            setSpinnerLevel(view.spinnerLevel.getSelectedItem().toString());
+        //проверяем, если удалялись игроки, из настроек для запуска, то устанавливаем спинеры по умолчанию
+        if ((view.adapter.getPosition(lastSpinRight)<0)
+                |(view.adapterForLeft.getPosition(lastSpinLeft)<0)
+                |view.adapterLevel.getPosition(lastSpinLevel)<0){
+            view.spinnerLeft.setSelection(0);
+            setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
+            view.spinnerRight.setSelection(1);
+            setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
+            Toast.makeText(view.getBaseContext(), "установлены начальные игроки", Toast.LENGTH_SHORT).show();
 
         }
+        //иначе устанавливаем спинеры из настроек
+        else {
+            int positionLastSpinLeft = view.adapterForLeft.getPosition(lastSpinLeft);
+            view.spinnerLeft.setSelection(positionLastSpinLeft);
+            setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
+
+            int positionLastSpinRight = view.adapter.getPosition(lastSpinRight);
+            view.spinnerRight.setSelection(positionLastSpinRight);
+            setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
+
+            if (view.spinnerRight.getSelectedItem().toString().equals(view.getResources().getString(R.string.droids_name))) {
+                int positionLastSpinLevel = view.adapterLevel.getPosition(lastSpinLevel);
+                view.spinnerLevel.setSelection(positionLastSpinLevel);
+                setSpinnerLevel(view.spinnerLevel.getSelectedItem().toString());
+
+            }
+        }
+
     }
 
 
@@ -368,6 +458,7 @@ public class MainPresenter {
 
     }
 
+    // TODO: 05.02.19 убрать нэйм из названия
     public void makeNameActive(String selectedSymbolsButton) {
 
         stopOfAnimation();
@@ -376,9 +467,9 @@ public class MainPresenter {
 
             //case "leftButton":
             case "leftName":
-                ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
+                //((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
                 //((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
-                ((TextView) view.spinnerRight.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
+                //((TextView) view.spinnerRight.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
                 //((TextView) view.spinnerRight.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
                 view.imageOfLeftPlayer.startAnimation(view.animation);
 
@@ -396,10 +487,10 @@ public class MainPresenter {
             //case "rightButton":
             case "rightName":
                 //view.imageOfLeftPlayer.clearAnimation();
-                ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
+               // ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
                 //((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
 
-                ((TextView) view.spinnerRight.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
+                //((TextView) view.spinnerRight.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
                 //((TextView) view.spinnerRight.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
                 view.imageOfRightPlayer.startAnimation(view.animation);
 
@@ -514,7 +605,7 @@ public class MainPresenter {
 
     // TODO: 12.01.19 вынести префс из вью в презентер
     // запоминаем в настройках спинеры
-    private void saveSpinners() {
+    public void saveSpinners() {
         SharedPreferences.Editor ed = view.prefs.edit();
         ed.putString(LASTLEFTSPINN, view.spinnerLeft.getSelectedItem().toString());
         ed.putString(LASTRIGHTSPINN, view.spinnerRight.getSelectedItem().toString());
@@ -748,6 +839,97 @@ public class MainPresenter {
                 view.spinnerLevel.setSelection(2);
                 break;
         }
+    }
+
+    public void checkEqualsSpinnerLeft() {
+        if (view.spinnerLeft.getSelectedItem().toString().equals(getSpinnerRight())) {
+            Toast.makeText(view.getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
+
+            equalsPlayersLeft = true;
+
+            int positionCurrentSpinLeft = view.adapterForLeft.getPosition(getSpinnerLeft());
+            view.spinnerLeft.setSelection(positionCurrentSpinLeft);
+
+        } else {
+            setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
+
+            //сброс счетчика счета
+            if (equalsPlayersLeft == false) {
+                clearScore();
+            }
+            equalsPlayersLeft = false;
+        }
+    }
+
+    // TODO: 29.01.19 исправить при удалении игроков проверка срабатывает, но устанавливает одинаковых если слева был п2, но при удалении правого ставится п2 по умолчанию
+
+    //проверка и запрет выбора одного игрока в обоих спинерах
+    public void checkEqualsSpinnerRight() {
+        if (view.spinnerRight.getSelectedItem().toString().equals(getSpinnerLeft())) {
+
+            Toast.makeText(view.getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
+            equalsPlayers = true;
+
+            int positionCurrentSpinRight = view.adapter.getPosition(getSpinnerRight());
+            view.spinnerRight.setSelection(positionCurrentSpinRight);
+        } else {
+
+            setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
+            Log.d(LOG_TAG, "846");
+
+            //сброс счетчика счета
+            if (equalsPlayers == false) {
+                clearScore();
+            }
+            equalsPlayers = false;
+
+            //видимость спинера уровня для игрока Андроид
+            checkVisibilitySpinnerLevel();
+        }
+    }
+
+    // TODO: 05.02.19 не получается установить второй спинер автоматом. после теста удалить
+    public void setSpinnerColor(Player player, AdapterView<?> parent) {
+
+        //устанавливаем цвет спинера при выборе спинера
+        if (player.isActive()) {
+            //((TextView) parent.getChildAt(0)).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
+            ((TextView) parent.getChildAt(0)).setTextColor(view.getResources().getColor(R.color.colorPrimary));
+        } else
+            //((TextView) parent.getChildAt(0)).setTextColor(view.getResources().getColor(R.color.buttonsText));
+            ((TextView) parent.getChildAt(0)).setTextColor(view.getResources().getColor(R.color.colorAccent));
+
+    }
+
+
+    public void setSpinnerColor() {
+
+        Log.d(LOG_TAG, " leftPlayer.isActive()= " + leftPlayer.isActive());
+        Log.d(LOG_TAG, " rightPlayer.isActive()= " + rightPlayer.isActive());
+
+        //устанавливаем цвет спинера при выборе спинера
+        if (leftPlayer.isActive()) {
+            Log.d(LOG_TAG, " leftPlayer.isActive()= " + leftPlayer.isActive());
+
+            ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(Color.BLUE);
+            ((TextView) view.spinnerRight.getSelectedView()).setTextColor(Color.MAGENTA);
+
+            Log.d(LOG_TAG, " ((TextView) view.spinnerLeft.getSelectedView()).getTextColors()= " + ((TextView) view.spinnerLeft.getSelectedView()).getTextColors());
+            //Log.d(LOG_TAG, " ((TextView) view.spinnerRight.getSelectedView()).getTextColors()= " + view.spinnerRight.getSelectedItem().toString());
+
+            //((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
+            //((TextView) view.spinnerRight.getSelectedView()).setTextColor(Color.CYAN);
+
+        } else if (rightPlayer.isActive()) {
+            Log.d(LOG_TAG, " rightPlayer.isActive()= " + rightPlayer.isActive());
+
+            // ((TextView) view.spinnerRight.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
+            //((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
+            ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(Color.CYAN);
+            ((TextView) view.spinnerRight.getSelectedView()).setTextColor(Color.YELLOW);
+        }
+
+
     }
 }
 

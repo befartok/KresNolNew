@@ -8,7 +8,8 @@
         android:id="@+id/textViewHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="11dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="11dp"
 
         android:text="Введите имя" />
 
@@ -17,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="11dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="2dp"
         android:ems="10"
 
         android:inputType="textPersonName"
@@ -25,17 +26,18 @@
         android:text="Name" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="11dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginLeft="11dp"
 
+        android:layout_marginTop="2dp"
         android:text="Выбрать игрока для игры" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="1dp"
         android:orientation="horizontal">
 
 
@@ -43,7 +45,7 @@
             android:id="@+id/radioButtonLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="11dp"
+            android:layout_marginLeft="11dp"
             android:layout_weight="1"
 
             android:text="Установить левым"
@@ -54,7 +56,7 @@
             android:id="@+id/radioButtonRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="11dp"
+            android:layout_marginRight="11dp"
             android:layout_weight="1"
 
             android:text="Установить правым" />
@@ -64,14 +66,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="3dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/buttonCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="11dp"
+            android:layout_marginLeft="11dp"
             android:layout_weight="0.7"
             android:onClick="onclick"
             android:text="OK" />
@@ -80,7 +82,7 @@
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="11dp"
+            android:layout_marginRight="11dp"
             android:onClick="onclick"
 
             android:layout_weight="0.7"
