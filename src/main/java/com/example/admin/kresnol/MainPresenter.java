@@ -147,7 +147,6 @@ public class MainPresenter {
 
  */
 
-    // TODO: 25.01.19 проверить необходимость булеан
     public void setSpinnerToNewPlayer() {
         //boolean setSpinnerToNewPlayer = false;
         if (CreatePlayerActivity.isSetPlayerToGame()) {
@@ -155,15 +154,45 @@ public class MainPresenter {
 
             if (CreatePlayerActivity.getPositionToSet().equals("left")) {
                 int positionForLeft = view.adapterForLeft.getPosition(CreatePlayerActivity.getNamePlayerToSet());
-                view.spinnerLeft.setSelection(positionForLeft);
-                setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
+
+                // если позиция удалялась и ее нет в адаптере, то ставим спиннеры по умолчанию
+
+                if (positionForLeft<0){
+                    setDefaultSpinners();
+
+                }
+                //иначе ставим созданного игрока
+                else {
+
+                    view.spinnerLeft.setSelection(positionForLeft);
+                    setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
+                }
 
             }
 
             if (CreatePlayerActivity.getPositionToSet().equals("right")) {
+                Log.d(LOG_TAG, "CreatePlayerActivity.getNamePlayerToSet() = " + CreatePlayerActivity.getNamePlayerToSet());
+
                 int position = view.adapter.getPosition(CreatePlayerActivity.getNamePlayerToSet());
-                view.spinnerRight.setSelection(position);
-                setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
+                Log.d(LOG_TAG, "position = " + position);//-1
+                // если позиция удалялась и ее нет в адаптере, то ставим спиннеры по умолчанию
+                if (position<0){
+                    setDefaultSpinners();
+
+                }
+                //иначе ставим созданного игрока
+                else {
+
+                    view.spinnerRight.setSelection(position);
+                    Log.d(LOG_TAG, "view.spinnerRight.getSelectedItem().toString() = "
+                            + view.spinnerRight.getSelectedItem().toString());
+
+                    setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
+
+                }
+
+
+
 
 
             }
@@ -173,50 +202,6 @@ public class MainPresenter {
         }
         //return setSpinnerToNewPlayer;
     }
-
-    public void setSpinnerToOldPlayer() {
-
-        view.spinnerLeft.setSelection(0, true);
-        //view.spinnerLeft.setSelection(0);
-        setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
-
-        //view.spinnerRight.setSelection(1);
-        view.spinnerRight.setSelection(1, true);
-        setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
-
-
-    }
-
-
-
-/*
-
- // TODO: 25.01.19 проверить необходимость булеан
-    public boolean setSpinnerToNewPlayer() {
-        boolean setSpinnerToNewPlayer = false;
-        if (CreatePlayerActivity.isSetPlayerToGame()) {
-            //int position = view.adapter.getPosition(CreatePlayerActivity.getNamePlayerToSet());
-
-            if (CreatePlayerActivity.getPositionToSet().equals("left")) {
-                int positionForLeft = view.adapterForLeft.getPosition(CreatePlayerActivity.getNamePlayerToSet());
-                view.spinnerLeft.setSelection(positionForLeft);
-                setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
-
-            }
-
-            if (CreatePlayerActivity.getPositionToSet().equals("right")) {
-                int position = view.adapter.getPosition(CreatePlayerActivity.getNamePlayerToSet());
-                view.spinnerRight.setSelection(position);
-                setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
-
-            }
-
-
-            setSpinnerToNewPlayer = true;
-        }
-        return setSpinnerToNewPlayer;
-    }
-*/
 
 
     public String[] getArrayOfLevel() {
@@ -235,18 +220,12 @@ public class MainPresenter {
         //view.adapterForLeft.getPosition(lastSpinLeft);
 
 
-
-
-        //проверяем, если удалялись игроки, из настроек для запуска, то устанавливаем спинеры по умолчанию
+        //проверяем, если удалялись игроки из настроек для запуска, то устанавливаем спинеры по умолчанию
         if ((view.adapter.getPosition(lastSpinRight)<0)
                 |(view.adapterForLeft.getPosition(lastSpinLeft)<0)
                 |view.adapterLevel.getPosition(lastSpinLevel)<0){
-            view.spinnerLeft.setSelection(0);
-            setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
-            view.spinnerRight.setSelection(1);
-            setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
-            Toast.makeText(view.getBaseContext(), "установлены начальные игроки", Toast.LENGTH_SHORT).show();
 
+            setDefaultSpinners();
         }
         //иначе устанавливаем спинеры из настроек
         else {
@@ -842,13 +821,22 @@ public class MainPresenter {
     }
 
     public void checkEqualsSpinnerLeft() {
-        if (view.spinnerLeft.getSelectedItem().toString().equals(getSpinnerRight())) {
-            Toast.makeText(view.getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
 
-            equalsPlayersLeft = true;
+        if (view.spinnerLeft.getSelectedItem().toString().equals(getSpinnerRight())) {
 
             int positionCurrentSpinLeft = view.adapterForLeft.getPosition(getSpinnerLeft());
-            view.spinnerLeft.setSelection(positionCurrentSpinLeft);
+
+            //если после удаления не найден игрок из геттера
+            if (positionCurrentSpinLeft<0){
+
+                setDefaultSpinners();
+
+            } else {
+                Toast.makeText(view.getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
+                equalsPlayers = true;
+                view.spinnerLeft.setSelection(positionCurrentSpinLeft);
+            }
+
 
         } else {
             setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
@@ -860,22 +848,33 @@ public class MainPresenter {
             equalsPlayersLeft = false;
         }
     }
+// TODO: 07.02.19 проверить соответствие сетСпиннерЛефт и Райт числу сет селекшн
 
-    // TODO: 29.01.19 исправить при удалении игроков проверка срабатывает, но устанавливает одинаковых если слева был п2, но при удалении правого ставится п2 по умолчанию
-
-    //проверка и запрет выбора одного игрока в обоих спинерах
+    //проверка и запрет выбора одного игрока в обоих спинерах привыборе правого
     public void checkEqualsSpinnerRight() {
         if (view.spinnerRight.getSelectedItem().toString().equals(getSpinnerLeft())) {
 
-            Toast.makeText(view.getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
-            equalsPlayers = true;
+            int positionCurrentSpinRight = view.adapter.getPosition(getSpinnerRight()); //-1
 
-            int positionCurrentSpinRight = view.adapter.getPosition(getSpinnerRight());
-            view.spinnerRight.setSelection(positionCurrentSpinRight);
+            //если после удаления не найден игрок из геттера
+            if (positionCurrentSpinRight<0){
+
+                setDefaultSpinners();
+
+            } else {
+                Toast.makeText(view.getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
+                equalsPlayers = true;
+
+                Log.d(LOG_TAG, "884 getSpinnerRight()= "+ getSpinnerRight());
+                Log.d(LOG_TAG, "884 view.adapter.getPosition(getSpinnerRight()= "+ view.adapter.getPosition(getSpinnerRight()));
+
+                view.spinnerRight.setSelection(positionCurrentSpinRight);
+            }
+
         } else {
 
             setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
-            Log.d(LOG_TAG, "846");
+            Log.d(LOG_TAG, "896");
 
             //сброс счетчика счета
             if (equalsPlayers == false) {
@@ -886,6 +885,15 @@ public class MainPresenter {
             //видимость спинера уровня для игрока Андроид
             checkVisibilitySpinnerLevel();
         }
+    }
+
+    private void setDefaultSpinners() {
+
+        view.spinnerLeft.setSelection(0);
+        setSpinnerLeft(view.spinnerLeft.getSelectedItem().toString());
+        view.spinnerRight.setSelection(1);
+        setSpinnerRight(view.spinnerRight.getSelectedItem().toString());
+        Toast.makeText(view.getBaseContext(), "установлены начальные игроки", Toast.LENGTH_SHORT).show();
     }
 
     // TODO: 05.02.19 не получается установить второй спинер автоматом. после теста удалить

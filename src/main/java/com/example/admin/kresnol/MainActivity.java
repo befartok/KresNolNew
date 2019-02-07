@@ -121,14 +121,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, " onResume " );
        // presenter.setSpinnerColor();
 
-
         presenter.setSpinnerToNewPlayer();
-       // presenter.setSpinnerToOldPlayer();
-
-
-
-
-       // presenter.updateSpinner();
 
         Log.d(LOG_TAG, " onResume end" );
 
