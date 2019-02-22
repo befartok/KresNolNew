@@ -68,7 +68,6 @@ public class EditPlayerActivity extends AppCompatActivity {
         //список игроков
         mLv = (ListView) findViewById(R.id.edit_player_lv);
 
-        Log.d(LOG_TAG, "test ");
 
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

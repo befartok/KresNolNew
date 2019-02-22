@@ -251,16 +251,6 @@ public class MainActivity extends AppCompatActivity {
 
                 presenter.checkEqualsSpinnerRight();
 
-// TODO: 29.01.19 ошибка при создании и правого и левого, после перезапуска первый раз ошибка
-
-                //presenter.setSpinnerColor(presenter.rightPlayer, parent);
-
-                /*if (presenter.rightPlayer.isActive()) {
-                    ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.buttonsTextActive));
-                } else
-                    ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.buttonsText));
-
-*/
             }
 
             @Override
@@ -320,6 +310,8 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(LOG_TAG, "150 onclick test");
 
+
+        // TODO: 20.02.19 зашел-вышел в меню, а спинеры сбросились на начальные
 
         // TODO: 20.04.18 сделать анимацию зачеркивания выигрышных кнопок
 

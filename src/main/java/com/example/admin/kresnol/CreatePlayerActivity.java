@@ -49,6 +49,8 @@ public class CreatePlayerActivity extends AppCompatActivity {
 
 
     final String LOG_TAG = "myLogs";
+    final String LEFT = "left";
+    final String RIGHT = "right";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,12 +94,13 @@ public class CreatePlayerActivity extends AppCompatActivity {
                     //Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует", Toast.LENGTH_SHORT).show();
 
                 } else {
+// TODO: 10.02.19 не учтена возможность одновременной установки и лефт и райт
 
                     db.addPlayer(etNameOfPlayer.getText().toString());
 
                     updateSpinner = true;
                     if (rbSetLeft.isChecked()) {
-                        positionToSet="left";
+                        positionToSet=LEFT;
                         namePlayerToSet=etNameOfPlayer.getText().toString();
 
                         setPlayerToGame = true;
@@ -105,7 +108,7 @@ public class CreatePlayerActivity extends AppCompatActivity {
                     };
                     if (rbSetRight.isChecked()) {
 
-                        positionToSet="right";
+                        positionToSet=RIGHT;
                         namePlayerToSet=etNameOfPlayer.getText().toString();
 
                         setPlayerToGame = true;
