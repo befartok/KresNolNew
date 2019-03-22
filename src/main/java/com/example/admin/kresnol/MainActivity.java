@@ -24,6 +24,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     final String LOG_TAG = "myLogs";
+    final String LEFT_NAME = "leftName";
 
     SquareButton arrayOfButtons[] = new SquareButton[9];
 
@@ -213,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tv_animation);
 
         // установка левого активным в первый раз
-        presenter.makeNameActive("leftName");
+        presenter.makeNameActive(LEFT_NAME);
         // Log.d(LOG_TAG, "тест цвета 2", ((TextView) spinnerLeft.getSelectedView()).getTextColors());
 
         // устанавливаем обработчик нажатия
@@ -274,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //установка  уровня  в преференс из спинера
                 // TODO: 13.12.18 проверить не работает?
-                prefs.edit().putString("pref_level", spinnerLevel.getSelectedItem().toString()).commit();
+               // prefs.edit().putString("pref_level", spinnerLevel.getSelectedItem().toString()).commit();
             }
 
             @Override
@@ -323,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO тексты вынести в константы или ресурсы
 
-        // TODO: 05.02.19 меню выход сделать
+// TODO: 21.03.19 не запоминает уровень в спинере после выхода
 
         // обработку нажатий
         presenter.click(v.getId());

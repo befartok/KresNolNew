@@ -24,6 +24,9 @@ public class LogicOfDroid {
     Player rightPlr;
 
     final String LOG_TAG = "myLogs";
+    final String X_SYMBOL = "x";
+    final String O_SYMBOL = "o";
+    final String EMPTY_SYMBOL = "";
 
     public int droidsStep(Button[] arr, Player lPlr, Player rPlr, MainModel mainModel) {
 
@@ -95,9 +98,8 @@ public class LogicOfDroid {
 
         Log.d(LOG_TAG, " 115 test  checkEmptyButton");
 
-        // TODO: 04.10.18 заменить хардкод на ресурсы - нет оставить, т.к. от них зависит первый ход
-        while ((arrayOfBtn[numberOfButton].getText().equals("x"))
-                | (arrayOfBtn[numberOfButton].getText().equals("o"))) {
+        while ((arrayOfBtn[numberOfButton].getText().equals(X_SYMBOL))
+                | (arrayOfBtn[numberOfButton].getText().equals(O_SYMBOL))) {
             numberOfButton = numberOfButton + 1;
             Log.d(LOG_TAG, "120 numberOfButton+1 = " + numberOfButton);
 
@@ -110,7 +112,7 @@ public class LogicOfDroid {
     }
 
     public int makeCenterStep(){
-        if ((makeStep == false) & (arrayOfBtn[4].getText().equals(""))) {
+        if ((makeStep == false) & (arrayOfBtn[4].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep=4;
         }
@@ -118,19 +120,19 @@ public class LogicOfDroid {
     }
 
     public int makeCornerStep(){
-        if ((makeStep == false)&(arrayOfBtn[0].getText().equals(""))) {
+        if ((makeStep == false)&(arrayOfBtn[0].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 0;
         }
-        if ((makeStep == false)&(arrayOfBtn[2].getText().equals(""))) {
+        if ((makeStep == false)&(arrayOfBtn[2].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 2;
         }
-        if ((makeStep == false)&(arrayOfBtn[5].getText().equals(""))) {
+        if ((makeStep == false)&(arrayOfBtn[5].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 5;
         }
-        if ((makeStep == false)&(arrayOfBtn[8].getText().equals(""))) {
+        if ((makeStep == false)&(arrayOfBtn[8].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 8;
         }
@@ -154,21 +156,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[1].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[2].getText().equals(""))) {
+                & (arrayOfBtn[2].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 2;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[2].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[1].getText().equals(""))) {
+                & (arrayOfBtn[1].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 1;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[1].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[2].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[0].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 0;
         }
@@ -176,21 +178,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[3].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[5].getText().equals(""))) {
+                & (arrayOfBtn[5].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 5;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[3].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[5].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[4].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 4;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[5].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[3].getText().equals(""))) {
+                & (arrayOfBtn[3].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 3;
         }
@@ -199,21 +201,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[6].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[7].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[8].getText().equals(""))) {
+                & (arrayOfBtn[8].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 8;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[6].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[8].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[7].getText().equals(""))) {
+                & (arrayOfBtn[7].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 7;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[7].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[8].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[6].getText().equals(""))) {
+                & (arrayOfBtn[6].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 6;
         }
@@ -222,21 +224,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[3].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[6].getText().equals(""))) {
+                & (arrayOfBtn[6].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 6;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[6].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[3].getText().equals(""))) {
+                & (arrayOfBtn[3].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 3;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[3].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[6].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[0].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 0;
         }
@@ -245,21 +247,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[1].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[7].getText().equals(""))) {
+                & (arrayOfBtn[7].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 7;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[1].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[7].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[4].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 4;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[7].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[1].getText().equals(""))) {
+                & (arrayOfBtn[1].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 1;
         }
@@ -268,21 +270,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[2].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[5].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[8].getText().equals(""))) {
+                & (arrayOfBtn[8].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 8;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[2].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[8].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[5].getText().equals(""))) {
+                & (arrayOfBtn[5].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 5;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[5].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[8].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[2].getText().equals(""))) {
+                & (arrayOfBtn[2].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 2;
         }
@@ -291,21 +293,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[8].getText().equals(""))) {
+                & (arrayOfBtn[8].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 8;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[8].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[4].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 4;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[8].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[0].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 0;
         }
@@ -314,21 +316,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[2].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[6].getText().equals(""))) {
+                & (arrayOfBtn[6].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 6;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[2].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[6].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[4].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 4;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[4].getText().equals(rightPlr.getSymbol()))
                 & (arrayOfBtn[6].getText().equals(rightPlr.getSymbol()))
-                & (arrayOfBtn[2].getText().equals(""))) {
+                & (arrayOfBtn[2].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 2;
         }
@@ -341,7 +343,7 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[1].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[2].getText().equals(""))) {
+                & (arrayOfBtn[2].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 2;
         }
@@ -349,7 +351,7 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[2].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[1].getText().equals(""))) {
+                & (arrayOfBtn[1].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 1;
 
@@ -357,7 +359,7 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[1].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[2].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[0].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 0;
         }
@@ -365,21 +367,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[3].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[5].getText().equals(""))) {
+                & (arrayOfBtn[5].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 5;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[3].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[5].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[4].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 4;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[5].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[3].getText().equals(""))) {
+                & (arrayOfBtn[3].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 3;
         }
@@ -388,21 +390,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[6].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[7].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[8].getText().equals(""))) {
+                & (arrayOfBtn[8].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 8;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[6].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[8].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[7].getText().equals(""))) {
+                & (arrayOfBtn[7].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 7;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[7].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[8].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[6].getText().equals(""))) {
+                & (arrayOfBtn[6].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 6;
         }
@@ -411,21 +413,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[3].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[6].getText().equals(""))) {
+                & (arrayOfBtn[6].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 6;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[6].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[3].getText().equals(""))) {
+                & (arrayOfBtn[3].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 3;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[3].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[6].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[0].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 0;
         }
@@ -434,21 +436,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[1].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[7].getText().equals(""))) {
+                & (arrayOfBtn[7].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 7;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[1].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[7].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[4].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 4;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[7].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[1].getText().equals(""))) {
+                & (arrayOfBtn[1].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 1;
         }
@@ -457,21 +459,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[2].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[5].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[8].getText().equals(""))) {
+                & (arrayOfBtn[8].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 8;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[2].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[8].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[5].getText().equals(""))) {
+                & (arrayOfBtn[5].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 5;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[5].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[8].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[2].getText().equals(""))) {
+                & (arrayOfBtn[2].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 2;
         }
@@ -480,21 +482,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[8].getText().equals(""))) {
+                & (arrayOfBtn[8].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 8;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[0].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[8].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[4].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 4;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[8].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[0].getText().equals(""))) {
+                & (arrayOfBtn[0].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 0;
         }
@@ -503,21 +505,21 @@ public class LogicOfDroid {
         if ((makeStep == false)
                 & (arrayOfBtn[2].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[6].getText().equals(""))) {
+                & (arrayOfBtn[6].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 6;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[2].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[6].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[4].getText().equals(""))) {
+                & (arrayOfBtn[4].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 4;
         }
         if ((makeStep == false)
                 & (arrayOfBtn[4].getText().equals(leftPlr.getSymbol()))
                 & (arrayOfBtn[6].getText().equals(leftPlr.getSymbol()))
-                & (arrayOfBtn[2].getText().equals(""))) {
+                & (arrayOfBtn[2].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 2;
         }

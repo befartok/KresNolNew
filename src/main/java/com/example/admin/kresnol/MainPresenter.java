@@ -43,6 +43,15 @@ public class MainPresenter {
     final String LASTRIGHTSPINN = "lastRightSpinn";
     final String LASTLEVELSPINN = "lastLevelSpinn";
 
+    final String X_SYMBOL = "x";
+    final String O_SYMBOL = "o";
+    final String EMPTY_SYMBOL = "";
+
+
+    final String LEFT = "left";
+    final String RIGHT = "right";
+    final String LEFT_NAME = "leftName";
+    final String RIGHT_NAME = "rightName";
 
     public MainPresenter(MainActivity mainActivity) {
         view = mainActivity;
@@ -63,10 +72,10 @@ public class MainPresenter {
 
         db.close();
 
-        leftPlayer.setSymbol("x");
+        leftPlayer.setSymbol(X_SYMBOL);
         leftPlayer.setActive(true);
 
-        rightPlayer.setSymbol("o");
+        rightPlayer.setSymbol(O_SYMBOL);
         rightPlayer.setActive(false);
 
         getArrayOfPlayer();
@@ -129,30 +138,12 @@ public class MainPresenter {
         //return updSpin;
     }
 
-    /*
-       //обновление массивов игроков и адаптеров спинеров после создания новых игроков
-       public boolean updateSpinner() {
-           boolean updSpin = false;
-           if (CreatePlayerActivity.isUpdateSpinner() | EditPlayerActivity.isUpdSpinner()) {
-               arrayOfPlayer.clear();
-               arrayOfPlayerForLeft.clear();
-               getArrayOfPlayer();
-               getArrayOfPlayerForLeft();
-               view.updateAdapters();
-
-               updSpin = true;
-           }
-           return updSpin;
-       }
-
-    */
-
     public void setSpinnerToNewPlayer() {
         //boolean setSpinnerToNewPlayer = false;
         if (CreatePlayerActivity.isSetPlayerToGame()) {
             //int position = view.adapter.getPosition(CreatePlayerActivity.getNamePlayerToSet());
 
-            if (CreatePlayerActivity.getPositionToSet().equals("left")) {
+            if (CreatePlayerActivity.getPositionToSet().equals(LEFT)) {
                 int positionForLeft = view.adapterForLeft.getPosition(CreatePlayerActivity.getNamePlayerToSet());
 
                 // если позиция удалялась и ее нет в адаптере, то ставим спиннеры по умолчанию
@@ -172,7 +163,7 @@ public class MainPresenter {
 
             }
 
-            if (CreatePlayerActivity.getPositionToSet().equals("right")) {
+            if (CreatePlayerActivity.getPositionToSet().equals(RIGHT)) {
                 Log.d(LOG_TAG, "CreatePlayerActivity.getNamePlayerToSet() = " + CreatePlayerActivity.getNamePlayerToSet());
 
                 int position = view.adapter.getPosition(CreatePlayerActivity.getNamePlayerToSet());
@@ -230,9 +221,9 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
     public void setSpinnersFromPreferences() {
 
 
-        String lastSpinLeft = view.prefs.getString(LASTLEFTSPINN, "");
-        String lastSpinRight = view.prefs.getString(LASTRIGHTSPINN, "");
-        String lastSpinLevel = view.prefs.getString(LASTLEVELSPINN, "");
+        String lastSpinLeft = view.prefs.getString(LASTLEFTSPINN, EMPTY_SYMBOL);
+        String lastSpinRight = view.prefs.getString(LASTRIGHTSPINN, EMPTY_SYMBOL);
+        String lastSpinLevel = view.prefs.getString(LASTLEVELSPINN, EMPTY_SYMBOL);
 
         //view.adapterForLeft.getPosition(lastSpinLeft);
 
@@ -333,16 +324,16 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
                     //первый выбор символа, установка активности
                     if ((model.clickedButtonsTotal == 0) & (model.numOfRestart == 0)) {
                         //Log.d(LOG_TAG, "128 clickedButtonsTotal=" + clickedButtonsTotal);
-                        if (leftPlayer.getSymbol().equals("x")) {
+                        if (leftPlayer.getSymbol().equals(X_SYMBOL)) {
                             leftPlayer.setActive(true);
 
                             //makeNameActive("leftButton");
-                            makeNameActive("leftName");
+                            makeNameActive(LEFT_NAME);
                             rightPlayer.setActive(false);
-                        } else if (leftPlayer.getSymbol().equals("o")) {
+                        } else if (leftPlayer.getSymbol().equals(O_SYMBOL)) {
                             leftPlayer.setActive(false);
                             //makeNameActive("rightButton");
-                            makeNameActive("rightName");
+                            makeNameActive(RIGHT_NAME);
                             rightPlayer.setActive(true);
                         }
                     }
@@ -396,6 +387,7 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
         switch (idMenu) {
 
             case R.id.menu_settings:
+                // TODO: 21.03.19 переименовать в менюСеттингс
                 view.setPrefs();
 
 
@@ -407,6 +399,10 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
                 return true;
             case R.id.menu_about:
                 view.menuAbout();
+                return true;
+
+            case R.id.menu_exit:
+                view.finish();
                 return true;
 
             default:
@@ -454,7 +450,6 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
 
     }
 
-    // TODO: 05.02.19 убрать нэйм из названия
     public void makeNameActive(String selectedSymbolsButton) {
 
         stopOfAnimation();
@@ -462,7 +457,7 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
         switch (selectedSymbolsButton) {
 
             //case "leftButton":
-            case "leftName":
+            case LEFT_NAME:
                 //((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
                 //((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
                 //((TextView) view.spinnerRight.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
@@ -481,7 +476,7 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
                 break;
 
             //case "rightButton":
-            case "rightName":
+            case RIGHT_NAME:
                 //view.imageOfLeftPlayer.clearAnimation();
                 // ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
                 //((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
@@ -510,7 +505,7 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
 
         for (int i = 0; i < 9; i++) {
             view.arrayOfButtons[i].setTextColor(Color.BLACK);
-            view.arrayOfButtons[i].setText("");
+            view.arrayOfButtons[i].setText(EMPTY_SYMBOL);
         }
 
         model.setStatusGames(view.getResources().getString(R.string.statusGamesReady));
@@ -536,20 +531,21 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
 
         if (leftPlayer.isActive()) {
             //makeNameActive("leftButton");
-            makeNameActive("leftName");
+            makeNameActive(LEFT_NAME);
         } else if (rightPlayer.isActive()) {
             //makeNameActive("rightButton");
-            makeNameActive("rightName");
+            makeNameActive(RIGHT_NAME);
         }
     }
 
     public void clickPlayFieldBtn(SquareButton btn) {
 
+        //запоминаем спинеры, когда нажата кнопка в поле
         saveSpinners();
 
         // проверка нажатости кнопки и закончившесяй игры
         if ((!model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesFinish)))
-                & (btn.getText().equals(""))) {
+                & (btn.getText().equals(EMPTY_SYMBOL))) {
 
             model.setStatusGames(view.getResources().getString(R.string.statusGamesInplay));
 
@@ -708,7 +704,6 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
         if ((view.arrayOfButtons[0].getText().equals(symbolActive))
                 & (view.arrayOfButtons[3].getText().equals(symbolActive))
                 & (view.arrayOfButtons[6].getText().equals(symbolActive))) {
-            //model.statusGames = "finish";
             model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[0].setTextColor(Color.RED);
@@ -721,7 +716,6 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
         if ((view.arrayOfButtons[1].getText().equals(symbolActive))
                 & (view.arrayOfButtons[4].getText().equals(symbolActive))
                 & (view.arrayOfButtons[7].getText().equals(symbolActive))) {
-            //model.statusGames = "finish";
             model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[1].setTextColor(Color.RED);
@@ -733,7 +727,6 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
         if ((view.arrayOfButtons[2].getText().equals(symbolActive))
                 & (view.arrayOfButtons[5].getText().equals(symbolActive))
                 & (view.arrayOfButtons[8].getText().equals(symbolActive))) {
-            //model.statusGames = "finish";
             model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[2].setTextColor(Color.RED);
@@ -745,7 +738,6 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
         if ((view.arrayOfButtons[0].getText().equals(symbolActive))
                 & (view.arrayOfButtons[4].getText().equals(symbolActive))
                 & (view.arrayOfButtons[8].getText().equals(symbolActive))) {
-            //model.statusGames = "finish";
             model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[0].setTextColor(Color.RED);
@@ -758,7 +750,6 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
                 & (view.arrayOfButtons[4].getText().equals(symbolActive))
                 & (view.arrayOfButtons[6].getText().equals(symbolActive))) {
 
-            //model.statusGames = "finish";
             model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[2].setTextColor(Color.RED);
@@ -814,14 +805,13 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
 
 
     public void setSpinnerLevelFromPreferences() {
-        String prefLevel = view.prefs.getString("pref_level", "");
+        String prefLevel = view.prefs.getString("pref_level", EMPTY_SYMBOL);
 
         //winLeft.setText(prefLevel);
         Log.d(LOG_TAG, "Уровень сложности установленный в настройках" + prefLevel);
 
         setSpinnerLevel(prefLevel);
-
-
+// TODO: 22.02.19 хардкод
         switch (prefLevel) {
             case "Easy":
                 view.spinnerLevel.setSelection(0);
@@ -892,6 +882,7 @@ Log.d(LOG_TAG, " getSpinnerLeft(); = "
                 setDefaultSpinners();
 
             } else {
+                // TODO: 22.02.19 вынести тосты в ресурсы
                 Toast.makeText(view.getBaseContext(), "нельзя выбрать одного игрока ", Toast.LENGTH_SHORT).show();
                 Log.d(LOG_TAG, "896 test ");
 

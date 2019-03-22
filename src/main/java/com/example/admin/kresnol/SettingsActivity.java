@@ -40,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
             addPreferencesFromResource(R.xml.preferences);
+            //находим преференсес в лайауте
             settingLevel = (ListPreference) this.findPreference("pref_level");
             //settingPlayers = (ListPreference)this.findPreference("pref_players");
             settingPlayers = (PreferenceCategory) this.findPreference("pref_players");
@@ -64,7 +65,6 @@ public class SettingsActivity extends AppCompatActivity {
             preference.setSummary((CharSequence) newValue);
 
             /*Toast.makeText(getActivity(),"Test of toast", Toast.LENGTH_SHORT).show();
-            createPlayers.setText("zzzz");
 */
             return true;
         }
