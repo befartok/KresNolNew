@@ -215,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
 
         // установка левого активным в первый раз
         presenter.makeNameActive(LEFT_NAME);
-        // Log.d(LOG_TAG, "тест цвета 2", ((TextView) spinnerLeft.getSelectedView()).getTextColors());
 
         // устанавливаем обработчик нажатия
         spinnerLeft.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -91,7 +91,6 @@ public class MainPresenter {
         for (RecordOfDb record : records) {
             arrayOfPlayer.add(record.getName());
 
-            //Log.d(LOG_TAG, "Имя: " + record.getName() + " сыграно: " + record.getTotalPlay());
             Log.d(LOG_TAG, "Имя: " + record.getName());
         }
         //return model.arrayOfPlayers;
@@ -111,7 +110,6 @@ public class MainPresenter {
             if (!record.getName().equals(view.getResources().getString(R.string.droids_name))) {
                 arrayOfPlayerForLeft.add(record.getName());
 
-                //Log.d(LOG_TAG, "Имя: " + record.getName() + " сыграно: " + record.getTotalPlay());
                 Log.d(LOG_TAG, "Имя1: " + record.getName());
             }
 
@@ -297,7 +295,6 @@ public class MainPresenter {
                 Log.d(LOG_TAG, "92 click test");
 
 
-                //if (model.statusGames == "ready") {
                 if (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesReady))) {
 
                     // меняет символ
@@ -305,16 +302,13 @@ public class MainPresenter {
 
                     //первый выбор символа, установка активности
                     if ((model.clickedButtonsTotal == 0) & (model.numOfRestart == 0)) {
-                        //Log.d(LOG_TAG, "128 clickedButtonsTotal=" + clickedButtonsTotal);
                         if (leftPlayer.getSymbol().equals(X_SYMBOL)) {
                             leftPlayer.setActive(true);
 
-                            //makeNameActive("leftButton");
                             makeNameActive(LEFT_NAME);
                             rightPlayer.setActive(false);
                         } else if (leftPlayer.getSymbol().equals(O_SYMBOL)) {
                             leftPlayer.setActive(false);
-                            //makeNameActive("rightButton");
                             makeNameActive(RIGHT_NAME);
                             rightPlayer.setActive(true);
                         }
@@ -325,7 +319,6 @@ public class MainPresenter {
             //перезапуск
             case R.id.layout0:
 
-                //if (model.statusGames == "finish") {
                 if (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesFinish))) {
                     restartGame();
                 }
@@ -440,7 +433,6 @@ public class MainPresenter {
 
         switch (selectedSymbolsButton) {
 
-            //case "leftButton":
             case LEFT_NAME:
                 //((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsTextActive));
                 //((TextView) view.spinnerLeft.getSelectedView()).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 28);
@@ -459,7 +451,6 @@ public class MainPresenter {
 
                 break;
 
-            //case "rightButton":
             case RIGHT_NAME:
                 //view.imageOfLeftPlayer.clearAnimation();
                 // ((TextView) view.spinnerLeft.getSelectedView()).setTextColor(view.getResources().getColor(R.color.buttonsText));
@@ -514,10 +505,8 @@ public class MainPresenter {
         rightPlayer.setActive(tempActive);
 
         if (leftPlayer.isActive()) {
-            //makeNameActive("leftButton");
             makeNameActive(LEFT_NAME);
         } else if (rightPlayer.isActive()) {
-            //makeNameActive("rightButton");
             makeNameActive(RIGHT_NAME);
         }
     }
@@ -553,7 +542,6 @@ public class MainPresenter {
 
             //проверка числа нажатых кнопок
             if (model.clickedButtonsTotal == 9) {
-                //model.statusGames = "finish";
                 model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
                 stopOfAnimation();
 
@@ -573,7 +561,6 @@ public class MainPresenter {
             }
 
         }
-        //else if (model.statusGames == "finish") {
         else if (model.getStatusGames().equals(view.getResources().getString(R.string.statusGamesFinish))) {
             restartGame();
         }
@@ -585,7 +572,6 @@ public class MainPresenter {
         SharedPreferences.Editor ed = view.prefs.edit();
         ed.putString(LASTLEFTSPINN, view.spinnerLeft.getSelectedItem().toString());
         ed.putString(LASTRIGHTSPINN, view.spinnerRight.getSelectedItem().toString());
-   //     Log.d(LOG_TAG, "position = " + position);//-1
 
         if (view.spinnerRight.getSelectedItem().toString().equals(view.getResources().getString(R.string.droids_name))) {
             Log.d(LOG_TAG, "589 view.spinnerLevel.getSelectedItem().toString() = " + view.spinnerLevel.getSelectedItem().toString());
@@ -594,8 +580,6 @@ public class MainPresenter {
 
 
             ed.putString("pref_level", view.spinnerLevel.getSelectedItem().toString());
-            //view.prefs.edit().putString("pref_level", view.spinnerLevel.getSelectedItem().toString()).commit();
-            //SettingsActivity.SettingsFragment.settingLevel=LASTLEVELSPINN;
 
 
         }
@@ -613,7 +597,6 @@ public class MainPresenter {
         Log.d(LOG_TAG, "rightPlayer = " + rightPlayer.getName());
 
         db.addGame(leftPlayer.getName(), rightPlayer.getName());
-        //db.addGame("Player1", "Player2");
 
         db.close();
     }
@@ -657,7 +640,6 @@ public class MainPresenter {
                 & (view.arrayOfButtons[2].getText().equals(symbolActive))) {
 
 
-            //model.statusGames = "finish";
             model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
             view.arrayOfButtons[0].setTextColor(Color.RED);
             view.arrayOfButtons[1].setTextColor(Color.RED);
@@ -670,7 +652,6 @@ public class MainPresenter {
                 & (view.arrayOfButtons[4].getText().equals(symbolActive))
                 & (view.arrayOfButtons[5].getText().equals(symbolActive))) {
 
-            //model.statusGames = "finish";
             model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[3].setTextColor(Color.RED);
@@ -684,7 +665,6 @@ public class MainPresenter {
                 & (view.arrayOfButtons[7].getText().equals(symbolActive))
                 & (view.arrayOfButtons[8].getText().equals(symbolActive))) {
 
-            //model.statusGames = "finish";
             model.setStatusGames(view.getResources().getString(R.string.statusGamesFinish));
 
             view.arrayOfButtons[6].setTextColor(Color.RED);
@@ -798,6 +778,8 @@ public class MainPresenter {
 
 
     public void setSpinnerLevelFromPreferences() {
+        // TODO: 22.02.19 хардкод
+
         String prefLevel = view.prefs.getString("pref_level", EMPTY_SYMBOL);
 
         //winLeft.setText(prefLevel);
