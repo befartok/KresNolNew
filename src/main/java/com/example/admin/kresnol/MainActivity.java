@@ -270,12 +270,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                //Toast.makeText(getBaseContext(), "Position = " + position, Toast.LENGTH_SHORT).show();
                 presenter.setSpinnerLevel(spinnerLevel.getSelectedItem().toString());
-
-                //установка  уровня  в преференс из спинера
-                // TODO: 13.12.18 проверить не работает?
-               // prefs.edit().putString("pref_level", spinnerLevel.getSelectedItem().toString()).commit();
             }
 
             @Override
@@ -289,10 +284,6 @@ public class MainActivity extends AppCompatActivity {
         //определение кнопки выбора символов
         symbolOfBtnLeftPlayer = (Button) findViewById(R.id.buttonSymbolLeftPlayer);
         symbolOfBtnRightPlayer = (Button) findViewById(R.id.buttonSymbolRightPlayer);
-
-
-
-
 
     }
 
@@ -312,7 +303,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "150 onclick test");
 
 
-        // TODO: 20.02.19 зашел-вышел в меню, а спинеры сбросились на начальные
 
         // TODO: 20.04.18 сделать анимацию зачеркивания выигрышных кнопок
 
@@ -324,14 +314,13 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO тексты вынести в константы или ресурсы
 
-// TODO: 21.03.19 не запоминает уровень в спинере после выхода
 
         // обработку нажатий
         presenter.click(v.getId());
 
     }
 
-    public void setPrefs() {
+    public void setSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }

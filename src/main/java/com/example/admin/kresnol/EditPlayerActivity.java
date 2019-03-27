@@ -145,7 +145,7 @@ public class EditPlayerActivity extends AppCompatActivity {
         // проверка на уникальность имени
         if (db.checkName(nameToDialog.getText().toString())) {
 
-            Toast toast= Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует",Toast.LENGTH_LONG);
+            Toast toast= Toast.makeText(getBaseContext(),R.string.playerIsAlreadyExist, Toast.LENGTH_LONG);
             //Выставляем положение сообщения вверху экрана:
             toast.setGravity(Gravity.TOP,0,0);
             toast.show();
@@ -176,7 +176,7 @@ public class EditPlayerActivity extends AppCompatActivity {
                 |(playersName.equals(getResources().getString(R.string.players1_name)))
                 |(playersName.equals(getResources().getString(R.string.players2_name))))
         {
-            Toast.makeText(getBaseContext(),"Стандартного игрока "+playersName+" удалять нельзя",
+            Toast.makeText(getBaseContext(),getString(R.string.doNotDelDefaultPlayerPart1)+playersName+getString(R.string.doNotDelDefaultPlayerPart2),
                     Toast.LENGTH_SHORT).show();
         }else {
 

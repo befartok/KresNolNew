@@ -64,8 +64,6 @@ public class SettingsActivity extends AppCompatActivity {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             preference.setSummary((CharSequence) newValue);
 
-            /*Toast.makeText(getActivity(),"Test of toast", Toast.LENGTH_SHORT).show();
-*/
             return true;
         }
     }

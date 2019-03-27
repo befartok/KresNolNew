@@ -36,21 +36,30 @@ public class CreatePlayerActivity extends AppCompatActivity {
 
     static boolean  setPlayerToGame=false;
 
-    static public String getPositionToSet() {
-        return positionToSet;
+    static public String getNameLeftPlayerToSet() {
+        return nameLeftPlayerToSet;
+    }
+    static public String getNameRightPlayerToSet() {
+        return nameRightPlayerToSet;
     }
 
-    static public String getNamePlayerToSet() {
-        return namePlayerToSet;
+
+    public static boolean isLeftPositionToSet() {
+        return leftPositionToSet;
     }
 
-    static String positionToSet;
-    static String namePlayerToSet;
+    static boolean leftPositionToSet=false;
+
+    public static boolean isRightPositionToSet() {
+        return rightPositionToSet;
+    }
+
+    static boolean rightPositionToSet = false;
+    static String nameLeftPlayerToSet;
+    static String nameRightPlayerToSet;
 
 
     final String LOG_TAG = "myLogs";
-    final String LEFT = "left";
-    final String RIGHT = "right";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,53 +85,55 @@ public class CreatePlayerActivity extends AppCompatActivity {
 
     public void onclick(View v) {
 
-        //String nameOfPlayer;
 
         switch (v.getId()) {
-            case R.id.buttonCreate:
 
-                //nameOfPlayer = etNameOfPlayer.getText().toString();
+            //нажатие кнопки ок
+            case R.id.buttonCreate:
 
                 db = new Db(this);
 
+                //проверяем игрока на существование в бд
                 if (db.checkName(etNameOfPlayer.getText().toString())) {
 
-                    Toast toast = Toast.makeText(getBaseContext(), "Игрок с таким именем уже существует", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(getBaseContext(), R.string.playerIsAlreadyExist, Toast.LENGTH_LONG);
                     //Выставляем положение сообщения вверху экрана:
                     toast.setGravity(Gravity.TOP, 0, 0);
                     toast.show();
-                    //Toast.makeText(getBaseContext(),"Игрок с таким именем уже существует", Toast.LENGTH_SHORT).show();
 
                 } else {
-// TODO: 10.02.19 не учтена возможность одновременной установки и лефт и райт
 
+                    //добавляем игрока в бд
                     db.addPlayer(etNameOfPlayer.getText().toString());
 
                     updateSpinner = true;
+
+                    //проверяем чекбокс установить игрока слева
                     if (rbSetLeft.isChecked()) {
-                        positionToSet=LEFT;
-                        namePlayerToSet=etNameOfPlayer.getText().toString();
+                        leftPositionToSet=true;
+                        nameLeftPlayerToSet=etNameOfPlayer.getText().toString();
 
                         setPlayerToGame = true;
 
                     };
+
+                    //проверяем чекбокс установить игрока справа
                     if (rbSetRight.isChecked()) {
 
-                        positionToSet=RIGHT;
-                        namePlayerToSet=etNameOfPlayer.getText().toString();
+                        rightPositionToSet=true;
+                        nameRightPlayerToSet=etNameOfPlayer.getText().toString();
 
                         setPlayerToGame = true;
 
                     }
 
                     onBackPressed();// возврат на предыдущий activity
-
-
                 }
+
                 db.close();
                 break;
 
-
+            //нажатие кнопки отмена
             case R.id.btnCancel:
                 Log.i(LOG_TAG, "btnCancel");
 

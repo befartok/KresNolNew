@@ -52,6 +52,11 @@
     <string name="title_activity_high_score">Таблица рекордов</string>
     <string name="title_activity_create_player">Создать игрока</string>
     <string name="title_activity_edit_player">Изменить игрока</string>
+    <string name="playerIsAlreadyExist">Игрок с таким именем уже существует</string>
+    <string name="doNotChooseEqualsPlayer">Нельзя выбрать одного игрока</string>
+    <string name="setDefaultPlayers">установлены начальные игроки</string>
+    <string name="doNotDelDefaultPlayerPart1">Стандартного игрока</string>
+    <string name="doNotDelDefaultPlayerPart2">удалять нельзя</string>
 
 
 </resources>

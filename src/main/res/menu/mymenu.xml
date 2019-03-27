@@ -7,38 +7,7 @@
             android:title="Настройки"></item>
     </group>
 
-    <!--<group android:id="@+id/group1">
-        <item
-            android:id="@+id/menu_setting_player"
-            android:orderInCategory="1"
 
-            android:title="Настройки игрока">
-
-
-            <menu>
-
-                <item
-                    android:id="@+id/menu_create_player"
-                    android:orderInCategory="1"
-                    android:title="Создать игрока"></item>
-                <item
-                    android:id="@+id/menu_edit_player"
-                    android:orderInCategory="2"
-                    android:title="Изменить игрока"></item>
-                <item
-                    android:id="@+id/menu_delete_player"
-                    android:orderInCategory="4"
-                    android:title="Удалить игрока"></item>
-
-            </menu>
-
-        </item>
-
-        <item
-            android:id="@+id/menu_level"
-            android:orderInCategory="5"
-            android:title="Выбрать сложность"></item>
-    </group>-->
     <item
         android:id="@+id/menu_records"
         android:orderInCategory="6"
