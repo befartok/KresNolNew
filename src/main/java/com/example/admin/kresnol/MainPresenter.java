@@ -32,6 +32,7 @@ public class MainPresenter {
 
     final String LOG_TAG = "myLogs";
 
+
     boolean equalsPlayersLeft = false;
     boolean equalsPlayers = false;
 
@@ -78,6 +79,8 @@ public class MainPresenter {
 
         getArrayOfPlayer();
         getArrayOfPlayerForLeft();
+
+
 
     }
 
@@ -201,9 +204,13 @@ public class MainPresenter {
     public void setSpinnersFromPreferences() {
 
 
+// TODO: 28.03.19 если выбрал сложность через меню, но не стал играть, то при первом запуске ставятся начальные игроки 
         String lastSpinLeft = view.prefs.getString(LASTLEFTSPINN, EMPTY_SYMBOL);
         String lastSpinRight = view.prefs.getString(LASTRIGHTSPINN, EMPTY_SYMBOL);
-        String lastSpinLevel = view.prefs.getString(LASTLEVELSPINN, EMPTY_SYMBOL);
+        //String lastSpinLevel = view.prefs.getString(LASTLEVELSPINN, EMPTY_SYMBOL);
+        String lastSpinLevel = view.prefs.getString("pref_level", EMPTY_SYMBOL);
+
+
 
 
         //проверяем, если удалялись игроки из настроек для запуска, то устанавливаем спинеры по умолчанию
@@ -566,10 +573,12 @@ public class MainPresenter {
         }
     }
 
-    // TODO: 12.01.19 вынести префс из вью в презентер
+  
     // запоминаем в настройках спинеры
     public void saveSpinners() {
+
         SharedPreferences.Editor ed = view.prefs.edit();
+
         ed.putString(LASTLEFTSPINN, view.spinnerLeft.getSelectedItem().toString());
         ed.putString(LASTRIGHTSPINN, view.spinnerRight.getSelectedItem().toString());
 

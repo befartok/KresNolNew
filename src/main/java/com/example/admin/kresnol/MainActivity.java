@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
         db.close();*/
 
         // presenter.getArrayOfPlayer();
+        Log.d(LOG_TAG, " onCreateEnd" );
+
     }
 
     protected void onResume() {
