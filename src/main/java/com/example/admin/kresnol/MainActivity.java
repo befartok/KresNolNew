@@ -17,10 +17,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-//это вью паттерна мвп
 public class MainActivity extends AppCompatActivity {
 
     final String LOG_TAG = "myLogs";
@@ -49,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences prefs;
 
-
-    Db db;
-
     ArrayAdapter<String> adapter;
     ArrayAdapter<String> adapterForLeft;
     ArrayAdapter<String> adapterLevel;
@@ -68,63 +63,18 @@ public class MainActivity extends AppCompatActivity {
 
         presenter.setSpinnersFromPreferences();
 
-
-        /*db = new Db(this);
-        db.upgradeBase();
-        *//*db.deleteItem(1);
-        db.deleteItem(2);*//*
-
-        //db.addPlayer("Player 1");
-
-
-        db.close();*/
-
-
-        //db = new Db(this);
-
-        //db.addGame("Player1", "Player2");
-
-
-        // получаем количество записей в базе перед изменениями
-        /*int mCount = db.getItemCount();
-        Log.d(LOG_TAG, "Количество записей в базе:" + mCount);
-*/
-        // обновляем запись с id = 1 (меняем email)
-        //db.updateEmail("Igor", "newemail@newemail.com");
-
-        // удаляем запись с id = 3
-        //db.deleteItem(3);
-
-
-        // выводим все имеющиеся записи в лог
-        //        List<RecordOfDb> records = db.getNamesFromDb();
-        //Log.d(LOG_TAG, "Имя: " + record.getName());
-
-
-        /*db = new Db(this);
-        List<RecordOfDb> records = db.getRecordOfDb();
-        for (RecordOfDb record : records) {
-            Log.d(LOG_TAG, "Имя: " + record.getName() + " сыграно: " + record.getTotalPlay());
-        }
-
-        db.close();*/
-
-        // presenter.getArrayOfPlayer();
         Log.d(LOG_TAG, " onCreateEnd" );
 
     }
 
     protected void onResume() {
 
+        Log.d(LOG_TAG, " onResume " );
         presenter.setSpinnerLevelFromPreferences();
 
-        presenter.updateSpinner();
+        presenter.checkChangePlayer();
 
-
-        Log.d(LOG_TAG, " onResume " );
-       // presenter.setSpinnerColor();
-
-        presenter.setSpinnerToNewPlayer();
+        presenter.checkSpinnerToNewPlayer();
 
         Log.d(LOG_TAG, " onResume end" );
 
@@ -163,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         presenter = new MainPresenter(this);
 
-        //определение кнопки игрового поля
+        //определение кнопок игрового поля
         arrayOfButtons[0] = (SquareButton) findViewById(R.id.button0);
         arrayOfButtons[1] = (SquareButton) findViewById(R.id.button1);
         arrayOfButtons[2] = (SquareButton) findViewById(R.id.button2);
@@ -174,15 +124,16 @@ public class MainActivity extends AppCompatActivity {
         arrayOfButtons[7] = (SquareButton) findViewById(R.id.button7);
         arrayOfButtons[8] = (SquareButton) findViewById(R.id.button8);
 
-        //определени текст вью для счета
+        //определение текст вью для счета
         winLeft = (TextView) findViewById(R.id.totalWinLeftPlayer);
         winRight = (TextView) findViewById(R.id.totalWinRightPlayer);
 
+        // заполнение массива игроков из БД для использования в спинерах
+        presenter.getArrayOfPlayer();
+        presenter.getArrayOfPlayerForLeft();
 
-        // адаптер
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfPlayer());
+        // адаптер для спинеров
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.arrayOfPlayer);
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.arrayOfPlayer);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         adapterForLeft = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.arrayOfPlayerForLeft);
@@ -198,41 +149,28 @@ public class MainActivity extends AppCompatActivity {
         spinnerRight = (Spinner) findViewById(R.id.spinnerRight);
         spinnerRight.setAdapter(adapter);
 
-        // устанавливаем элемент
-        //spinnerLeft.setSelection(0, true);
+        // устанавливаем спинер
         spinnerLeft.setSelection(0);
         // запоминать спинер
         presenter.setSpinnerLeft(spinnerLeft.getSelectedItem().toString());
 
-        //spinnerRight.setSelection(1,true);
         spinnerRight.setSelection(1);
         presenter.setSpinnerRight(spinnerRight.getSelectedItem().toString());
 
-
-        //устанавливаем цвет спинера
-       /* ((TextView) spinnerLeft.getSelectedView()).setTextColor(getResources().getColor(R.color.buttonsTextActive));
-        ((TextView) spinnerRight.getSelectedView()).setTextColor(getResources().getColor(R.color.colorAccent));
-*/
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.tv_animation);
 
-        // установка левого активным в первый раз
-        presenter.makeNameActive(LEFT_NAME);
+        // установка левого игрока активным в первый раз
+        presenter.makeIconActive(LEFT_NAME);
 
         // устанавливаем обработчик нажатия
         spinnerLeft.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-           // boolean equalsPlayersLeft = false;
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                Log.d(LOG_TAG, "218 ma presenter.checkEqualsSpinnerLeft();" );
 
-
+                //проверка равенства выбранных спинеров
                 presenter.checkEqualsSpinnerLeft();
-
-               // presenter.setSpinnerColor(presenter.leftPlayer,parent);
-
-
             }
 
             @Override
@@ -241,16 +179,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         spinnerRight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            //boolean equalsPlayers = false;
-
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                Log.d(LOG_TAG, "240 ma presenter.checkEqualsSpinnerRight();" );
-                //((TextView) spinnerRight.getSelectedView()).setTextColor(getResources().getColor(R.color.colorAccent));
 
-
+                //проверка равенства выбранных спинеров
                 presenter.checkEqualsSpinnerRight();
 
             }
@@ -260,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //ArrayAdapter<String> adapterLevel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfLevel);
         adapterLevel = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, presenter.getArrayOfLevel());
         adapterLevel.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -279,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //проверка видимости спинера уровня
         presenter.checkVisibilitySpinnerLevel();
 
 
@@ -293,35 +227,16 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         adapterForLeft.notifyDataSetChanged();
 
-        Log.d(LOG_TAG, "updateAdapters main");
-
-
     }
 
-
+    // обработка нажатий
     public void onclick(View v) {
 
-        Log.d(LOG_TAG, "150 onclick test");
-
-
-
-        // TODO: 20.04.18 сделать анимацию зачеркивания выигрышных кнопок
-
-        //// TODO: 22.09.18 добавить тесты
-
-        // TODO: 15.10.18 вынести БД в другой поток
-
-        // TODO: 22.12.18 перенести методы из вью в презентер
-
-        //TODO тексты вынести в константы или ресурсы
-
-
-        // обработку нажатий
         presenter.click(v.getId());
 
     }
 
-    public void setSettings() {
+    public void menuSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
