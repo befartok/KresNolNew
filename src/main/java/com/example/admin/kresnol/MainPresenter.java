@@ -256,7 +256,6 @@ class MainPresenter {
             setDefaultSpinners();
         }
 
-        //todo разбить на методы?
         //иначе устанавливаем спинеры из настроек
         else {
             int positionLastSpinLeft = view.adapterForLeft.getPosition(lastSpinLeft);
@@ -324,6 +323,7 @@ class MainPresenter {
         } else view.spinnerLevel.setVisibility(View.INVISIBLE);
     }
 
+    //обработка нажатий
     void click(Integer id) {
 
         switch (id) {
@@ -395,6 +395,7 @@ class MainPresenter {
         }
     }
 
+    //нажатия в меню
     boolean clickMenu(Integer idMenu) {
 
         Log.d(LOG_TAG, "clickMenu ");
@@ -544,7 +545,6 @@ class MainPresenter {
             //отключение изменяемости кнопок выбора символа и игроков
             disableChangeSymbol();
 
-            // TODO: 08.04.19 вынести в метод?
             //установка в нажатую кнопку акивного символа
             if (leftPlayer.isActive()) {
                 btn.setText(leftPlayer.getSymbol());
@@ -827,7 +827,6 @@ class MainPresenter {
 
                 setDefaultSpinners();
             }
-// TODO: 13.02.19 проверить клирскоре везде
             //сброс счетчика счета
             if (equalsPlayersRight == false) {
                 clearScore();

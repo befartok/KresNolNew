@@ -6,28 +6,23 @@ package com.example.admin.kresnol;
 
 //модель базы данных
 
-public class RecordOfDb {
+class RecordOfDb {
 
     private Integer id;
     private String name;
     private Integer totalPlay;
     private Integer totalWin;
-    private Integer totalLose;
 
-    RecordOfDb() {
-    }
 
-    public RecordOfDb(Integer id, String name, Integer totalPlay, Integer totalWin
-                      //        , Integer totalLose
+    RecordOfDb(Integer id, String name, Integer totalPlay, Integer totalWin
     ) {
         this.id = id;
         this.name = name;
         this.totalPlay = totalPlay;
         this.totalWin = totalWin;
-        //       this.totalLose = totalLose;
     }
 
-    public RecordOfDb(String name) {
+    RecordOfDb(String name) {
         this.name = name;
     }
 

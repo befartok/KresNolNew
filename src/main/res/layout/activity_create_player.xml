@@ -11,7 +11,7 @@
         android:layout_marginTop="3dp"
         android:layout_marginLeft="11dp"
 
-        android:text="Введите имя" />
+        android:text="@string/inputName" />
 
     <EditText
         android:id="@+id/editTextName"
@@ -23,7 +23,7 @@
 
         android:inputType="textPersonName"
 
-        android:text="Name" />
+        android:text="@string/name" />
 
     <TextView
         android:id="@+id/textView"
@@ -32,9 +32,9 @@
         android:layout_marginLeft="11dp"
 
         android:layout_marginTop="2dp"
-        android:text="Выбрать игрока для игры" />
+        android:text="@string/setPlayerForGame" />
 
-    <LinearLayout
+    <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
@@ -48,7 +48,7 @@
             android:layout_marginLeft="11dp"
             android:layout_weight="1"
 
-            android:text="Установить левым"
+            android:text="@string/setToLeft"
 
             />
 
@@ -59,9 +59,9 @@
             android:layout_marginRight="11dp"
             android:layout_weight="1"
 
-            android:text="Установить правым" />
+            android:text="@string/setToRight" />
 
-    </LinearLayout>
+    </RadioGroup>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,7 +76,7 @@
             android:layout_marginLeft="11dp"
             android:layout_weight="0.7"
             android:onClick="onclick"
-            android:text="OK" />
+            android:text="@string/ok" />
 
         <Button
             android:id="@+id/btnCancel"
@@ -86,7 +86,7 @@
             android:onClick="onclick"
 
             android:layout_weight="0.7"
-            android:text="CANCEL" />
+            android:text="@string/cancel" />
     </LinearLayout>
 
 </LinearLayout>

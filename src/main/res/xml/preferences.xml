@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--    <CheckBoxPreference
-            android:key="chb1"
-            android:summary="@string/pref_checkbox_summary"
-            android:title="@string/pref_checkbox_title">
-        </CheckBoxPreference>-->
     <PreferenceCategory android:title="@string/level_header">
         <ListPreference
             android:entries="@array/levels_array"
@@ -18,45 +13,32 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_players_title"
-        android:key="pref_players">
+        android:key="pref_players"
+        android:title="@string/pref_players_title">
+
 
         <Preference
+            android:id="@+id/prefActivityCreatePlayer"
+            android:key="pref_create_players"
+
+            android:onClick="onclick"
+
             android:title="@string/title_activity_create_player"
 
-            android:key="pref_create_players">
-            <intent
-                android:action="intent.action.create.player">
-            </intent>
-
-            </Preference>
-
-    </PreferenceCategory>
-
-        <Preference
-            android:title="@string/title_activity_edit_player"
-
-            android:key="pref_edit_players">
-
-            <intent
-                android:action="intent.action.edit.player">
-            </intent>
-
+            >
 
 
         </Preference>
 
-    <!--<ListPreference
-        android:entries="@array/players_settings"
+    </PreferenceCategory>
 
-        android:entryValues="@array/players_settings_values"
-            android:key="pref_players"
+    <Preference
+        android:key="pref_edit_players"
 
-        android:summary=""
+        android:title="@string/title_activity_edit_player">
 
+        <intent android:action="intent.action.edit.player"></intent>
 
-        android:title="@string/pref_players_title">
-        </ListPreference>
+    </Preference>
 
--->
 </PreferenceScreen>

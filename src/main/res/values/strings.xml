@@ -14,7 +14,7 @@
 
 
     <string name="statusGamesReady">ready</string>
-    <string name="statusGamesInplay">inplay</string>
+    <string name="statusGamesPlay">play</string>
     <string name="statusGamesFinish">finish</string>
 
 
@@ -23,19 +23,19 @@
     <string name="pref_checkbox_summary">Запомнить настройки и использовать в следующей игре</string>
     <string name="about_text">
         Крестики-нолики v1.0 \n
-        (c)2018 by Алексей Черкасов
+        ©2018 by Алексей Черкасов
     </string>
     <string name="about_title">О программе</string>
 
     <string-array name="levels_array">
-        <item>Easy</item>
-        <item>Normal</item>
-        <item>Hard</item>
+        <item>Легко</item>
+        <item>Нормально</item>
+        <item>Сложно</item>
     </string-array>
     <string-array name="levels_array_values">
-        <item>Easy</item>
-        <item>Normal</item>
-        <item>Hard</item>
+        <item>Легко</item>
+        <item>Нормально</item>
+        <item>Сложно</item>
     </string-array>
 
     <string name="pref_players_title">Настройки игроков</string>
@@ -57,6 +57,17 @@
     <string name="setDefaultPlayers">установлены начальные игроки</string>
     <string name="doNotDelDefaultPlayerPart1">Стандартного игрока</string>
     <string name="doNotDelDefaultPlayerPart2">удалять нельзя</string>
+    <string name="settings">Настройки</string>
+    <string name="high_score">Таблица рекордов</string>
+    <string name="about">О программе</string>
+    <string name="exit">Выход</string>
+    <string name="inputName">Введите имя</string>
+    <string name="name">Name</string>
+    <string name="setPlayerForGame">Выбрать игрока для игры</string>
+    <string name="setToLeft">Установить левым</string>
+    <string name="setToRight">Установить правым</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
 
 
 </resources>

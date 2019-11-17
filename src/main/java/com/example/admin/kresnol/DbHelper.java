@@ -10,43 +10,38 @@ import android.util.Log;
  * Created by admin on 09.10.18.
  */
 
-public class DbHelper extends SQLiteOpenHelper {
+class DbHelper extends SQLiteOpenHelper {
 
     private static final String LOG_TAG = "my_tag";
 
-    public static final String TABLE_NAME = "records";
-
-    public static final String KEY_ID = "_id";
-    public static final String KEY_NAME = "name";
-    public static final String KEY_TOTAL_PLAY = "totalPlay";
-    public static final String KEY_TOTAL_WIN = "totalWin";
+    static final String TABLE_NAME = "records";
+    static final String KEY_ID = "_id";
+    static final String KEY_NAME = "name";
+    static final String KEY_TOTAL_PLAY = "totalPlay";
+    static final String KEY_TOTAL_WIN = "totalWin";
 
     private static final String DATABASE_NAME = "recordsDB";
     private static final int DATABASE_VERSION = 1;
 
-    Context cnt;
+    private Context cnt;
 
-    String PlayersOneName;
-    String PlayersTwoName;
-    String PlayersAndroidName;
-
-    public DbHelper(Context context) {
+    DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
     }
 
-
-
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+/*        String playersOneName = cnt.getResources().getString(R.string.players1_name);
+        String playersTwoName = cnt.getResources().getString(R.string.players2_name);
+        String playersAndroidName = cnt.getResources().getString(R.string.droids_name);*/
 
-        PlayersOneName=cnt.getResources().getString(R.string.players1_name);
-        PlayersTwoName=cnt.getResources().getString(R.string.players2_name);
-        PlayersAndroidName=cnt.getResources().getString(R.string.droids_name);
+        String playersOneName = "Player 1";
+        String playersTwoName = "Player 2";
+        String playersAndroidName = "Android";
 
-
-        db.execSQL("create table " + TABLE_NAME +" ("
+        db.execSQL("create table " + TABLE_NAME + " ("
                 + KEY_ID + " integer primary key autoincrement,"
                 + KEY_NAME + " text,"
                 + KEY_TOTAL_PLAY + " text,"
@@ -56,20 +51,17 @@ public class DbHelper extends SQLiteOpenHelper {
 
         ContentValues cv = new ContentValues();
 
-        cv.put(KEY_NAME, PlayersOneName);
-        //cv.put(KEY_NAME, "Player 1");
+        cv.put(KEY_NAME, playersOneName);
         cv.put(KEY_TOTAL_PLAY, "0");
         cv.put(KEY_TOTAL_WIN, "0");
         db.insert(TABLE_NAME, null, cv);
 
-        cv.put(KEY_NAME, PlayersTwoName);
-        //cv.put(KEY_NAME, "Player 2");
+        cv.put(KEY_NAME, playersTwoName);
         cv.put(KEY_TOTAL_PLAY, "0");
         cv.put(KEY_TOTAL_WIN, "0");
         db.insert(TABLE_NAME, null, cv);
 
-        cv.put(KEY_NAME, PlayersAndroidName);
-        //cv.put(KEY_NAME, "Android");
+        cv.put(KEY_NAME, playersAndroidName);
         cv.put(KEY_TOTAL_PLAY, "0");
         cv.put(KEY_TOTAL_WIN, "0");
         db.insert(TABLE_NAME, null, cv);

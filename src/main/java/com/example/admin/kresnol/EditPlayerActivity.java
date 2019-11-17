@@ -2,15 +2,16 @@ package com.example.admin.kresnol;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -21,6 +22,7 @@ import android.widget.Toast;
  * Created by admin on 10.11.18.
  */
 
+//класс активити редактирования игрока
 public class EditPlayerActivity extends AppCompatActivity {
 
     final String LOG_TAG = "myLogs";
@@ -28,7 +30,6 @@ public class EditPlayerActivity extends AppCompatActivity {
     private Db db;
     private Cursor mCursor;
     private SimpleCursorAdapter mCursorAd;
-    private ListView mLv;
 
     final int DIALOG = 1;
 
@@ -43,8 +44,8 @@ public class EditPlayerActivity extends AppCompatActivity {
     RadioButton deletePlayer;
     long idOfRecord;
 
-    static boolean updSpinner=false;
 
+    SharedPreferences prefs;
 
 
     @Override
@@ -52,7 +53,7 @@ public class EditPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_player);
 
-        //initView();
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         db = new Db(this);
 
@@ -66,7 +67,7 @@ public class EditPlayerActivity extends AppCompatActivity {
                 R.id.edit_player_item_totalWin};
 
         //список игроков
-        mLv = (ListView) findViewById(R.id.edit_player_lv);
+        ListView mLv = (ListView) findViewById(R.id.edit_player_lv);
 
 
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -91,46 +92,50 @@ public class EditPlayerActivity extends AppCompatActivity {
 
 
     public void onclick(View v) {
+
         viewClicked = v.getId();
 
         switch (viewClicked) {
 
+            //переименовать игрока
             case R.id.dialog_rename:
-                    Log.i(LOG_TAG, "переименовать");
 
-                    nameToDialog.setEnabled(true);
+                nameToDialog.setEnabled(true);
 
-               break;
+                break;
 
+            //очистить статистику игрока
             case R.id.dialog_clear_stats:
-                    Log.i(LOG_TAG, "dialog_clear_stats");
 
-                    nameToDialog.setEnabled(false);
+                nameToDialog.setEnabled(false);
 
-               break;
+                break;
+
+            //удалить игрока
             case R.id.dialog_delete_player:
-                    Log.i(LOG_TAG, "delete_player");
+                Log.i(LOG_TAG, "delete_player");
 
-                    nameToDialog.setEnabled(false);
+                nameToDialog.setEnabled(false);
 
-               break;
+                break;
 
+            //отмена диалога
             case R.id.dialog_button_cancel:
                 dialog.dismiss();
                 break;
+
             case R.id.dialog_button_ok:
 
-                if (renamePlayer.isChecked()){
+                if (renamePlayer.isChecked()) {
 
                     renamePlayer();
                 }
-                if (clearStats.isChecked()){
+                if (clearStats.isChecked()) {
 
                     clearStats();
                 }
 
-                // TODO: 02.12.18 раскидать на MVP?
-                if (deletePlayer.isChecked()){
+                if (deletePlayer.isChecked()) {
 
                     deletePlayer();
                 }
@@ -145,21 +150,26 @@ public class EditPlayerActivity extends AppCompatActivity {
         // проверка на уникальность имени
         if (db.checkName(nameToDialog.getText().toString())) {
 
-            Toast toast= Toast.makeText(getBaseContext(),R.string.playerIsAlreadyExist, Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(getBaseContext(), R.string.playerIsAlreadyExist, Toast.LENGTH_LONG);
             //Выставляем положение сообщения вверху экрана:
-            toast.setGravity(Gravity.TOP,0,0);
+            toast.setGravity(Gravity.TOP, 0, 0);
             toast.show();
 
         } else {
             db.editName(idOfRecord, nameToDialog.getText().toString());
 
-            updSpinner = true;
+            SharedPreferences.Editor ed = prefs.edit();
+
+            //добавляем в преференсес флаг переименовать игрока
+            ed.putBoolean("renamePlayer", true);
+            ed.apply();
 
             closeDialog();
 
         }
     }
 
+    //очистка статистики
     private void clearStats() {
         Log.d(LOG_TAG, "clearStats");
 
@@ -168,40 +178,39 @@ public class EditPlayerActivity extends AppCompatActivity {
         closeDialog();
     }
 
+    //удаление игрока
     private void deletePlayer() {
         Log.d(LOG_TAG, "deletePlayer");
 
         // запретить удалять имена по умолчанию
         if (playersName.equals(getResources().getString(R.string.droids_name))
-                |(playersName.equals(getResources().getString(R.string.players1_name)))
-                |(playersName.equals(getResources().getString(R.string.players2_name))))
-        {
-            Toast.makeText(getBaseContext(),getString(R.string.doNotDelDefaultPlayerPart1)+playersName+getString(R.string.doNotDelDefaultPlayerPart2),
+                | (playersName.equals(getResources().getString(R.string.players1_name)))
+                | (playersName.equals(getResources().getString(R.string.players2_name)))) {
+            Toast.makeText(getBaseContext(), getString(R.string.doNotDelDefaultPlayerPart1) + playersName + getString(R.string.doNotDelDefaultPlayerPart2),
                     Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
 
             db.deleteItem(idOfRecord);
-            updSpinner = true;
+
+            SharedPreferences.Editor ed = prefs.edit();
+
+            //добавляем в преференсес флаг удалить игрока
+            ed.putBoolean("deletePlayer", true);
+            ed.apply();
 
             closeDialog();
         }
     }
 
-    public static boolean isUpdSpinner() {
-        return updSpinner;
-    }
-
     public void closeDialog() {
         mCursor = db.getAllItems();
-        mCursorAd.changeCursor(mCursor); // обновить список
+        // обновить список
+        mCursorAd.changeCursor(mCursor);
         removeDialog(DIALOG);
-
     }
 
 
-
-
-        @Override
+    @Override
     protected Dialog onCreateDialog(int id) {
 
         // создаем view из dialog_edit_player.xml

@@ -9,6 +9,7 @@ import android.widget.Button;
  * Created by admin on 14.08.18.
  */
 
+//класс создает квадратные кнопки
     public class SquareButton extends Button{
         public SquareButton(Context context) {
             super(context);
@@ -28,10 +29,7 @@ import android.widget.Button;
             setMeasuredDimension(width, width);
         }
 
-        /*@Override
-        protected void onSizeChanged(final int w, final int h, final int oldw, final int oldh) {
-            super.onSizeChanged(w, w, oldw, oldh);
-        }*/
+
     }
 
 

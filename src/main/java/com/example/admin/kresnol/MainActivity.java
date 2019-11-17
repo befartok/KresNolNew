@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+//запуск компонентов для инициализации
     private void init() {
 
          Log.d(LOG_TAG, "init");
@@ -236,11 +236,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //запуск активити меню Настройки
     public void menuSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
+    //запуск активити меню Таблица рекордов
     public void menuHighScore() {
         Intent intent = new Intent(MainActivity.this, HighScoreActivity.class);
 
@@ -248,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //запуск активити меню О программе
     public void menuAbout() {
         Intent intent = new Intent(MainActivity.this, AboutActivity.class);
         startActivity(intent);

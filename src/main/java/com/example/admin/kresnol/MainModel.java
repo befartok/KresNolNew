@@ -1,83 +1,123 @@
 package com.example.admin.kresnol;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import android.view.ViewGroup;
 
 /**
  * Created by admin on 26.07.18.
  */
 
-
-
-public class MainModel {
+//класс модели
+class MainModel {
     final String LOG_TAG = "myLogs";
 
 
-    int clickedButtonsTotal = 0;
+    int getClickedButtonsTotal() {
+        return clickedButtonsTotal;
+    }
 
-    public String getStatusGames() {
+    void setClickedButtonsTotal(int clickedButtonsTotal) {
+        this.clickedButtonsTotal = clickedButtonsTotal;
+    }
+
+    private int clickedButtonsTotal = 0;
+
+
+    String getStatusGames() {
         return statusGames;
     }
 
-    public void setStatusGames(String statusGames) {
+    void setStatusGames(String statusGames) {
         this.statusGames = statusGames;
     }
 
-    String statusGames = "ready";
+     private String statusGames;
 
-    int totalWinLeft = 0;
-    int totalWinRight = 0;
+    int getTotalWinLeft() {
+        return totalWinLeft;
+    }
 
-    int numOfRestart = 0;
+    void setTotalWinLeft(int totalWinLeft) {
+        this.totalWinLeft = totalWinLeft;
+    }
 
-    String[] arrayOfPlayers = {"Player 1", "Player 2", "Android"};
+    int getTotalWinRight() {
+        return totalWinRight;
+    }
 
-    boolean makeStep;
+    void setTotalWinRight(int totalWinRight) {
+        this.totalWinRight = totalWinRight;
+    }
 
-    String spinnerLeftValue;
-    String spinnerRightValue;
-    String spinnerLevelValue;
+    //счетчики побед левого и правого игроков
+    private int totalWinLeft = 0;
+    private int totalWinRight = 0;
+
+    int getNumOfRestart() {
+        return numOfRestart;
+    }
+
+    void setNumOfRestart(int numOfRestart) {
+        this.numOfRestart = numOfRestart;
+    }
+
+    //число перезапусков игры
+    private int numOfRestart = 0;
+
+
+    //спинеры игроков и уровня сложности
+    private String spinnerLeftValue;
+    private String spinnerRightValue;
+    private String spinnerLevelValue;
 
     //массив уровней игры
     String[] arrayOfLevel = new String[3];
 
-    public MainModel(String arrLv0, String arrLv1,String arrLv2) {
-        arrayOfLevel[0]=arrLv0;
-        arrayOfLevel[1]=arrLv1;
-        arrayOfLevel[2]=arrLv2;
+    //конструктор модели
+    MainModel(String arrLv0, String arrLv1, String arrLv2, String statusGames) {
+        arrayOfLevel[0] = arrLv0;
+        arrayOfLevel[1] = arrLv1;
+        arrayOfLevel[2] = arrLv2;
+
+        setStatusGames(statusGames);
 
     }
 
-    // TODO: 27.07.18 проверить гетеры и сеттеры насчет параметров и переменных
-
-    public String getSpinnerLeftValue() {
+    String getSpinnerLeftValue() {
         return spinnerLeftValue;
     }
 
-    public void setSpinnerLeftValue(String spinnerLeftValue) {
+    void setSpinnerLeftValue(String spinnerLeftValue) {
         this.spinnerLeftValue = spinnerLeftValue;
     }
 
-    public String getSpinnerRightValue() {
+    String getSpinnerRightValue() {
         return spinnerRightValue;
     }
 
-    public void setSpinnerRightValue(String spinnerRightValue) {
+    void setSpinnerRightValue(String spinnerRightValue) {
         this.spinnerRightValue = spinnerRightValue;
     }
-    public void setSpinnerLevelValue(String spinnerLevelValue) {
+
+    void setSpinnerLevelValue(String spinnerLevelValue) {
         this.spinnerLevelValue = spinnerLevelValue;
     }
 
-    public String getSpinnerLevelValue() {
+    String getSpinnerLevelValue() {
         return spinnerLevelValue;
     }
 
 
 
+    //массив линий выигрышей
+    int[][] winLines = {
+            { 0, 1, 2 },
+            { 3, 4, 5 },
+            { 6, 7, 8 },
+            { 0, 3, 6 },
+            { 1, 4, 7 },
+            { 2, 5, 8 },
+            { 0, 4, 8 },
+            { 2, 4, 6 }
+
+    };
 
 }

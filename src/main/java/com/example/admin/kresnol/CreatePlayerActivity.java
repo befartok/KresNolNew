@@ -1,6 +1,9 @@
 package com.example.admin.kresnol;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,6 +17,7 @@ import android.widget.Toast;
  * Created by admin on 03.11.18.
  */
 
+//класс активити создания нового игрока
 public class CreatePlayerActivity extends AppCompatActivity {
 
     EditText etNameOfPlayer;
@@ -22,42 +26,11 @@ public class CreatePlayerActivity extends AppCompatActivity {
     Button btnCreate;
     Button btnCancel;
 
+    SharedPreferences prefs;
+
+
+
     Db db;
-
-    public static boolean isUpdateSpinner() {
-        return updateSpinner;
-    }
-
-    static boolean  updateSpinner=false;
-
-    public static boolean isSetPlayerToGame() {
-        return setPlayerToGame;
-    }
-
-    static boolean  setPlayerToGame=false;
-
-    static public String getNameLeftPlayerToSet() {
-        return nameLeftPlayerToSet;
-    }
-    static public String getNameRightPlayerToSet() {
-        return nameRightPlayerToSet;
-    }
-
-
-    public static boolean isLeftPositionToSet() {
-        return leftPositionToSet;
-    }
-
-    static boolean leftPositionToSet=false;
-
-    public static boolean isRightPositionToSet() {
-        return rightPositionToSet;
-    }
-
-    static boolean rightPositionToSet = false;
-    static String nameLeftPlayerToSet;
-    static String nameRightPlayerToSet;
-
 
     final String LOG_TAG = "myLogs";
 
@@ -79,6 +52,7 @@ public class CreatePlayerActivity extends AppCompatActivity {
         btnCreate = (Button) findViewById(R.id.buttonCreate);
         btnCancel = (Button) findViewById(R.id.btnCancel);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     }
 
@@ -106,28 +80,45 @@ public class CreatePlayerActivity extends AppCompatActivity {
                     //добавляем игрока в бд
                     db.addPlayer(etNameOfPlayer.getText().toString());
 
-                    updateSpinner = true;
+                    SharedPreferences.Editor ed = prefs.edit();
+
+                    //добавляем в преференсес флаг о создании нового игрока
+                    ed.putBoolean("prefNewPlayer", true);
+                    ////добавляем в преференсес имя нового игрока
+                    ed.putString("prefNameNewPlayer", etNameOfPlayer.getText().toString());
 
                     //проверяем чекбокс установить игрока слева
                     if (rbSetLeft.isChecked()) {
-                        leftPositionToSet=true;
-                        nameLeftPlayerToSet=etNameOfPlayer.getText().toString();
 
-                        setPlayerToGame = true;
+                        //добавляем в преференсес флаг, что игрок выбран для установки левым игроком
+                        ed.putBoolean("leftPositionToSet", true);
 
-                    };
+                        //добавляем в преференсес имя нового игрока выбранного для установки левым игроком
+                        ed.putString("nameLeftPlayerToSet", etNameOfPlayer.getText().toString());
+
+                        //добавляем в преференсес флаг, установить игрока для игры
+                        ed.putBoolean("setPlayerToGame", true);
+
+                    }
 
                     //проверяем чекбокс установить игрока справа
                     if (rbSetRight.isChecked()) {
 
-                        rightPositionToSet=true;
-                        nameRightPlayerToSet=etNameOfPlayer.getText().toString();
+                        //добавляем в преференсес флаг, что игрок выбран для установки правым игроком
+                        ed.putBoolean("rightPositionToSet", true);
 
-                        setPlayerToGame = true;
+                        //добавляем в преференсес имя нового игрока выбранного для установки правым игроком
+                        ed.putString("nameRightPlayerToSet", etNameOfPlayer.getText().toString());
+
+                        //добавляем в преференсес флаг, установить игрока для игры
+                        ed.putBoolean("setPlayerToGame", true);
 
                     }
 
-                    onBackPressed();// возврат на предыдущий activity
+                    ed.apply();
+
+                    // возврат на предыдущий activity
+                    onBackPressed();
                 }
 
                 db.close();
@@ -135,16 +126,14 @@ public class CreatePlayerActivity extends AppCompatActivity {
 
             //нажатие кнопки отмена
             case R.id.btnCancel:
-                Log.i(LOG_TAG, "btnCancel");
 
-                onBackPressed();// возврат на предыдущий activity
+
+                // возврат на предыдущий activity
+                onBackPressed();
 
                 break;
         }
 
     }
-
-
-
 
 }
