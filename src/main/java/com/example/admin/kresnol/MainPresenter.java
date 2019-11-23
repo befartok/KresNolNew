@@ -53,6 +53,11 @@ class MainPresenter {
     private final String RIGHT_NAME = "rightName";
 
 
+    private final String PREF_NEW_PLAYER = "prefNewPlayer";
+    private final String PREF_RENAME_PLAYER = "renamePlayer";
+    private final String PREF_DELETE_PLAYER = "deletePlayer";
+
+
     MainPresenter(MainActivity mainActivity) {
 
         view = mainActivity;
@@ -139,9 +144,9 @@ class MainPresenter {
     //проверка создания или изменения игроков
     void checkChangePlayer() {
 
-        if ((view.prefs.getBoolean("prefNewPlayer", false) == true)
-                | ((view.prefs.getBoolean("renamePlayer", false) == true))
-                | ((view.prefs.getBoolean("deletePlayer", false) == true))) {
+        if ((view.prefs.getBoolean(PREF_NEW_PLAYER, false) == true)
+                | ((view.prefs.getBoolean(PREF_RENAME_PLAYER, false) == true))
+                | ((view.prefs.getBoolean(PREF_DELETE_PLAYER, false) == true))) {
             updateSpinner();
             clearNewPlayerPreferences();
 
@@ -151,9 +156,9 @@ class MainPresenter {
     //очистка преференсес создания нового игрока
     private void clearNewPlayerPreferences() {
         SharedPreferences.Editor ed = view.prefs.edit();
-        ed.putBoolean("prefNewPlayer", false);
-        ed.putBoolean("renamePlayer", false);
-        ed.putBoolean("deletePlayer", false);
+        ed.putBoolean(PREF_NEW_PLAYER, false);
+        ed.putBoolean(PREF_RENAME_PLAYER, false);
+        ed.putBoolean(PREF_DELETE_PLAYER, false);
         //ed.commit();
         ed.apply();
 

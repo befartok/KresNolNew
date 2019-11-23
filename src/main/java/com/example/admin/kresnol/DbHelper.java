@@ -20,6 +20,10 @@ class DbHelper extends SQLiteOpenHelper {
     static final String KEY_TOTAL_PLAY = "totalPlay";
     static final String KEY_TOTAL_WIN = "totalWin";
 
+    private final String playersOneName = "Player 1";
+    private final String playersTwoName = "Player 2";
+    private final String playersAndroidName = "Android";
+
     private static final String DATABASE_NAME = "recordsDB";
     private static final int DATABASE_VERSION = 1;
 
@@ -37,9 +41,7 @@ class DbHelper extends SQLiteOpenHelper {
         String playersTwoName = cnt.getResources().getString(R.string.players2_name);
         String playersAndroidName = cnt.getResources().getString(R.string.droids_name);*/
 
-        String playersOneName = "Player 1";
-        String playersTwoName = "Player 2";
-        String playersAndroidName = "Android";
+
 
         db.execSQL("create table " + TABLE_NAME + " ("
                 + KEY_ID + " integer primary key autoincrement,"

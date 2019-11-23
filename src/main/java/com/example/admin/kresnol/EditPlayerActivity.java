@@ -186,7 +186,7 @@ public class EditPlayerActivity extends AppCompatActivity {
         if (playersName.equals(getResources().getString(R.string.droids_name))
                 | (playersName.equals(getResources().getString(R.string.players1_name)))
                 | (playersName.equals(getResources().getString(R.string.players2_name)))) {
-            Toast.makeText(getBaseContext(), getString(R.string.doNotDelDefaultPlayerPart1) + playersName + getString(R.string.doNotDelDefaultPlayerPart2),
+            Toast.makeText(getBaseContext(), getString(R.string.doNotDelDefaultPlayerPart1) + " " + playersName + " " + getString(R.string.doNotDelDefaultPlayerPart2),
                     Toast.LENGTH_SHORT).show();
         } else {
 
