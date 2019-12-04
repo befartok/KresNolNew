@@ -178,10 +178,10 @@ class MainPresenter {
     void checkSpinnerToNewPlayer() {
 
         if (view.prefs.getBoolean("setPlayerToGame", false) == true
-                ) {
+        ) {
 
             if (view.prefs.getBoolean("leftPositionToSet", false) == true
-                    ) {
+            ) {
 
                 //находим в адаптере номер позиции созданного игрока
                 int positionForLeft = view.adapterForLeft.getPosition(view.prefs.getString("nameLeftPlayerToSet", EMPTY_SYMBOL));
@@ -665,10 +665,6 @@ class MainPresenter {
 
 
             for (int i = 0; i < 3; i++) {
-                /*Log.d(LOG_TAG, "j= " + j);
-                Log.d(LOG_TAG, "i= " + i);
-                Log.d(LOG_TAG, "[model.winLines[i][j]= " + model.winLines[j][i]);
-*/
 
                 if (view.arrayOfButtons[model.winLines[j][i]].getText().equals(symbolActive)) {
                     amountOfSymbolActive++;
@@ -697,7 +693,6 @@ class MainPresenter {
 
         }
     }
-
 
 
     //сохранение победного результата в базе и счетчике побед
@@ -797,7 +792,7 @@ class MainPresenter {
             }
 
             //сброс счетчика счета
-            if (equalsPlayersLeft == false) {
+            if (!equalsPlayersLeft) {
                 clearScore();
             }
             equalsPlayersLeft = false;
@@ -833,7 +828,7 @@ class MainPresenter {
                 setDefaultSpinners();
             }
             //сброс счетчика счета
-            if (equalsPlayersRight == false) {
+            if (!equalsPlayersRight) {
                 clearScore();
             }
             equalsPlayersRight = false;

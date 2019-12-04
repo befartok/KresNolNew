@@ -1,6 +1,5 @@
 package com.example.admin.kresnol;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Button;
@@ -12,8 +11,9 @@ import android.widget.Button;
 //класс логики для игрока Андроид
 class LogicOfDroid {
     LogicOfDroid(Resources res) {
-        this.res=res;
+        this.res = res;
     }
+
     private Resources res;
     private boolean makeStep;
     private int btnToDroidStep;
@@ -29,19 +29,19 @@ class LogicOfDroid {
 
     int droidsStep(Button[] arr, Player lPlr, Player rPlr, MainModel model) {
 
-        arrayOfBtn=arr;
+        arrayOfBtn = arr;
         leftPlr = lPlr;
         rightPlr = rPlr;
-        mainModel=model;
+        mainModel = model;
 
         // логика для 1 уровня
-        if (mainModel.getSpinnerLevelValue().equals(res.getString(R.string.level_easy))){
+        if (mainModel.getSpinnerLevelValue().equals(res.getString(R.string.level_easy))) {
             // рэндом нажатие кнопки андроидом
             btnToDroidStep = makeRandomStep();
         }
 
         //логика для 2 уровня;
-        if (mainModel.getSpinnerLevelValue().equals(res.getString(R.string.level_normal))){
+        if (mainModel.getSpinnerLevelValue().equals(res.getString(R.string.level_normal))) {
             makeStep = false;
 
             //проверка возможности выигрыша
@@ -52,10 +52,10 @@ class LogicOfDroid {
 
             //проверка возможности поставить в центр
             btnToDroidStep = makeCenterStep();
-            Log.d(LOG_TAG, "74 test" );
+            Log.d(LOG_TAG, "74 test");
 
             //если раньше не было ходов то сделать случайный ход
-            if (makeStep == false) {
+            if (!makeStep) {
                 // рэндом нажатие кнопки андроидом
                 btnToDroidStep = makeRandomStep();
             }
@@ -63,7 +63,7 @@ class LogicOfDroid {
 
         // логику для 3 уровня
 
-        if (mainModel.getSpinnerLevelValue().equals(res.getString(R.string.level_hard))){
+        if (mainModel.getSpinnerLevelValue().equals(res.getString(R.string.level_hard))) {
 
             makeStep = false;
 
@@ -80,7 +80,7 @@ class LogicOfDroid {
             btnToDroidStep = makeCornerStep();
 
             //если раньше не было ходов то сделать случайный ход
-            if (makeStep == false) {
+            if (!makeStep) {
                 // рэндом нажатие кнопки андроидом
                 btnToDroidStep = makeRandomStep();
             }
@@ -105,28 +105,28 @@ class LogicOfDroid {
         return (numberOfButton);
     }
 
-    private int makeCenterStep(){
-        if ((makeStep == false) & (arrayOfBtn[4].getText().equals(EMPTY_SYMBOL))) {
+    private int makeCenterStep() {
+        if ((!makeStep) & (arrayOfBtn[4].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
-            btnToStep=4;
+            btnToStep = 4;
         }
         return btnToStep;
     }
 
-    private int makeCornerStep(){
-        if ((makeStep == false)&(arrayOfBtn[0].getText().equals(EMPTY_SYMBOL))) {
+    private int makeCornerStep() {
+        if ((!makeStep) & (arrayOfBtn[0].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 0;
         }
-        if ((makeStep == false)&(arrayOfBtn[2].getText().equals(EMPTY_SYMBOL))) {
+        if ((!makeStep) & (arrayOfBtn[2].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 2;
         }
-        if ((makeStep == false)&(arrayOfBtn[5].getText().equals(EMPTY_SYMBOL))) {
+        if ((!makeStep) & (arrayOfBtn[5].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 5;
         }
-        if ((makeStep == false)&(arrayOfBtn[8].getText().equals(EMPTY_SYMBOL))) {
+        if ((!makeStep) & (arrayOfBtn[8].getText().equals(EMPTY_SYMBOL))) {
             makeStep = true;
             btnToStep = 8;
         }
@@ -135,28 +135,28 @@ class LogicOfDroid {
     }
 
     // рэндом нажатие кнопки андроидом
-    private int makeRandomStep(){
+    private int makeRandomStep() {
 
-        int varRandom ;
+        int varRandom;
         varRandom = (int) (Math.random() * 8);
 
-        return  checkEmptyButton(varRandom);
-            }
+        return checkEmptyButton(varRandom);
+    }
 
     private int checkWinStep() {
 
         String symbolOfDroid = rightPlr.getSymbol();
 
-        int emptyButton=-1;
+        int emptyButton = -1;
 
 
         Boolean isEmptyButton;
-        int amountOfSymbolOfDroid=0;
+        int amountOfSymbolOfDroid = 0;
         int j = 0;
 
-        while ((makeStep==false) & (j < 8)) {
+        while ((!makeStep) & (j < 8)) {
 
-            isEmptyButton=false;
+            isEmptyButton = false;
             amountOfSymbolOfDroid = 0;
 
             for (int i = 0; i < 3; i++) {
@@ -165,16 +165,16 @@ class LogicOfDroid {
 
                     amountOfSymbolOfDroid++;
 
-                } else if (arrayOfBtn[mainModel.winLines[j][i]].getText().equals("")){
+                } else if (arrayOfBtn[mainModel.winLines[j][i]].getText().equals("")) {
 
-                    isEmptyButton=true;
+                    isEmptyButton = true;
 
                     emptyButton = mainModel.winLines[j][i];
                 }
 
 
-                if ((amountOfSymbolOfDroid == 2) & (isEmptyButton)){
-                    makeStep=true;
+                if ((amountOfSymbolOfDroid == 2) & (isEmptyButton)) {
+                    makeStep = true;
                     btnToStep = emptyButton;
                 }
             }
@@ -182,26 +182,23 @@ class LogicOfDroid {
         }
 
 
-
-
-
         return btnToStep;
     }
 
-    private int checkLooseStep(){
+    private int checkLooseStep() {
 
         String symbolOfPlayer = leftPlr.getSymbol();
 
-        int emptyButton=-1;
+        int emptyButton = -1;
 
 
         Boolean isEmptyButton;
-        int amountOfSymbolOfPlayer=0;
+        int amountOfSymbolOfPlayer = 0;
         int j = 0;
 
-        while ((makeStep==false) & (j < 8)) {
+        while ((!makeStep) & (j < 8)) {
 
-            isEmptyButton=false;
+            isEmptyButton = false;
             amountOfSymbolOfPlayer = 0;
 
 
@@ -211,15 +208,15 @@ class LogicOfDroid {
 
                     amountOfSymbolOfPlayer++;
 
-                } else if (arrayOfBtn[mainModel.winLines[j][i]].getText().equals("")){
+                } else if (arrayOfBtn[mainModel.winLines[j][i]].getText().equals("")) {
 
-                    isEmptyButton=true;
+                    isEmptyButton = true;
 
                     emptyButton = mainModel.winLines[j][i];
                 }
 
-                if ((amountOfSymbolOfPlayer == 2) & (isEmptyButton)){
-                    makeStep=true;
+                if ((amountOfSymbolOfPlayer == 2) & (isEmptyButton)) {
+                    makeStep = true;
                     btnToStep = emptyButton;
                 }
             }

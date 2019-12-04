@@ -12,14 +12,14 @@
         android:layout_height="match_parent"
         android:layout_marginStart="5dp"
         android:layout_weight="0.8"
-        android:text="testtest" />
+        android:text="" />
 
     <TextView
         android:id="@+id/high_score_totalPlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="testtest"
+        android:text=""
 
         android:textAlignment="center" />
 
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="testtest"
+        android:text=""
 
         android:textAlignment="center" />
 

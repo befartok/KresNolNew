@@ -42,7 +42,6 @@ class DbHelper extends SQLiteOpenHelper {
         String playersAndroidName = cnt.getResources().getString(R.string.droids_name);*/
 
 
-
         db.execSQL("create table " + TABLE_NAME + " ("
                 + KEY_ID + " integer primary key autoincrement,"
                 + KEY_NAME + " text,"

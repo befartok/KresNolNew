@@ -10,7 +10,7 @@ import android.widget.Button;
  */
 
 //класс создает квадратные кнопки
-    public class SquareButton extends Button{
+    public class SquareButton extends android.support.v7.widget.AppCompatButton{
         public SquareButton(Context context) {
             super(context);
         }

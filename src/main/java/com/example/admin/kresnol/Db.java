@@ -13,7 +13,7 @@ import java.util.List;
  * Created by admin on 07.10.18.
  */
 class Db {
-    final String LOG_TAG = "myLogs";
+    private final String LOG_TAG = "myLogs";
 
     private DbHelper dbHelper;
     private Cursor cursor;

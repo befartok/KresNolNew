@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     final String LOG_TAG = "myLogs";
     final String LEFT_NAME = "leftName";
 
-    SquareButton arrayOfButtons[] = new SquareButton[9];
+    SquareButton[] arrayOfButtons = new SquareButton[9];
 
     Button symbolOfBtnLeftPlayer;
     Button symbolOfBtnRightPlayer;
@@ -63,20 +63,20 @@ public class MainActivity extends AppCompatActivity {
 
         presenter.setSpinnersFromPreferences();
 
-        Log.d(LOG_TAG, " onCreateEnd" );
+        Log.d(LOG_TAG, " onCreateEnd");
 
     }
 
     protected void onResume() {
 
-        Log.d(LOG_TAG, " onResume " );
+        Log.d(LOG_TAG, " onResume ");
         presenter.setSpinnerLevelFromPreferences();
 
         presenter.checkChangePlayer();
 
         presenter.checkSpinnerToNewPlayer();
 
-        Log.d(LOG_TAG, " onResume end" );
+        Log.d(LOG_TAG, " onResume end");
 
         super.onResume();
 
@@ -106,10 +106,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//запуск компонентов для инициализации
+    //запуск компонентов для инициализации
     private void init() {
 
-         Log.d(LOG_TAG, "init");
+        Log.d(LOG_TAG, "init");
 
         presenter = new MainPresenter(this);
 

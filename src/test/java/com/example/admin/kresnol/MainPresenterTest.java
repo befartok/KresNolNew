@@ -1,6 +1,5 @@
 package com.example.admin.kresnol;
 
-import android.content.Context;
 import android.content.res.Resources;
 
 import org.junit.Before;

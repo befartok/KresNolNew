@@ -2,10 +2,8 @@ package com.example.admin.kresnol;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -20,17 +18,16 @@ import android.widget.Toast;
 //класс активити создания нового игрока
 public class CreatePlayerActivity extends AppCompatActivity {
 
-    EditText etNameOfPlayer;
-    RadioButton rbSetLeft;
-    RadioButton rbSetRight;
-    Button btnCreate;
-    Button btnCancel;
+    private EditText etNameOfPlayer;
+    private RadioButton rbSetLeft;
+    private RadioButton rbSetRight;
+    private Button btnCreate;
+    private Button btnCancel;
 
-    SharedPreferences prefs;
+    private SharedPreferences prefs;
 
 
-
-    Db db;
+    private Db db;
 
     final String LOG_TAG = "myLogs";
 
