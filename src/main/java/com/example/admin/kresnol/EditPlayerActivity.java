@@ -22,7 +22,7 @@ import android.widget.Toast;
  * Created by admin on 10.11.18.
  */
 
-//класс активити редактирования игрока
+//класc активити редактирования игрока
 public class EditPlayerActivity extends AppCompatActivity {
 
     final String LOG_TAG = "myLogs";

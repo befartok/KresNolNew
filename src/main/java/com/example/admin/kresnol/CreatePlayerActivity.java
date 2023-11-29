@@ -59,8 +59,8 @@ public class CreatePlayerActivity extends AppCompatActivity {
 
         switch (v.getId()) {
 
-            //нажатие кнопки ок
-            case R.id.buttonCreate:
+                //нажатие кнопки ок
+                 case R.id.buttonCreate:
 
                 db = new Db(this);
 
@@ -121,12 +121,12 @@ public class CreatePlayerActivity extends AppCompatActivity {
                 db.close();
                 break;
 
+
             //нажатие кнопки отмена
             case R.id.btnCancel:
 
-
-                // возврат на предыдущий activity
-                onBackPressed();
+            // возврат на предыдущий activity
+            onBackPressed();
 
                 break;
         }
